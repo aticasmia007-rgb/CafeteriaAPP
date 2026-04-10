@@ -6,6 +6,35 @@
   min-height: 100%;
 }
 
+@media (min-width: 1024px) {
+  .content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-rows: auto auto;
+    column-gap: 24px;
+    row-gap: 16px;
+    padding: 24px;
+    align-items: start;
+  }
+
+  .header {
+    grid-column: 1 / -1;
+  }
+
+  .itemsList {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .summary {
+    grid-column: 2;
+    grid-row: 2;
+    position: sticky;
+    top: calc(var(--topbar-height) + 16px);
+    margin-top: 0;
+  }
+}
+
 /* Empty State */
 .empty {
   display: flex;

@@ -5,6 +5,13 @@
   gap: 24px;
 }
 
+@media (min-width: 1024px) {
+  .content {
+    padding: 24px 0 32px;
+    gap: 32px;
+  }
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -47,6 +54,20 @@
 
 .horizontalScroll > * {
   scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .horizontalScroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    overflow-x: visible;
+    padding: 4px 16px 8px;
+  }
+
+  .horizontalScroll > * {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .emptyState {
