@@ -7,13 +7,24 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface User {
+  email: string;
+  name: string;
+  provider: "email" | "google";
+}
+
+export type AuthIntent = "checkout" | "profile" | "login" | null;
+
 export interface AppState {
-  activeTab: "home" | "search" | "cart";
+  activeTab: "home" | "search" | "cart" | "profile" | "history";
   activeCategory: string;
   cart: CartItem[];
   favorites: number[];
   notifications: Notification[];
   searchQuery: string;
+  user: User | null;
+  authSheetOpen: boolean;
+  pendingIntent: AuthIntent;
 }
 
 export type AppAction =
@@ -26,7 +37,13 @@ export type AppAction =
   | { type: "TOGGLE_FAVORITE"; productId: number }
   | { type: "MARK_NOTIFICATION_READ"; notificationId: number }
   | { type: "MARK_ALL_NOTIFICATIONS_READ" }
-  | { type: "SET_SEARCH_QUERY"; query: string };
+  | { type: "SET_SEARCH_QUERY"; query: string }
+  | { type: "OPEN_AUTH_SHEET"; intent: AuthIntent }
+  | { type: "CLOSE_AUTH_SHEET" }
+  | { type: "LOGIN"; user: User }
+  | { type: "LOGOUT" }
+  | { type: "CLEAR_PENDING_INTENT" }
+  | { type: "PUSH_NOTIFICATION"; notification: Notification };
 
 export const initialState: AppState = {
   activeTab: "home",
@@ -35,6 +52,9 @@ export const initialState: AppState = {
   favorites: [1, 3, 6, 8, 10],
   notifications: [],
   searchQuery: "",
+  user: null,
+  authSheetOpen: false,
+  pendingIntent: null,
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -110,6 +130,21 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       };
     case "SET_SEARCH_QUERY":
       return { ...state, searchQuery: action.query };
+    case "OPEN_AUTH_SHEET":
+      return { ...state, authSheetOpen: true, pendingIntent: action.intent };
+    case "CLOSE_AUTH_SHEET":
+      return { ...state, authSheetOpen: false };
+    case "LOGIN":
+      return { ...state, user: action.user, authSheetOpen: false };
+    case "LOGOUT":
+      return { ...state, user: null, pendingIntent: null };
+    case "CLEAR_PENDING_INTENT":
+      return { ...state, pendingIntent: null };
+    case "PUSH_NOTIFICATION":
+      return {
+        ...state,
+        notifications: [action.notification, ...state.notifications],
+      };
     default:
       return state;
   }

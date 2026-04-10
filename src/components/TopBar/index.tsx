@@ -85,8 +85,14 @@ export default function TopBar() {
           <div className={styles.iconWrapper} ref={userMenuRef}>
             <button
               className={styles.avatar}
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              aria-label="Menú de usuario"
+              onClick={() => {
+                if (!state.user) {
+                  dispatch({ type: "OPEN_AUTH_SHEET", intent: "profile" });
+                } else {
+                  setShowUserMenu(!showUserMenu);
+                }
+              }}
+              aria-label={state.user ? "Menú de usuario" : "Iniciar sesión"}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -94,7 +100,7 @@ export default function TopBar() {
               </svg>
             </button>
 
-            {showUserMenu && (
+            {state.user && showUserMenu && (
               <div className={styles.dropdown}>
                 <div className={styles.userInfo}>
                   <div className={styles.avatarLg}>
@@ -104,16 +110,28 @@ export default function TopBar() {
                     </svg>
                   </div>
                   <div>
-                    <strong>Estudiante</strong>
-                    <p className={styles.userEmail}>estudiante@iespio.es</p>
+                    <strong>{state.user.name}</strong>
+                    <p className={styles.userEmail}>{state.user.email}</p>
                   </div>
                 </div>
                 <div className={styles.menuList}>
-                  <button className={styles.menuItem}>
+                  <button
+                    className={styles.menuItem}
+                    onClick={() => {
+                      dispatch({ type: "SET_TAB", tab: "profile" });
+                      setShowUserMenu(false);
+                    }}
+                  >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Perfil
                   </button>
-                  <button className={styles.menuItem}>
+                  <button
+                    className={styles.menuItem}
+                    onClick={() => {
+                      dispatch({ type: "SET_TAB", tab: "history" });
+                      setShowUserMenu(false);
+                    }}
+                  >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
                     Historial
                   </button>
@@ -122,7 +140,13 @@ export default function TopBar() {
                     Ajustes
                   </button>
                   <hr className={styles.divider} />
-                  <button className={`${styles.menuItem} ${styles.logout}`}>
+                  <button
+                    className={`${styles.menuItem} ${styles.logout}`}
+                    onClick={() => {
+                      dispatch({ type: "LOGOUT" });
+                      setShowUserMenu(false);
+                    }}
+                  >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     Cerrar sesión
                   </button>
@@ -134,7 +158,7 @@ export default function TopBar() {
       </div>
 
       {/* Category Filters */}
-      {state.activeTab !== "cart" && (
+      {state.activeTab !== "cart" && state.activeTab !== "profile" && state.activeTab !== "history" && (
       <nav className={styles.filters}>
         {categories.map((cat) => (
           <button

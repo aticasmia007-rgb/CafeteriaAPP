@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
   AppContext,
   appReducer,
@@ -10,6 +10,9 @@ import HomeContent from "../HomeContent";
 import SearchContent from "../SearchContent";
 import CartContent from "../CartContent";
 import BottomNav from "../BottomNav";
+import AuthSheet from "../AuthSheet";
+import ProfileView from "../ProfileView";
+import HistoryView from "../HistoryView";
 import styles from "./App.module.css";
 
 export default function App() {
@@ -17,6 +20,28 @@ export default function App() {
     ...initialState,
     notifications: mockNotifications,
   });
+
+  // Resume the flow that triggered the auth sheet, once the user is logged in.
+  useEffect(() => {
+    if (!state.user || !state.pendingIntent) return;
+    if (state.pendingIntent === "checkout") {
+      dispatch({
+        type: "PUSH_NOTIFICATION",
+        notification: {
+          id: Date.now(),
+          title: "Pedido realizado",
+          message: `¡Gracias, ${state.user.name}! Tu pedido está en camino.`,
+          time: "Ahora",
+          read: false,
+        },
+      });
+      dispatch({ type: "CLEAR_CART" });
+      dispatch({ type: "SET_TAB", tab: "home" });
+    } else if (state.pendingIntent === "profile") {
+      dispatch({ type: "SET_TAB", tab: "profile" });
+    }
+    dispatch({ type: "CLEAR_PENDING_INTENT" });
+  }, [state.user, state.pendingIntent]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
@@ -26,8 +51,11 @@ export default function App() {
           {state.activeTab === "home" && <HomeContent />}
           {state.activeTab === "search" && <SearchContent />}
           {state.activeTab === "cart" && <CartContent />}
+          {state.activeTab === "profile" && <ProfileView />}
+          {state.activeTab === "history" && <HistoryView />}
         </main>
         <BottomNav />
+        <AuthSheet />
       </div>
     </AppContext.Provider>
   );
