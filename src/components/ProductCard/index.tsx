@@ -1,5 +1,5 @@
-import { useApp } from "../store/appStore";
-import type { Product } from "../data/mockData";
+import { useApp } from "../../store/appStore";
+import type { Product } from "../../data/mockData";
 import styles from "./ProductCard.module.css";
 
 interface Props {

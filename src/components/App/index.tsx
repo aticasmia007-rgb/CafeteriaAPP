@@ -3,13 +3,13 @@ import {
   AppContext,
   appReducer,
   initialState,
-} from "../store/appStore";
-import { notifications as mockNotifications } from "../data/mockData";
-import TopBar from "./TopBar";
-import HomeContent from "./HomeContent";
-import SearchContent from "./SearchContent";
-import CartContent from "./CartContent";
-import BottomNav from "./BottomNav";
+} from "../../store/appStore";
+import { notifications as mockNotifications } from "../../data/mockData";
+import TopBar from "../TopBar";
+import HomeContent from "../HomeContent";
+import SearchContent from "../SearchContent";
+import CartContent from "../CartContent";
+import BottomNav from "../BottomNav";
 import styles from "./App.module.css";
 
 export default function App() {

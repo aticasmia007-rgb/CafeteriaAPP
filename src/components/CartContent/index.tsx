@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useApp } from "../store/appStore";
+import { useApp } from "../../store/appStore";
 import styles from "./CartContent.module.css";
 
 export default function CartContent() {

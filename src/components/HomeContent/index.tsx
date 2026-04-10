@@ -1,6 +1,6 @@
-import { useApp } from "../store/appStore";
-import { products, recentOrders } from "../data/mockData";
-import ProductCard from "./ProductCard";
+import { useApp } from "../../store/appStore";
+import { products, recentOrders } from "../../data/mockData";
+import ProductCard from "../ProductCard";
 import styles from "./HomeContent.module.css";
 
 export default function HomeContent() {

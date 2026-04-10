@@ -1,4 +1,4 @@
-import { useApp } from "../store/appStore";
+import { useApp } from "../../store/appStore";
 import styles from "./BottomNav.module.css";
 
 export default function BottomNav() {

@@ -1,6 +1,6 @@
-import { useApp } from "../store/appStore";
-import { products } from "../data/mockData";
-import ProductCard from "./ProductCard";
+import { useApp } from "../../store/appStore";
+import { products } from "../../data/mockData";
+import ProductCard from "../ProductCard";
 import styles from "./SearchContent.module.css";
 
 export default function SearchContent() {

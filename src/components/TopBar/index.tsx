@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { useApp } from "../store/appStore";
-import { categories, notifications as mockNotifications } from "../data/mockData";
+import { useApp } from "../../store/appStore";
+import { categories, notifications as mockNotifications } from "../../data/mockData";
 import styles from "./TopBar.module.css";
 
 export default function TopBar() {
