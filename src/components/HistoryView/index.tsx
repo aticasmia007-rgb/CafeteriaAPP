@@ -1,5 +1,5 @@
 import { useApp } from "../../store/appStore";
-import { recentOrders } from "../../data/mockData";
+import { isImageUrl, recentOrders } from "../../data/mockData";
 import styles from "./HistoryView.module.css";
 
 function orderTotal(items: { price: number; discount?: number }[]) {
@@ -91,7 +91,16 @@ export default function HistoryView() {
                     : item.price;
                   return (
                     <li key={item.id} className={styles.item}>
-                      <span className={styles.itemEmoji}>{item.image}</span>
+                      {isImageUrl(item.image) ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className={styles.itemImage}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className={styles.itemEmoji}>{item.image}</span>
+                      )}
                       <span className={styles.itemName}>{item.name}</span>
                       <span className={styles.itemPrice}>{price.toFixed(2)}€</span>
                     </li>

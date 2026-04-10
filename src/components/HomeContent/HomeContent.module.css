@@ -165,6 +165,17 @@
 .orderItemEmoji {
   font-size: 20px;
   line-height: 1;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.orderItemImage {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .orderItemName {

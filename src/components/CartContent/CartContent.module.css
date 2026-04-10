@@ -111,6 +111,17 @@
 .itemEmoji {
   font-size: 28px;
   line-height: 1;
+  width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.itemImage {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .itemInfo {

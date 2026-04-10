@@ -1,5 +1,5 @@
 import { useApp } from "../../store/appStore";
-import { products, recentOrders } from "../../data/mockData";
+import { isImageUrl, products, recentOrders } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import styles from "./HomeContent.module.css";
 
@@ -72,7 +72,16 @@ export default function HomeContent() {
                   const inCart = cartItem !== undefined;
                   return (
                     <div key={item.id} className={styles.orderItem}>
-                      <span className={styles.orderItemEmoji}>{item.image}</span>
+                      {isImageUrl(item.image) ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className={styles.orderItemImage}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className={styles.orderItemEmoji}>{item.image}</span>
+                      )}
                       <span className={styles.orderItemName}>{item.name}</span>
                       <div className={`${styles.reorderGroup} ${inCart ? styles.reorderGroupActive : ""}`}>
                         {inCart && (

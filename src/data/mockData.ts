@@ -1,5 +1,9 @@
 // Mock data for the cafeteria app
 
+/** True when a Product.image value is a URL (file in /public or external) rather than an emoji. */
+export const isImageUrl = (image: string): boolean =>
+  image.startsWith("/") || image.startsWith("http");
+
 export interface Product {
   id: number;
   name: string;
@@ -36,7 +40,7 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "🥖", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15 },
+  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15 },
   { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", category: "bocadillos", description: "Lechuga, tomate, huevo y atún" },
   { id: 3, name: "Café con Leche", price: 1.20, image: "☕", category: "cafe", description: "Café con leche semidesnatada" },
   { id: 4, name: "Zumo de Naranja", price: 1.50, image: "🍊", category: "bebidas", description: "Zumo natural recién exprimido", discount: 10 },
@@ -46,7 +50,7 @@ export const products: Product[] = [
   { id: 8, name: "Fruta del Día", price: 0.70, image: "🍎", category: "fruta", description: "Manzana, plátano o naranja" },
   { id: 9, name: "Patatas Fritas", price: 1.00, image: "🍟", category: "snacks", description: "Bolsa individual" },
   { id: 10, name: "Batido Chocolate", price: 1.60, image: "🥛", category: "bebidas", description: "Batido de chocolate frío" },
-  { id: 11, name: "Tortilla Española", price: 2.20, image: "🍳", category: "bocadillos", description: "Pincho de tortilla con pan" },
+  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", category: "bocadillos", description: "Pincho de tortilla con pan" },
   { id: 12, name: "Galletas", price: 0.90, image: "🍪", category: "snacks", description: "Paquete de galletas María" },
   { id: 13, name: "Yogur Natural", price: 0.95, image: "🥄", category: "postres", description: "Yogur natural sin azúcar" },
   { id: 14, name: "Cortado", price: 1.00, image: "☕", category: "cafe", description: "Café cortado con leche", discount: 5 },

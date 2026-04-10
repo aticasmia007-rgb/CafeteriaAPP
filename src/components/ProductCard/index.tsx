@@ -1,5 +1,5 @@
 import { useApp } from "../../store/appStore";
-import type { Product } from "../../data/mockData";
+import { isImageUrl, type Product } from "../../data/mockData";
 import styles from "./ProductCard.module.css";
 
 interface Props {
@@ -19,7 +19,16 @@ export default function ProductCard({ product, compact = false }: Props) {
   return (
     <div className={`${styles.card} ${compact ? styles.compact : ""}`}>
       <div className={styles.imageArea}>
-        <span className={styles.emoji}>{product.image}</span>
+        {isImageUrl(product.image) ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className={styles.image}
+            loading="lazy"
+          />
+        ) : (
+          <span className={styles.emoji}>{product.image}</span>
+        )}
         {product.discount && (
           <span className={styles.discountBadge}>-{product.discount}%</span>
         )}
@@ -36,6 +45,39 @@ export default function ProductCard({ product, compact = false }: Props) {
       <div className={styles.info}>
         <h3 className={styles.name}>{product.name}</h3>
         {!compact && <p className={styles.desc}>{product.description}</p>}
+        <div
+          className={`${styles.qtyGroup} ${inCart ? "" : styles.qtyGroupHidden}`}
+          aria-hidden={!inCart}
+        >
+          <button
+            className={styles.qtyBtn}
+            onClick={() =>
+              dispatch({
+                type: "UPDATE_CART_QTY",
+                productId: product.id,
+                quantity: (cartItem?.quantity ?? 0) - 1,
+              })
+            }
+            aria-label="Quitar uno del carrito"
+            tabIndex={inCart ? 0 : -1}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <span className={styles.qtyValue}>{cartItem?.quantity ?? 0}</span>
+          <button
+            className={styles.qtyBtn}
+            onClick={() => dispatch({ type: "ADD_TO_CART", product })}
+            aria-label="Añadir uno al carrito"
+            tabIndex={inCart ? 0 : -1}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
         <div className={styles.priceRow}>
           <div className={styles.prices}>
             {discountedPrice !== null ? (
@@ -60,36 +102,6 @@ export default function ProductCard({ product, compact = false }: Props) {
             </button>
           )}
         </div>
-        {inCart && (
-          <div className={styles.qtyGroup}>
-            <button
-              className={styles.qtyBtn}
-              onClick={() =>
-                dispatch({
-                  type: "UPDATE_CART_QTY",
-                  productId: product.id,
-                  quantity: cartItem!.quantity - 1,
-                })
-              }
-              aria-label="Quitar uno del carrito"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-            <span className={styles.qtyValue}>{cartItem!.quantity}</span>
-            <button
-              className={styles.qtyBtn}
-              onClick={() => dispatch({ type: "ADD_TO_CART", product })}
-              aria-label="Añadir uno al carrito"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

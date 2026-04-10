@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../store/appStore";
+import { isImageUrl } from "../../data/mockData";
 import styles from "./CartContent.module.css";
 
 export default function CartContent() {
@@ -76,7 +77,16 @@ export default function CartContent() {
             : item.product.price;
           return (
             <div key={item.product.id} className={styles.cartItem}>
-              <span className={styles.itemEmoji}>{item.product.image}</span>
+              {isImageUrl(item.product.image) ? (
+                <img
+                  src={item.product.image}
+                  alt={item.product.name}
+                  className={styles.itemImage}
+                  loading="lazy"
+                />
+              ) : (
+                <span className={styles.itemEmoji}>{item.product.image}</span>
+              )}
               <div className={styles.itemInfo}>
                 <h3 className={styles.itemName}>{item.product.name}</h3>
                 <span className={styles.itemPrice}>{unitPrice.toFixed(2)}€</span>
