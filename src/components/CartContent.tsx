@@ -1,8 +1,34 @@
+import { useEffect, useRef, useState } from "react";
 import { useApp } from "../store/appStore";
 import styles from "./CartContent.module.css";
 
 export default function CartContent() {
   const { state, dispatch } = useApp();
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const [atEnd, setAtEnd] = useState(false);
+
+  useEffect(() => {
+    const el = summaryRef.current;
+    if (!el) return;
+    let scroller: HTMLElement | null = el.parentElement;
+    while (scroller && getComputedStyle(scroller).overflowY !== "auto") {
+      scroller = scroller.parentElement;
+    }
+    if (!scroller) return;
+    const check = () => {
+      setAtEnd(
+        scroller!.scrollTop + scroller!.clientHeight >=
+          scroller!.scrollHeight - 4
+      );
+    };
+    check();
+    scroller.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      scroller!.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [state.cart.length]);
 
   const total = state.cart.reduce((sum, item) => {
     const price = item.product.discount
@@ -95,10 +121,13 @@ export default function CartContent() {
         })}
       </div>
 
-      <div className={styles.summary}>
+      <div
+        ref={summaryRef}
+        className={`${styles.summary} ${atEnd ? styles.summaryAtEnd : ""}`}
+      >
         <div className={styles.summaryRow}>
           <span>Productos ({itemCount})</span>
-          <span>{total.toFixed(2)}€</span>
+          {/* <span>{total.toFixed(2)}€</span> */}
         </div>
         <div className={styles.summaryTotal}>
           <span>Total</span>
@@ -109,7 +138,8 @@ export default function CartContent() {
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
             <line x1="1" y1="10" x2="23" y2="10"/>
           </svg>
-          Realizar Pedido — {total.toFixed(2)}€
+          {/* Realizar Pedido — {total.toFixed(2)}€ */}
+          Realizar Pedido
         </button>
       </div>
     </div>

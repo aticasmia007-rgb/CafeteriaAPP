@@ -134,6 +134,7 @@ export default function TopBar() {
       </div>
 
       {/* Category Filters */}
+      {state.activeTab !== "cart" && (
       <nav className={styles.filters}>
         {categories.map((cat) => (
           <button
@@ -151,6 +152,7 @@ export default function TopBar() {
           </button>
         ))}
       </nav>
+      )}
     </header>
   );
 }
