@@ -10,6 +10,8 @@ interface Props {
 export default function ProductCard({ product, compact = false }: Props) {
   const { state, dispatch } = useApp();
   const isFav = state.favorites.includes(product.id);
+  const cartItem = state.cart.find((i) => i.product.id === product.id);
+  const inCart = cartItem !== undefined;
   const discountedPrice = product.discount
     ? product.price * (1 - product.discount / 100)
     : null;
@@ -45,17 +47,49 @@ export default function ProductCard({ product, compact = false }: Props) {
               <span className={styles.price}>{product.price.toFixed(2)}€</span>
             )}
           </div>
-          <button
-            className={styles.addBtn}
-            onClick={() => dispatch({ type: "ADD_TO_CART", product })}
-            aria-label="Añadir al carrito"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-          </button>
+          {!inCart && (
+            <button
+              className={styles.addBtn}
+              onClick={() => dispatch({ type: "ADD_TO_CART", product })}
+              aria-label="Añadir al carrito"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          )}
         </div>
+        {inCart && (
+          <div className={styles.qtyGroup}>
+            <button
+              className={styles.qtyBtn}
+              onClick={() =>
+                dispatch({
+                  type: "UPDATE_CART_QTY",
+                  productId: product.id,
+                  quantity: cartItem!.quantity - 1,
+                })
+              }
+              aria-label="Quitar uno del carrito"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <span className={styles.qtyValue}>{cartItem!.quantity}</span>
+            <button
+              className={styles.qtyBtn}
+              onClick={() => dispatch({ type: "ADD_TO_CART", product })}
+              aria-label="Añadir uno al carrito"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

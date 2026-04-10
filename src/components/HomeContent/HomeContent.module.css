@@ -173,6 +173,43 @@
   color: var(--color-gray-800);
 }
 
+.reorderGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.reorderGroupActive {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-full);
+  padding: 2px 2px 2px 4px;
+}
+
+.reorderQtyBtn {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.reorderQtyBtn:hover {
+  background: var(--color-gray-200);
+}
+
+.reorderQtyValue {
+  min-width: 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
 .reorderBtn {
   width: 26px;
   height: 26px;
@@ -184,6 +221,11 @@
   justify-content: center;
   transition: background 0.2s;
   flex-shrink: 0;
+}
+
+.reorderGroupActive .reorderBtn {
+  width: 22px;
+  height: 22px;
 }
 
 .reorderBtn:hover {

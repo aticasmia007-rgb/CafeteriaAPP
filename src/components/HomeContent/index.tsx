@@ -67,22 +67,50 @@ export default function HomeContent() {
                 </span>
               </div>
               <div className={styles.orderItems}>
-                {order.items.map((item) => (
-                  <div key={item.id} className={styles.orderItem}>
-                    <span className={styles.orderItemEmoji}>{item.image}</span>
-                    <span className={styles.orderItemName}>{item.name}</span>
-                    <button
-                      className={styles.reorderBtn}
-                      onClick={() => dispatch({ type: "ADD_TO_CART", product: item })}
-                      title="Volver a pedir"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                {order.items.map((item) => {
+                  const cartItem = state.cart.find((c) => c.product.id === item.id);
+                  const inCart = cartItem !== undefined;
+                  return (
+                    <div key={item.id} className={styles.orderItem}>
+                      <span className={styles.orderItemEmoji}>{item.image}</span>
+                      <span className={styles.orderItemName}>{item.name}</span>
+                      <div className={`${styles.reorderGroup} ${inCart ? styles.reorderGroupActive : ""}`}>
+                        {inCart && (
+                          <>
+                            <button
+                              className={styles.reorderQtyBtn}
+                              onClick={() =>
+                                dispatch({
+                                  type: "UPDATE_CART_QTY",
+                                  productId: item.id,
+                                  quantity: cartItem!.quantity - 1,
+                                })
+                              }
+                              title="Quitar uno"
+                              aria-label="Quitar uno del carrito"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                              </svg>
+                            </button>
+                            <span className={styles.reorderQtyValue}>{cartItem!.quantity}</span>
+                          </>
+                        )}
+                        <button
+                          className={styles.reorderBtn}
+                          onClick={() => dispatch({ type: "ADD_TO_CART", product: item })}
+                          title="Volver a pedir"
+                          aria-label="Añadir al carrito"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
