@@ -16,13 +16,23 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* Critical: without min-width: 0, the .horizontalScroll's flex-shrink:0 cards
+     push .section wider than the viewport, clipping the section title at the
+     right edge (body has overflow: hidden in global.css). */
+  min-width: 0;
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .sectionHeader {
+    padding: 0 clamp(2rem, 6vw, 5rem);
+  }
 }
 
 .sectionTitle {
@@ -41,9 +51,16 @@
 
 .horizontalScroll {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   overflow-x: auto;
-  padding: 4px 16px 8px;
+  /* Vertical padding leaves room for card shadow + hover translateY.
+     Horizontal padding is the gutter inside the scroll viewport so cards
+     have breathing room against the screen edges and never sit flush
+     against the border when mid-scroll. */
+  padding: 14px 20px 20px;
+  /* Snap stops respect the gutter — cards align with the visible area
+     instead of clipping at the raw edge. */
+  scroll-padding-inline: 20px;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
 }
@@ -61,7 +78,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     overflow-x: visible;
-    padding: 4px 16px 8px;
+    padding: 14px clamp(2rem, 6vw, 5rem) 20px;
   }
 
   .horizontalScroll > * {
@@ -71,13 +88,19 @@
 }
 
 .emptyState {
-  padding: 24px 16px;
+  padding: 24px 20px;
   text-align: center;
   color: var(--color-gray-500);
   font-size: 14px;
   background: var(--color-gray-100);
   border-radius: var(--radius-md);
-  margin: 0 16px;
+  margin: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .emptyState {
+    margin: 0 clamp(2rem, 6vw, 5rem);
+  }
 }
 
 /* Orders */
@@ -85,7 +108,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 16px;
+  padding: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .ordersList {
+    padding: 0 clamp(2rem, 6vw, 5rem);
+  }
 }
 
 .orderCard {
@@ -100,7 +129,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: var(--color-gray-50, #FAFAFA);
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-gray-100);
 }
 
@@ -149,7 +178,7 @@
   height: 26px;
   border-radius: var(--radius-full);
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;

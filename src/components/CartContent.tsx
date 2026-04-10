@@ -15,7 +15,7 @@ export default function CartContent() {
 
   if (state.cart.length === 0) {
     return (
-      <div className={styles.content}>
+      <div className={styles.emptyWrapper}>
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>🛒</span>
           <p className={styles.emptyTitle}>Tu carrito está vacío</p>
@@ -105,7 +105,7 @@ export default function CartContent() {
           <span>{total.toFixed(2)}€</span>
         </div>
         <button className={styles.payBtn}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
             <line x1="1" y1="10" x2="23" y2="10"/>
           </svg>

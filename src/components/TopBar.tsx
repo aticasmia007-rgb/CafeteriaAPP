@@ -88,7 +88,7 @@ export default function TopBar() {
               onClick={() => setShowUserMenu(!showUserMenu)}
               aria-label="Menú de usuario"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
@@ -98,7 +98,7 @@ export default function TopBar() {
               <div className={styles.dropdown}>
                 <div className={styles.userInfo}>
                   <div className={styles.avatarLg}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                       <circle cx="12" cy="7" r="4"/>
                     </svg>
@@ -139,7 +139,12 @@ export default function TopBar() {
           <button
             key={cat.id}
             className={`${styles.filterBtn} ${state.activeCategory === cat.id ? styles.filterActive : ""}`}
-            onClick={() => dispatch({ type: "SET_CATEGORY", category: cat.id })}
+            onClick={() => {
+              dispatch({ type: "SET_CATEGORY", category: cat.id });
+              if (state.activeTab !== "search") {
+                dispatch({ type: "SET_TAB", tab: "search" });
+              }
+            }}
           >
             <span className={styles.filterIcon}>{cat.icon}</span>
             <span className={styles.filterLabel}>{cat.name}</span>

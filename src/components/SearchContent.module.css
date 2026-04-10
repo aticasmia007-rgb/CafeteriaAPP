@@ -1,8 +1,15 @@
 .content {
-
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-inline: 20px;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding-inline: clamp(2rem, 6vw, 5rem);
+  }
 }
 
 .searchBar {
@@ -14,6 +21,15 @@
   border-radius: var(--radius-lg);
   padding: 10px 14px;
   transition: border-color 0.2s;
+}
+
+.searchIcon {
+  color: var(--color-gray-400);
+  flex-shrink: 0;
+}
+
+.searchBar:focus-within .searchIcon {
+  color: var(--color-primary);
 }
 
 .searchBar:focus-within {

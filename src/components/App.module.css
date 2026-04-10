@@ -13,19 +13,22 @@
   overflow-y: auto;
   padding-bottom: var(--bottomnav-height);
   -webkit-overflow-scrolling: touch;
+
+  & > * {
+    padding-block: 1rem;
+  }
 }
 
 /* Tablet: widen the mobile card and add side borders */
 @media (min-width: 768px) {
   .app {
-    /* max-width: 768px; */
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 0 40px rgba(68, 64, 47, 0.06);
     border-left: 1px solid var(--color-gray-200);
     border-right: 1px solid var(--color-gray-200);
   }
 
   .main > * {
-    padding: 2rem 8rem;
+    padding-block: 2rem;
   }
 }
 
