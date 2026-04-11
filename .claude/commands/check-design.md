@@ -5,7 +5,7 @@ $ARGUMENTS
 Evalúa en este orden:
 1. ¿Usa tokens de `src/styles/global.css` o hardcodea valores? (`color: white` → `var(--color-white)`, etc.)
 2. ¿Respeta los 3 breakpoints (`< 768px`, `≥ 768px`, `≥ 1024px`)?
-3. ¿Las media queries están DESPUÉS de las reglas base? (cascade gotcha — ver CLAUDE.md)
+3. **Organización de media queries**: ¿todas las `@media` están agrupadas AL FINAL del archivo, después de todas las reglas base? El patrón obligatorio es: (1) todos los selectores base primero, (2) un bloque `@media (min-width: 768px) { … }` con todos los overrides de tablet, (3) un bloque `@media (min-width: 1024px) { … }` con todos los overrides de desktop. NO intercalar media queries entre selectores base — eso viola el cascade gotcha de CLAUDE.md y dificulta la lectura. Si el archivo tiene queries dispersas, reorganízalo.
 4. ¿Los iconos SVG usan `currentColor` en `stroke`/`fill`, con el color real en una clase CSS del padre? (NO `stroke="white"`, NO `stroke="var(--color-...)"` inline)
 5. ¿La estética es coherente con una cafetería escolar (cálida, no genérica)? Verde oliva + terracota + cream + Fraunces.
 6. ¿El CSS Module sigue el patrón del proyecto? (co-localizado, sin globals filtrados)
