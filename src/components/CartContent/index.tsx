@@ -155,9 +155,11 @@ export default function CartContent() {
         className={`${styles.summary} ${atEnd ? styles.summaryAtEnd : ""}`}
       >
         <div className={styles.summaryRow}>
+          <div className={styles.slotInlineLabels}>
+            <span className={styles.slotInlineLabel}>Hora de recogida:</span>
           <span>Productos ({itemCount})</span>
+          </div>
           <div className={styles.slotInline}>
-            <span className={styles.slotInlineLabel}>Recogida</span>
             <SlotPicker compact />
           </div>
         </div>
