@@ -31,7 +31,7 @@ export default function App() {
       dispatch({
         type: "PLACE_ORDER",
         id: createOrderId(),
-        claimSlot: createClaimSlot(),
+        claimSlot: state.selectedPickupSlot ?? createClaimSlot(),
         placedAt: "Ahora",
       });
       dispatch({

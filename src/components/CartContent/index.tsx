@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createClaimSlot, createOrderId, useApp } from "../../store/appStore";
 import { isImageUrl, products } from "../../data/mockData";
 import ProductCard from "../ProductCard";
+import SlotPicker from "../SlotPicker";
 import styles from "./CartContent.module.css";
 
 export default function CartContent() {
@@ -20,7 +21,7 @@ export default function CartContent() {
     const check = () => {
       setAtEnd(
         scroller!.scrollTop + scroller!.clientHeight >=
-          scroller!.scrollHeight - 4
+        scroller!.scrollHeight - 4
       );
     };
     check();
@@ -116,7 +117,7 @@ export default function CartContent() {
                   }
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <line x1="5" y1="12" x2="19" y2="12" />
                   </svg>
                 </button>
                 <span className={styles.qtyValue}>{item.quantity}</span>
@@ -131,8 +132,8 @@ export default function CartContent() {
                   }
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
                   </svg>
                 </button>
               </div>
@@ -144,13 +145,21 @@ export default function CartContent() {
         })}
       </div>
 
+
+      <div className={styles.slotPickerArea}>
+        <SlotPicker />
+      </div>
+
       <div
         ref={summaryRef}
         className={`${styles.summary} ${atEnd ? styles.summaryAtEnd : ""}`}
       >
         <div className={styles.summaryRow}>
           <span>Productos ({itemCount})</span>
-          {/* <span>{total.toFixed(2)}€</span> */}
+          <div className={styles.slotInline}>
+            <span className={styles.slotInlineLabel}>Recogida</span>
+            <SlotPicker compact />
+          </div>
         </div>
         <div className={styles.summaryTotal}>
           <span>Total</span>
@@ -165,7 +174,7 @@ export default function CartContent() {
               dispatch({
                 type: "PLACE_ORDER",
                 id: createOrderId(),
-                claimSlot: createClaimSlot(),
+                claimSlot: state.selectedPickupSlot ?? createClaimSlot(),
                 placedAt: "Ahora",
               });
               dispatch({
@@ -183,13 +192,14 @@ export default function CartContent() {
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-            <line x1="1" y1="10" x2="23" y2="10"/>
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+            <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
           {/* Realizar Pedido — {total.toFixed(2)}€ */}
           Realizar Pedido
         </button>
       </div>
+
     </div>
   );
 }

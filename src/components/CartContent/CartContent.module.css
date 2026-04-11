@@ -224,19 +224,28 @@
 
 .summaryRow {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
   font-size: 14px;
   color: var(--color-gray-600);
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  margin: 0;
-  transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
 }
 
-.summaryAtEnd .summaryRow {
-  max-height: 24px;
-  opacity: 1;
+/* label + compact SlotPicker grouped on the right, max half the row */
+.slotInline {
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  flex-shrink: 0;
+  max-width: 50%;
+}
+
+.slotInlineLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gray-500);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .summaryTotal {
@@ -248,6 +257,11 @@
   padding-top: 0;
   border-top: 1px solid transparent;
   transition: padding-top 0.25s ease, border-top-color 0.2s ease;
+}
+
+/* hide the standalone card on mobile */
+.slotPickerArea {
+  display: none;
 }
 
 .summaryAtEnd .summaryTotal {
@@ -308,16 +322,24 @@
   }
 
 
+  /* restore standalone SlotPicker card, hide the compact inline one */
+  .slotPickerArea {
+    display: block;
+  }
+
+  .slotInline {
+    display: none;
+  }
+
+  .summaryRow {
+    font-size: 14px;
+    color: var(--color-gray-600);
+  }
+
   .summary {
     position: static;
     border: none;
     box-shadow: var(--shadow-sm);
-  }
-
-  .summaryRow {
-    max-height: none;
-    opacity: 1;
-    overflow: visible;
   }
 
   .summaryTotal {
@@ -358,15 +380,20 @@
     padding-inline: var(--padding-x-inner-elements);
   }
 
-  /* Filled state: items + sticky summary sidebar */
+  /* Filled state: items list spans both rows in col 1; slot + summary in col 2 */
   .itemsList {
     grid-column: 1;
+    grid-row: 2 / 4;
+  }
+
+  .slotPickerArea {
+    grid-column: 2;
     grid-row: 2;
   }
 
   .summary {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 3;
     position: sticky;
     top: calc(var(--topbar-height) + 16px);
     margin-top: 0;
