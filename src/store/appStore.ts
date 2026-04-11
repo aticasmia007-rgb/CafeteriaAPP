@@ -30,6 +30,7 @@ export interface AppState {
 export type AppAction =
   | { type: "SET_TAB"; tab: AppState["activeTab"] }
   | { type: "SET_CATEGORY"; category: string }
+  | { type: "SELECT_FILTER"; category: string }
   | { type: "ADD_TO_CART"; product: Product }
   | { type: "REMOVE_FROM_CART"; productId: number }
   | { type: "UPDATE_CART_QTY"; productId: number; quantity: number }
@@ -47,7 +48,7 @@ export type AppAction =
 
 export const initialState: AppState = {
   activeTab: "home",
-  activeCategory: "all",
+  activeCategory: '',
   cart: [],
   favorites: [1, 3, 6, 8, 10],
   notifications: [],
@@ -60,9 +61,17 @@ export const initialState: AppState = {
 export function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "SET_TAB":
-      return { ...state, activeTab: action.tab, searchQuery: "" };
+      return {
+        ...state,
+        activeTab: action.tab,
+        searchQuery: "",
+        // Reset category filter when leaving search
+        activeCategory: action.tab !== "search" ? '' : state.activeCategory === '' ? 'all' : state.activeCategory,
+      };
     case "SET_CATEGORY":
       return { ...state, activeCategory: action.category };
+    case "SELECT_FILTER":
+      return { ...state, activeTab: "search", activeCategory: action.category, searchQuery: "" };
     case "ADD_TO_CART": {
       const existing = state.cart.find(
         (item) => item.product.id === action.product.id

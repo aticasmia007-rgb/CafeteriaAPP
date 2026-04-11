@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useApp } from "../../store/appStore";
-import { categories, notifications as mockNotifications } from "../../data/mockData";
+import { notifications as mockNotifications } from "../../data/mockData";
+import CategoryFilters from "../CategoryFilters";
 import styles from "./TopBar.module.css";
 
 export default function TopBar() {
@@ -157,26 +158,7 @@ export default function TopBar() {
         </div>
       </div>
 
-      {/* Category Filters */}
-      {state.activeTab !== "cart" && state.activeTab !== "profile" && state.activeTab !== "history" && (
-      <nav className={styles.filters}>
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            className={`${styles.filterBtn} ${state.activeCategory === cat.id ? styles.filterActive : ""}`}
-            onClick={() => {
-              dispatch({ type: "SET_CATEGORY", category: cat.id });
-              if (state.activeTab !== "search") {
-                dispatch({ type: "SET_TAB", tab: "search" });
-              }
-            }}
-          >
-            <span className={styles.filterIcon}>{cat.icon}</span>
-            <span className={styles.filterLabel}>{cat.name}</span>
-          </button>
-        ))}
-      </nav>
-      )}
+      <CategoryFilters />
     </header>
   );
 }
