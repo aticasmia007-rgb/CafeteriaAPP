@@ -2,9 +2,11 @@ import { useEffect, useReducer } from "react";
 import {
   AppContext,
   appReducer,
+  createClaimSlot,
+  createOrderId,
   initialState,
 } from "../../store/appStore";
-import { notifications as mockNotifications, pendingOrders as mockPendingOrders } from "../../data/mockData";
+import { notifications as mockNotifications } from "../../data/mockData";
 import TopBar from "../TopBar";
 import HomeContent from "../HomeContent";
 import SearchContent from "../SearchContent";
@@ -20,13 +22,18 @@ export default function App() {
   const [state, dispatch] = useReducer(appReducer, {
     ...initialState,
     notifications: mockNotifications,
-    pendingOrders: mockPendingOrders,
   });
 
   // Resume the flow that triggered the auth sheet, once the user is logged in.
   useEffect(() => {
     if (!state.user || !state.pendingIntent) return;
     if (state.pendingIntent === "checkout") {
+      dispatch({
+        type: "PLACE_ORDER",
+        id: createOrderId(),
+        claimSlot: createClaimSlot(),
+        placedAt: "Ahora",
+      });
       dispatch({
         type: "PUSH_NOTIFICATION",
         notification: {
@@ -37,7 +44,6 @@ export default function App() {
           read: false,
         },
       });
-      dispatch({ type: "CLEAR_CART" });
       dispatch({ type: "SET_TAB", tab: "home" });
     } else if (state.pendingIntent === "profile") {
       dispatch({ type: "SET_TAB", tab: "profile" });

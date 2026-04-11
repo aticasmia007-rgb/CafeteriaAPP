@@ -49,7 +49,29 @@ export type AppAction =
   | { type: "CLEAR_PENDING_INTENT" }
   | { type: "PUSH_NOTIFICATION"; notification: Notification }
   | { type: "OPEN_PENDING_ORDER_SHEET"; orderId: string }
-  | { type: "CLOSE_PENDING_ORDER_SHEET" };
+  | { type: "CLOSE_PENDING_ORDER_SHEET" }
+  | { type: "PLACE_ORDER"; id: string; claimSlot: string; placedAt: string };
+
+/** Generate a fake order id like "#adb323" (3 letters + 3 digits). */
+export function createOrderId(): string {
+  const letters = Array.from({ length: 3 }, () =>
+    String.fromCharCode(97 + Math.floor(Math.random() * 26))
+  ).join("");
+  const digits = Math.floor(100 + Math.random() * 900);
+  return `#${letters}${digits}`;
+}
+
+/** Build a 15-minute claim slot starting ~10 minutes from now, e.g. "10:30 – 10:45". */
+export function createClaimSlot(now: Date = new Date()): string {
+  const start = new Date(now.getTime() + 10 * 60 * 1000);
+  const end = new Date(start.getTime() + 15 * 60 * 1000);
+  const fmt = (d: Date) =>
+    `${d.getHours().toString().padStart(2, "0")}:${d
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+  return `${fmt(start)} – ${fmt(end)}`;
+}
 
 export const initialState: AppState = {
   activeTab: "home",
@@ -166,6 +188,31 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, pendingOrderSheetOpen: true, selectedPendingOrderId: action.orderId };
     case "CLOSE_PENDING_ORDER_SHEET":
       return { ...state, pendingOrderSheetOpen: false };
+    case "PLACE_ORDER": {
+      if (state.cart.length === 0) return state;
+      const items = state.cart.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+      }));
+      const total = state.cart.reduce((sum, item) => {
+        const price = item.product.discount
+          ? item.product.price * (1 - item.product.discount / 100)
+          : item.product.price;
+        return sum + price * item.quantity;
+      }, 0);
+      const order: PendingOrder = {
+        id: action.id,
+        items,
+        total,
+        claimSlot: action.claimSlot,
+        placedAt: action.placedAt,
+      };
+      return {
+        ...state,
+        pendingOrders: [order, ...state.pendingOrders],
+        cart: [],
+      };
+    }
     default:
       return state;
   }

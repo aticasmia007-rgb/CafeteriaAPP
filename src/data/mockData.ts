@@ -108,15 +108,3 @@ export interface PendingOrder {
   placedAt: string;  // e.g. "Hace 3 min"
 }
 
-export const pendingOrders: PendingOrder[] = [
-  {
-    id: "#adb323",
-    items: [
-      { product: products[0], quantity: 2 },
-      { product: products[2], quantity: 1 },
-    ],
-    total: 5.45,
-    claimSlot: "10:00 – 10:45",
-    placedAt: "Hace 3 min",
-  },
-];

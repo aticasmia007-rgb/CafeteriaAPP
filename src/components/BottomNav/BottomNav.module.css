@@ -135,8 +135,8 @@
   }
 
   .cartBadge {
-    top: 6px;
-    right: 6px;
+    top: 0px;
+    right: 0px;
     border: 2px solid var(--color-white);
     min-width: 20px;
     height: 20px;

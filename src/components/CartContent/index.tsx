@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useApp } from "../../store/appStore";
+import { createClaimSlot, createOrderId, useApp } from "../../store/appStore";
 import { isImageUrl, products } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import styles from "./CartContent.module.css";
@@ -163,6 +163,12 @@ export default function CartContent() {
               dispatch({ type: "OPEN_AUTH_SHEET", intent: "checkout" });
             } else {
               dispatch({
+                type: "PLACE_ORDER",
+                id: createOrderId(),
+                claimSlot: createClaimSlot(),
+                placedAt: "Ahora",
+              });
+              dispatch({
                 type: "PUSH_NOTIFICATION",
                 notification: {
                   id: Date.now(),
@@ -172,7 +178,6 @@ export default function CartContent() {
                   read: false,
                 },
               });
-              dispatch({ type: "CLEAR_CART" });
               dispatch({ type: "SET_TAB", tab: "home" });
             }
           }}
