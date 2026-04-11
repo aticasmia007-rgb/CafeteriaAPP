@@ -9,6 +9,24 @@ Componente: $ARGUMENTS
 - Lee/escribe estado global con `useApp()` desde `src/store/appStore.ts`
 - UI copy en **español**
 
+## Estado global disponible (`AppState`)
+Campos relevantes:
+- `cart` — items en carrito; `UPDATE_CART_QTY` con `quantity ≤ 0` elimina el item
+- `pendingOrders` — pedidos realizados (empieza vacío, se llena con `PLACE_ORDER`)
+- `pendingOrderSheetOpen` / `selectedPendingOrderId` — controlan el sheet de detalle de pedido
+- `authSheetOpen` / `pendingIntent` — controlan el sheet de login
+- `user` — null si no autenticado
+
+### Flujo de pago (`PLACE_ORDER`)
+Para registrar un pedido al pagar, **NO** uses `CLEAR_CART` separado — usa `PLACE_ORDER` que construye el pedido desde el carrito y lo vacía en un solo dispatch:
+```tsx
+import { createClaimSlot, createOrderId } from "../../store/appStore";
+
+dispatch({ type: "PLACE_ORDER", id: createOrderId(), claimSlot: createClaimSlot(), placedAt: "Ahora" });
+dispatch({ type: "PUSH_NOTIFICATION", notification: { id: Date.now(), title: "Pedido realizado", message: `...`, time: "Ahora", read: false } });
+dispatch({ type: "SET_TAB", tab: "home" });
+```
+
 ## Responsive obligatorio (3 breakpoints)
 - `< 768px` móvil: full-width
 - `≥ 768px` tablet: grid/wrap en lugar de scroll horizontal
@@ -159,3 +177,9 @@ if (!mounted) return null;
 - Paleta cálida: verde oliva `--color-primary` + terracota `--color-accent` + cream `--color-bg`/`--color-surface`
 - Animaciones sutiles con CSS puro (fade, hover, transición de 0.15-0.2s)
 - Sin gradientes púrpura, sin Inter/Roboto, sin patrones genéricos de IA
+
+## Componentes existentes como referencia
+`App/`, `TopBar/`, `BottomNav/`, `CategoryFilters/`, `HomeContent/`, `SearchContent/`, `CartContent/`, `ProductCard/`, `AuthSheet/`, `ProfileView/`, `HistoryView/`, `RecentOrders/`, `PendingOrders/`, `PendingOrderSheet/`
+
+### Imágenes de producto (`isImageUrl`)
+Cualquier componente que muestre `Product.image` debe importar `isImageUrl` de `src/data/mockData` y ramificar entre `<img>` y `<span>` emoji. Esto incluye sheets de detalle de pedidos (`PendingOrderSheet`) y cualquier listado de items.
