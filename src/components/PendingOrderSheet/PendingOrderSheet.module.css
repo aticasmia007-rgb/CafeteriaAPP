@@ -233,7 +233,7 @@
 }
 
 .totalAmount {
-  font-family: var(--font-display);
+  font-family: var(--font-family);
   font-size: 18px;
   color: var(--color-primary-dark);
 }
