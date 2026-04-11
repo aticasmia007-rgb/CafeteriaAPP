@@ -276,7 +276,7 @@
   .content {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr;
     column-gap: 24px;
     row-gap: 16px;
     align-items: start;
