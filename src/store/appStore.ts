@@ -1,6 +1,6 @@
 // Simple global state using React context + useReducer
 import { createContext, useContext } from "react";
-import type { Product, Notification } from "../data/mockData";
+import type { Product, Notification, PendingOrder } from "../data/mockData";
 
 export interface CartItem {
   product: Product;
@@ -25,6 +25,9 @@ export interface AppState {
   user: User | null;
   authSheetOpen: boolean;
   pendingIntent: AuthIntent;
+  pendingOrders: PendingOrder[];
+  pendingOrderSheetOpen: boolean;
+  selectedPendingOrderId: string | null;
 }
 
 export type AppAction =
@@ -44,7 +47,9 @@ export type AppAction =
   | { type: "LOGIN"; user: User }
   | { type: "LOGOUT" }
   | { type: "CLEAR_PENDING_INTENT" }
-  | { type: "PUSH_NOTIFICATION"; notification: Notification };
+  | { type: "PUSH_NOTIFICATION"; notification: Notification }
+  | { type: "OPEN_PENDING_ORDER_SHEET"; orderId: string }
+  | { type: "CLOSE_PENDING_ORDER_SHEET" };
 
 export const initialState: AppState = {
   activeTab: "home",
@@ -56,6 +61,9 @@ export const initialState: AppState = {
   user: null,
   authSheetOpen: false,
   pendingIntent: null,
+  pendingOrders: [],
+  pendingOrderSheetOpen: false,
+  selectedPendingOrderId: null,
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -154,6 +162,10 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         notifications: [action.notification, ...state.notifications],
       };
+    case "OPEN_PENDING_ORDER_SHEET":
+      return { ...state, pendingOrderSheetOpen: true, selectedPendingOrderId: action.orderId };
+    case "CLOSE_PENDING_ORDER_SHEET":
+      return { ...state, pendingOrderSheetOpen: false };
     default:
       return state;
   }

@@ -94,3 +94,29 @@ export const recentOrders: OrderGroup[] = [
 ];
 
 export const favoriteProductIds = [1, 3, 6, 8, 10];
+
+export interface PendingOrderItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface PendingOrder {
+  id: string;        // e.g. "#adb323" — 3 letters + 3 digits
+  items: PendingOrderItem[];
+  total: number;
+  claimSlot: string; // e.g. "10:30 – 10:45"
+  placedAt: string;  // e.g. "Hace 3 min"
+}
+
+export const pendingOrders: PendingOrder[] = [
+  {
+    id: "#adb323",
+    items: [
+      { product: products[0], quantity: 2 },
+      { product: products[2], quantity: 1 },
+    ],
+    total: 5.45,
+    claimSlot: "10:30 – 10:45",
+    placedAt: "Hace 3 min",
+  },
+];

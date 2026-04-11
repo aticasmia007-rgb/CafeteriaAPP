@@ -2,6 +2,7 @@ import { useApp } from "../../store/appStore";
 import { products, recentOrders } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import RecentOrders from "../RecentOrders";
+import PendingOrders from "../PendingOrders";
 import styles from "./HomeContent.module.css";
 
 export default function HomeContent() {
@@ -12,6 +13,9 @@ export default function HomeContent() {
 
   return (
     <div className={styles.content}>
+      {/* Por recoger */}
+      <PendingOrders />
+
       {/* Recomendados */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>

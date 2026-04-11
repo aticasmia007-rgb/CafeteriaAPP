@@ -4,13 +4,14 @@ import {
   appReducer,
   initialState,
 } from "../../store/appStore";
-import { notifications as mockNotifications } from "../../data/mockData";
+import { notifications as mockNotifications, pendingOrders as mockPendingOrders } from "../../data/mockData";
 import TopBar from "../TopBar";
 import HomeContent from "../HomeContent";
 import SearchContent from "../SearchContent";
 import CartContent from "../CartContent";
 import BottomNav from "../BottomNav";
 import AuthSheet from "../AuthSheet";
+import PendingOrderSheet from "../PendingOrderSheet";
 import ProfileView from "../ProfileView";
 import HistoryView from "../HistoryView";
 import styles from "./App.module.css";
@@ -19,6 +20,7 @@ export default function App() {
   const [state, dispatch] = useReducer(appReducer, {
     ...initialState,
     notifications: mockNotifications,
+    pendingOrders: mockPendingOrders,
   });
 
   // Resume the flow that triggered the auth sheet, once the user is logged in.
@@ -56,6 +58,7 @@ export default function App() {
         </main>
         <BottomNav />
         <AuthSheet />
+        <PendingOrderSheet />
       </div>
     </AppContext.Provider>
   );
