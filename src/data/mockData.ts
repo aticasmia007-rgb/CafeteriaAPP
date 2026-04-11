@@ -116,7 +116,7 @@ export const pendingOrders: PendingOrder[] = [
       { product: products[2], quantity: 1 },
     ],
     total: 5.45,
-    claimSlot: "10:30 – 10:45",
+    claimSlot: "10:00 – 10:45",
     placedAt: "Hace 3 min",
   },
 ];
