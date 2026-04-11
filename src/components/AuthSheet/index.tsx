@@ -10,6 +10,17 @@ export default function AuthSheet() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  // Mount immediately on open; unmount after close animation finishes (350ms transition + buffer)
+  useEffect(() => {
+    if (state.authSheetOpen) {
+      setMounted(true);
+    } else {
+      const t = setTimeout(() => setMounted(false), 400);
+      return () => clearTimeout(t);
+    }
+  }, [state.authSheetOpen]);
 
   // Lock body scroll while open
   useEffect(() => {
@@ -73,6 +84,8 @@ export default function AuthSheet() {
         : mode === "login"
           ? "Bienvenido de nuevo"
           : "Crea tu cuenta";
+
+  if (!mounted) return null;
 
   return (
     <>

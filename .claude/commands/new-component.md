@@ -122,6 +122,38 @@ Para elementos que se muestran/ocultan pero deben conservar su espacio (ej. bot�
 ### Variable inexistente
 `--color-gray-50` NO existe — usa `--color-surface` para fondos muy claros.
 
+### Viewport height
+Usa siempre `dvh` en lugar de `vh` para alturas de pantalla completa — `height: 100dvh`, `max-height: 92dvh`, etc. `dvh` se adapta al chrome dinámico del navegador móvil (barra de URL, barra de pestañas).
+
+### Inputs: font-size mínimo 16px
+Todo `<input>`, `<textarea>` y `<select>` debe tener `font-size: 16px` o mayor en su clase CSS. iOS Safari hace auto-zoom si el campo enfocado tiene `font-size < 16px`, rompiendo el layout.
+
+### Targets táctiles en móvil
+Botones de interacción frecuente (steppers, reordenar, FABs) deben tener área de toque ≥44×44px en móvil. Mantén el visual compacto y expande el hit area con un pseudo-elemento invisible:
+```css
+.btn { position: relative; }
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: -10px;  /* ajustar según tamaño visual: 24px + 20px = 44px */
+}
+@media (min-width: 768px) {
+  .btn::after { display: none; }
+}
+```
+**Nota:** si el componente padre tiene `overflow: hidden` (ej. una card con imagen), mueve ese `overflow: hidden` al contenedor de la imagen (con `border-radius` solo en las esquinas superiores), no a la card raíz — de lo contrario el `::after` queda recortado.
+
+### Modales y overlays — renderizado condicional
+Nunca dejes un modal/sheet en el DOM con solo `opacity: 0`. En ≥768px un sheet centrado en viewport con `opacity: 0` bloquea todos los clics aunque sea invisible. Usa un `mounted` state con timeout para preservar la animación de cierre:
+```tsx
+const [mounted, setMounted] = useState(false);
+useEffect(() => {
+  if (open) { setMounted(true); }
+  else { const t = setTimeout(() => setMounted(false), 400); return () => clearTimeout(t); }
+}, [open]);
+if (!mounted) return null;
+```
+
 ## Estética
 - Tipografía: `var(--font-display)` (Fraunces serif italic) para títulos, `var(--font-family)` (DM Sans) para UI
 - Paleta cálida: verde oliva `--color-primary` + terracota `--color-accent` + cream `--color-bg`/`--color-surface`

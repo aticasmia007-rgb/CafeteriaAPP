@@ -242,3 +242,18 @@
   color: var(--color-danger);
 }
 
+@media (min-width: 768px) {
+  .header {
+    --padding-x-inner-elements: clamp(2rem, 6vw, 5rem);
+  }
+
+  .topRow {
+    padding: 0 var(--padding-x-inner-elements);
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    --padding-x-inner-elements: clamp(2rem, 20vw, 25rem);
+  }
+}

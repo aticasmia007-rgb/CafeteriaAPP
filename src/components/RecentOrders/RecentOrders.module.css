@@ -124,6 +124,13 @@
   align-items: center;
   justify-content: center;
   transition: background 0.15s;
+  position: relative;
+}
+
+.reorderQtyBtn::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
 }
 
 .reorderQtyBtn:hover {
@@ -149,6 +156,13 @@
   justify-content: center;
   transition: background 0.2s;
   flex-shrink: 0;
+  position: relative;
+}
+
+.reorderBtn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
 }
 
 .reorderBtn:hover {
@@ -163,6 +177,11 @@
   }
 
   .ordersList {
-    padding: 0 var(--padding-x-inner-elements);
+    padding: 14px var(--padding-x-inner-elements);
+  }
+
+  .reorderQtyBtn::after,
+  .reorderBtn::after {
+    display: none;
   }
 }

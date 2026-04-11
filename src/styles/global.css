@@ -47,6 +47,13 @@
   /* Distinctive pairing: Fraunces (display serif) + DM Sans (geometric UI) */
   --font-display: 'Fraunces', Georgia, serif;
   --font-family: 'DM Sans', -apple-system, sans-serif;
+
+  /* App background pattern */
+  --bg-pattern-image: url('/i-like-food.svg');
+  --bg-pattern-size: 430px 430px;
+  --bg-pattern-repeat: repeat;
+  --bg-pattern-color: #4A7C54;
+  --bg-pattern-opacity: 0.05;
 }
 
 * {
@@ -57,13 +64,37 @@
 
 html, body {
   font-family: var(--font-family);
-  background: var(--color-bg);
   color: var(--color-black);
   height: 100%;
   width: 100%;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
+
+html {
+  background-color: var(--color-bg);
+}
+
+body {
+  isolation: isolate;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--bg-pattern-color);
+  -webkit-mask-image: var(--bg-pattern-image);
+  mask-image: var(--bg-pattern-image);
+  -webkit-mask-repeat: var(--bg-pattern-repeat);
+  mask-repeat: var(--bg-pattern-repeat);
+  -webkit-mask-size: var(--bg-pattern-size);
+  mask-size: var(--bg-pattern-size);
+  opacity: var(--bg-pattern-opacity);
+  pointer-events: none;
+}
+
 
 @media (min-width: 1024px) {
   html, body {

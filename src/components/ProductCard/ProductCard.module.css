@@ -2,7 +2,6 @@
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
@@ -29,6 +28,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  overflow: hidden;
 }
 
 .compact .imageArea {
@@ -169,6 +170,13 @@
   justify-content: center;
   color: var(--color-gray-700);
   transition: background 0.15s, transform 0.15s;
+  position: relative;
+}
+
+.qtyBtn::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
 }
 
 .qtyBtn:hover {
@@ -214,4 +222,10 @@
 
 .addBtn:active {
   transform: scale(0.95);
+}
+
+@media (min-width: 768px) {
+  .qtyBtn::after {
+    display: none;
+  }
 }

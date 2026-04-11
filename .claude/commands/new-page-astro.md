@@ -28,3 +28,5 @@ Las media queries van DESPUÉS de las reglas base (cascade gotcha del proyecto).
 - UI copy en **español**
 - Iconos SVG inline con `stroke="currentColor"` (color en CSS, no inline)
 - Sin JavaScript innecesario — esta es una página estática Astro pura
+- Viewport height con `dvh` (`height: 100dvh`, `min-height: 100dvh`) — nunca `vh`
+- Inputs/textareas/selects con `font-size: 16px` mínimo para evitar auto-zoom en iOS

@@ -242,11 +242,17 @@
 
 @media (min-width: 768px) {
   .content {
-    padding-inline: clamp(2rem, 6vw, 5rem);
+    --padding-x-inner-elements: clamp(2rem, 6vw, 5rem);
+    padding-inline: var(--padding-x-inner-elements);
   }
 }
 
 @media (min-width: 1024px) {
+  .content {
+    --padding-x-inner-elements: clamp(2rem, 20vw, 25rem);
+    padding-inline: var(--padding-x-inner-elements);
+  }
+
   .list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

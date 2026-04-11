@@ -47,13 +47,41 @@ Al generar interfaces:
 
 **Anonymous-first auth gate.** The app is fully usable while logged out (browse, favorite, add to cart). Auth is only required for actions like *pay*, *profile*, and *history*. The pattern: a trigger checks `state.user`; if `null` it dispatches `OPEN_AUTH_SHEET` with an `intent` (`"checkout" | "profile" | "login"`), which sets `authSheetOpen = true` and stores `pendingIntent`. `AuthSheet` (slide-up bottom sheet, Google or email+password, mock login) dispatches `LOGIN` on submit. `App/index.tsx` runs a `useEffect` watching `state.user && state.pendingIntent`: when both are set it replays the original flow (e.g. `checkout` → push notification + clear cart + go home, `profile` → set tab to `profile`) and then dispatches `CLEAR_PENDING_INTENT`. **When adding a new gated action**, follow the same pattern: dispatch `OPEN_AUTH_SHEET` with a new intent, add a branch in App's effect, run the same logic inline when the user is already logged in. `ProfileView` early-returns `null` and dispatches `SET_TAB → home` from a `useEffect` if `state.user` becomes null — never dispatch during render.
 
+**Modal/overlay rendering pattern.** `AuthSheet` uses a `mounted` state to avoid keeping the overlay in the DOM when closed. Mount immediately on open; unmount after the close animation finishes (timeout slightly longer than the CSS transition — 400ms for a 350ms transition). **Never rely solely on `opacity: 0` to hide a modal** — at ≥768px the sheet is centered in the viewport with `opacity: 0` and no `pointer-events: none`, so it silently blocks all clicks on the page underneath. Conditional rendering is the correct fix:
+```tsx
+const [mounted, setMounted] = useState(false);
+useEffect(() => {
+  if (open) { setMounted(true); }
+  else { const t = setTimeout(() => setMounted(false), 400); return () => clearTimeout(t); }
+}, [open]);
+if (!mounted) return null;
+```
+
 **Cart stepper pattern.** `ProductCard` and HomeContent's recent-orders rows show a `+` button until the product is in the cart, then expose a `−  qty  +` stepper. Both the stepper (`.qtyGroup`) and the initial add button (`.addBtn`) are **always rendered** — neither is mounted/unmounted conditionally. When the product is not in the cart, `.qtyGroup` gets `.qtyGroupHidden` and `.addBtn` gets `.addBtnHidden` (both use `visibility: hidden; opacity: 0; pointer-events: none` + `tabIndex={-1}`). This reserves space for both so the layout never shifts when adding the first unit. Inside `.info` the order is: name → desc → qtyGroup (`margin-top: auto`, centered) → priceRow (discount + price + addBtn). Both stepper buttons read `state.cart.find(i => i.product.id === product.id)`; the `−` uses `UPDATE_CART_QTY` with `cartItem.quantity - 1` and relies on the reducer's `<= 0` removal to restore the original state.
+
+**Mobile touch targets.** Any button that is tapped frequently on mobile (steppers, reorder buttons, etc.) must have a minimum 44×44 px tap area. Keep the visual size tight; expand the hit area invisibly with a `::after` pseudo-element:
+```css
+.qtyBtn { position: relative; }
+.qtyBtn::after {
+  content: '';
+  position: absolute;
+  inset: -10px;   /* 24px visual + 20px = 44px tap target */
+}
+@media (min-width: 768px) {
+  .qtyBtn::after { display: none; }   /* mouse users don't need it */
+}
+```
+Currently applied to: `ProductCard .qtyBtn` (inset -10px), `CartContent .qtyBtn` (inset -8px), `RecentOrders .reorderQtyBtn/.reorderBtn` (inset -7px/-6px). **Important:** for this to work on `ProductCard`, `overflow: hidden` must be on `.imageArea` (with `border-radius: var(--radius-md) var(--radius-md) 0 0`), NOT on `.card` — otherwise the `::after` pseudo-elements get clipped by the card bounds.
 
 **Cart sticky summary (mobile).** On `< 768px`, `CartContent`'s `.summary` is `position: sticky; bottom: 8px` so the pay block hovers above the items list. The component also tracks an `atEnd` state via a scroll listener on the cart's scroll parent (walks up looking for `overflow-y: auto`) and toggles a `.summaryAtEnd` class on the summary when the user reaches the bottom. While not at end, the `Productos (n)` row is collapsed (`max-height: 0; opacity: 0`) and `.summaryTotal`'s top divider is transparent + zero padding; both animate in once `.summaryAtEnd` is set. At ≥768px these mobile-only states are reset and the divider/row are always visible. The desktop ≥1024px sticky-aside override comes after, so source order matters.
 
 **Product images (`Product.image`).** The field is a single string that holds **either** an emoji (e.g. `"🥖"`) **or** a URL pointing to a file in `public/` (e.g. `"/tortilla.jpg"`) or an external URL (`"https://..."`). The helper [`isImageUrl(image)`](src/data/mockData.ts) in `mockData.ts` (`image.startsWith("/") || image.startsWith("http")`) is the discriminator. **Every render site that displays `Product.image` must branch on `isImageUrl` and render either an `<img>` (with `alt={product.name}` and `loading="lazy"`) or a `<span class={emojiClass}>`** — currently: `ProductCard` (`.image` fills `.imageArea` with `object-fit: cover`), `CartContent` (`.itemImage` 44×44 thumb), `HomeContent` recent-orders rows (`.orderItemImage` 28×28), and `HistoryView` (`.itemImage` 26×26). The emoji span variants set fixed widths so a row mixing emojis and images doesn't shift horizontally. To add a real image: drop the file in `public/` and set `image: "/myfile.jpg"` — no other changes needed.
 
 **Styling: CSS Modules + global tokens.** Design tokens (colors, radii, shadows, `--topbar-height`, `--bottomnav-height`, `--sidebar-width`, `--content-max-width`) live in [src/styles/global.css](src/styles/global.css). Each component folder has its co-located `<Name>.module.css`. Do NOT introduce Tailwind, CSS-in-JS, or other styling systems — match the existing CSS Module pattern.
+
+**Background pattern (global.css / Layout.astro).** The food SVG pattern (`public/i-like-food.svg`) is rendered via CSS `mask-image` on `body::before`. The stacking setup: `html { background-color: var(--color-bg) }` provides the cream canvas; `body { isolation: isolate }` creates a scoped stacking context; `body::before { position: fixed; inset: 0; z-index: -1; background-color: var(--bg-pattern-color); mask-image: var(--bg-pattern-image); opacity: var(--bg-pattern-opacity) }` renders the pattern above body's transparent background but below body's content; `.app { background: transparent }` lets the pattern show through the content area. All tunable values (`--bg-pattern-image`, `--bg-pattern-size`, `--bg-pattern-repeat`, `--bg-pattern-color`, `--bg-pattern-opacity`) are CSS variables in `:root`. **Why `isolation: isolate` is required:** without it, `body::before { z-index: -1 }` escapes to the root stacking context and renders behind `html`'s background, making the pattern invisible.
+
+**TopBar padding alignment.** `TopBar.module.css` sets `--padding-x-inner-elements` on `.header` at 768px/1024px (same clamp values as non-scroll content components). `CategoryFilters` inherits the variable via the cascade and uses `padding-inline: var(--padding-x-inner-elements)` at tablet/desktop — no need to redeclare the clamp values inside CategoryFilters.module.css.
 
 **Responsive breakpoints** (important — the app must work on phone, tablet, and PC):
 - **< 768px** — mobile: full-width app card, fixed bottom nav.
@@ -72,6 +100,10 @@ Al generar interfaces:
 **CSS Module cascade gotcha — media queries at the end.** All `@media` blocks must be grouped at the bottom of the file, after every base rule. The required structure is: (1) all base selectors, (2) one `@media (min-width: 768px) { … }` block with all tablet overrides, (3) one `@media (min-width: 1024px) { … }` block with all desktop overrides. Never intercalate queries between base rules — media queries don't add specificity so source order is the only tiebreaker, and mixing them makes overrides unpredictable. This bit `BottomNav` active-pill styles and several other components.
 
 **SVG icon colors.** Icons use `stroke="currentColor"` / `fill="currentColor"` so color is driven by the parent CSS class. Set the color on the wrapping button/element (e.g. `.avatar { color: var(--color-white) }`), never hard-code `stroke="white"` or inline `var(--color-...)` in JSX. The fallback variable `--color-gray-50` does **not** exist in `global.css` — use `--color-surface` for very light backgrounds.
+
+**Mobile viewport height.** Always use `dvh` (dynamic viewport height) instead of `vh` for full-screen height declarations — `height: 100dvh`, `max-height: 92dvh`, etc. `dvh` resizes as the browser chrome (address bar, tab strip) slides in/out on mobile; `vh` is fixed to the largest possible viewport and causes layout overflow or clipping on iOS Safari / Chrome Android.
+
+**Input font-size — prevent iOS auto-zoom.** Every `<input>`, `<textarea>`, and `<select>` element **must** have `font-size: 16px` or larger in its CSS class. iOS Safari zooms the viewport whenever a focusable field has `font-size < 16px`, which breaks the layout. Do not use `14px` or `15px` on form fields even if the surrounding UI uses smaller type — the minimum is `16px`.
 
 ## Language
 

@@ -176,6 +176,13 @@
   justify-content: center;
   color: var(--color-gray-700);
   transition: background 0.15s;
+  position: relative;
+}
+
+.qtyBtn::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
 }
 
 .qtyBtn:hover {
@@ -278,6 +285,10 @@
   .content {
     --padding-x-inner-elements: clamp(2rem, 6vw, 5rem);
     padding-inline: var(--padding-x-inner-elements);
+  }
+
+  .qtyBtn::after {
+    display: none;
   }
 
   .recommendedSection {

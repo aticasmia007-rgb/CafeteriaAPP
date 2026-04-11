@@ -46,3 +46,9 @@
 .filterLabel {
   font-weight: 500;
 }
+
+@media (min-width: 768px) {
+  .filters {
+    padding-inline: var(--padding-x-inner-elements);
+  }
+}
