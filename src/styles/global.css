@@ -45,8 +45,9 @@
   --content-max-width: 1200px;
 
   /* Distinctive pairing: Fraunces (display serif) + DM Sans (geometric UI) */
-  --font-display: 'Fraunces', Georgia, serif;
   --font-family: 'DM Sans', -apple-system, sans-serif;
+  --font-display: var(--font-family);
+  /* --font-display: 'Fraunces', Georgia, serif; */
 
   /* App background pattern */
   --bg-pattern-image: url('/i-like-food.svg');
