@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../store/appStore";
-import { isImageUrl } from "../../data/mockData";
+import { isImageUrl, products } from "../../data/mockData";
+import ProductCard from "../ProductCard";
 import styles from "./CartContent.module.css";
 
 export default function CartContent() {
@@ -40,20 +41,32 @@ export default function CartContent() {
 
   const itemCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const recommended = products.filter((p) => p.recommended);
+
   if (state.cart.length === 0) {
     return (
-      <div className={styles.emptyWrapper}>
+      <div className={styles.content}>
         <div className={styles.empty}>
           <span className={styles.emptyIcon}>🛒</span>
           <p className={styles.emptyTitle}>Tu carrito está vacío</p>
           <p className={styles.emptyHint}>Añade productos desde la página principal</p>
           <button
             className={styles.goHomeBtn}
-            onClick={() => dispatch({ type: "SET_TAB", tab: "home" })}
+            onClick={() => dispatch({ type: "SET_TAB", tab: "search" })}
           >
             Ver productos
           </button>
         </div>
+        <section className={styles.recommendedSection}>
+          <h2 className={styles.recommendedTitle}>
+            <span>⭐</span> Recomendados
+          </h2>
+          <div className={styles.horizontalScroll}>
+            {recommended.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
       </div>
     );
   }

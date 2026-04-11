@@ -7,7 +7,7 @@ import styles from "./HomeContent.module.css";
 export default function HomeContent() {
   const { state } = useApp();
 
-  const recommended = products.filter((p) => p.discount);
+  const recommended = products.filter((p) => p.recommended);
   const favorites = products.filter((p) => state.favorites.includes(p.id));
 
   return (

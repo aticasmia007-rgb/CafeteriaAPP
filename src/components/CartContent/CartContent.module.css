@@ -7,20 +7,13 @@
 }
 
 /* Empty State */
-.emptyWrapper {
-  min-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-
 .empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-block: 32px;
 }
 
 .emptyIcon {
@@ -53,6 +46,38 @@
 
 .goHomeBtn:hover {
   background: var(--color-primary-dark);
+}
+
+/* Recommended section (empty cart) */
+.recommendedSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* bleed the scroll out of .content's padding-inline */
+  margin-inline: -20px;
+}
+
+.recommendedTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 20px;
+}
+
+.horizontalScroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 14px 20px 20px;
+  scroll-padding-inline: 20px;
+  scrollbar-width: none;
+}
+
+.horizontalScroll::-webkit-scrollbar {
+  display: none;
 }
 
 /* Header */
@@ -251,8 +276,26 @@
 
 @media (min-width: 768px) {
   .content {
-    padding-inline: clamp(2rem, 6vw, 5rem);
+    --padding-x-inner-elements: clamp(2rem, 6vw, 5rem);
+    padding-inline: var(--padding-x-inner-elements);
   }
+
+  .recommendedSection {
+    margin-inline: calc(var(--padding-x-inner-elements) * -1);
+  }
+
+  .recommendedTitle {
+    padding-inline: var(--padding-x-inner-elements);
+  }
+
+  .horizontalScroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 160px);
+    justify-content: center;
+    overflow-x: visible;
+    padding: 14px var(--padding-x-inner-elements) 20px;
+  }
+
 
   .summary {
     position: static;
@@ -274,6 +317,8 @@
 
 @media (min-width: 1024px) {
   .content {
+    --padding-x-inner-elements: clamp(2rem, 20vw, 25rem);
+    padding-inline: var(--padding-x-inner-elements);
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
     grid-template-rows: auto 1fr;
@@ -282,10 +327,27 @@
     align-items: start;
   }
 
-  .header {
+  /* Full-width header for both empty and filled states */
+  .header,
+  .empty {
     grid-column: 1 / -1;
   }
 
+  /* Empty state: recommended section spans both columns and bleeds */
+  .recommendedSection {
+    grid-column: 1 / -1;
+    margin-inline: calc(var(--padding-x-inner-elements) * -1);
+  }
+
+  .recommendedTitle {
+    padding-inline: var(--padding-x-inner-elements);
+  }
+
+  .horizontalScroll {
+    padding-inline: var(--padding-x-inner-elements);
+  }
+
+  /* Filled state: items + sticky summary sidebar */
   .itemsList {
     grid-column: 1;
     grid-row: 2;

@@ -13,6 +13,7 @@ export interface Product {
   description: string;
   discount?: number;
   isFavorite?: boolean;
+  recommended?: boolean;
 }
 
 export interface Notification {
@@ -40,21 +41,31 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15 },
-  { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", category: "bocadillos", description: "Lechuga, tomate, huevo y atún" },
-  { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", category: "cafe", description: "Café con leche semidesnatada" },
-  { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", category: "bebidas", description: "Zumo natural", discount: 10 },
+  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15, recommended: true },
+  { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", category: "bocadillos", description: "Lechuga, tomate, huevo y atún", recommended: true },
+  { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", category: "cafe", description: "Café con leche semidesnatada", recommended: true },
+  { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", category: "bebidas", description: "Zumo natural", discount: 10, recommended: true },
   { id: 5, name: "Fuze Tea", price: 0.80, image: "/fuze-tea.jpg", category: "bebidas", description: "Lata 250ml" },
-  { id: 6, name: "Tarta de Manzana", price: 1.80, image: "/tarta.jpg", category: "postres", description: "Porción casera", discount: 20 },
-  { id: 7, name: "Croissant", price: 1.10, image: "/croissant.jpg", category: "snacks", description: "Croissant de mantequilla" },
-  { id: 8, name: "Fruta del Día", price: 0.70, image: "/fruit.jpg", category: "fruta", description: "Manzana, plátano o naranja" },
-  { id: 9, name: "Patatas Fritas", price: 1.00, image: "🍟", category: "snacks", description: "Bolsa individual" },
-  { id: 10, name: "Batido Chocolate", price: 1.60, image: "/chocolate.jpg", category: "bebidas", description: "Batido de chocolate frío" },
-  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", category: "bocadillos", description: "Pincho de tortilla con pan" },
-  { id: 12, name: "Galletas", price: 0.90, image: "/galleta.jpg", category: "snacks", description: "Paquete de galletas María" },
-  { id: 13, name: "Yogur Natural", price: 0.95, image: "🥄", category: "postres", description: "Yogur natural sin azúcar" },
-  { id: 14, name: "Cortado", price: 1.00, image: "/cortado.jpg", category: "cafe", description: "Café cortado con leche", discount: 5 },
-  { id: 15, name: "Bocadillo Mixto", price: 2.30, image: "🧀", category: "bocadillos", description: "Jamón york y queso a la plancha" },
+  { id: 6, name: "Tarta de Manzana", price: 1.80, image: "/tarta.jpg", category: "postres", description: "Porción casera", discount: 20, recommended: true },
+  { id: 7, name: "Croissant", price: 1.10, image: "/croissant.jpg", category: "snacks", description: "Croissant de mantequilla", recommended: true },
+  { id: 8, name: "Fruta del Día", price: 0.70, image: "/fruit.jpg", category: "fruta", description: "Manzana, plátano o naranja", recommended: true },
+  { id: 9, name: "Patatas Fritas", price: 1.00, image: "🍟", category: "snacks", description: "Bolsa individual" , recommended: true},
+  { id: 10, name: "Batido Chocolate", price: 1.60, image: "/chocolate.jpg", category: "bebidas", description: "Batido de chocolate frío", recommended: true },
+  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", category: "bocadillos", description: "Pincho de tortilla con pan" , recommended: true},
+  { id: 12, name: "Galletas", price: 0.90, image: "/galleta.jpg", category: "snacks", description: "Paquete de galletas María" , recommended: true},
+  { id: 13, name: "Yogur Natural", price: 0.95, image: "🥄", category: "postres", description: "Yogur natural sin azúcar" , recommended: true},
+  { id: 14, name: "Cortado", price: 1.00, image: "/cortado.jpg", category: "cafe", description: "Café cortado con leche", discount: 5, recommended: true },
+  { id: 15, name: "Bocadillo Mixto", price: 2.30, image: "🧀", category: "bocadillos", description: "Jamón york y queso a la plancha", recommended: true },
+  { id: 16, name: "Napolitana de Chocolate", price: 1.30, image: "🥐", category: "snacks", description: "Hojaldre relleno de crema de cacao" },
+  { id: 17, name: "Agua Mineral", price: 0.50, image: "💧", category: "bebidas", description: "Botella 500ml" },
+  { id: 18, name: "Bocadillo de Atún", price: 2.60, image: "🥪", category: "bocadillos", description: "Atún con tomate natural y aceite de oliva", recommended: true },
+  { id: 19, name: "Té Verde", price: 1.00, image: "🍵", category: "cafe", description: "Infusión de té verde en bolsita" },
+  { id: 20, name: "Muffin de Arándanos", price: 1.40, image: "🧁", category: "postres", description: "Bizcocho esponjoso con arándanos frescos", discount: 10 },
+  { id: 21, name: "Bocadillo de Lomo", price: 2.90, image: "🥩", category: "bocadillos", description: "Lomo de cerdo a la plancha con pimientos" },
+  { id: 22, name: "Refresco Cola", price: 1.10, image: "🥤", category: "bebidas", description: "Lata 330ml" },
+  { id: 23, name: "Barrita de Cereales", price: 0.80, image: "🌾", category: "snacks", description: "Barrita de avena con miel y frutos secos", recommended: true },
+  { id: 24, name: "Flan de Huevo", price: 1.20, image: "🍮", category: "postres", description: "Flan casero con caramelo", discount: 15 },
+  { id: 25, name: "Cappuccino", price: 1.50, image: "☕", category: "cafe", description: "Café espresso con leche vaporizada y espuma", recommended: true },
 ];
 
 export const notifications: Notification[] = [
