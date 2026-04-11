@@ -5,13 +5,6 @@
   gap: 24px;
 }
 
-@media (min-width: 1024px) {
-  .content {
-    padding: 24px 0 32px;
-    gap: 32px;
-  }
-}
-
 .section {
   display: flex;
   flex-direction: column;
@@ -27,12 +20,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-}
-
-@media (min-width: 768px) {
-  .sectionHeader {
-    padding: 0 clamp(2rem, 6vw, 5rem);
-  }
 }
 
 .sectionTitle {
@@ -73,20 +60,6 @@
   scroll-snap-align: start;
 }
 
-@media (min-width: 768px) {
-  .horizontalScroll {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    overflow-x: visible;
-    padding: 14px clamp(2rem, 6vw, 5rem) 20px;
-  }
-
-  .horizontalScroll > * {
-    width: 100%;
-    min-width: 0;
-  }
-}
-
 .emptyState {
   padding: 24px 20px;
   text-align: center;
@@ -97,24 +70,12 @@
   margin: 0 20px;
 }
 
-@media (min-width: 768px) {
-  .emptyState {
-    margin: 0 clamp(2rem, 6vw, 5rem);
-  }
-}
-
 /* Orders */
 .ordersList {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 0 20px;
-}
-
-@media (min-width: 768px) {
-  .ordersList {
-    padding: 0 clamp(2rem, 6vw, 5rem);
-  }
 }
 
 .orderCard {
@@ -241,4 +202,44 @@
 
 .reorderBtn:hover {
   background: var(--color-primary-dark);
+}
+
+
+@media (min-width: 768px) {
+  
+  .content {
+    --padding-x-inner-elements: clamp(2rem, 10vw, 8rem);
+  }
+
+  .sectionHeader {
+    padding: 0 var(--padding-x-inner-elements);
+  }
+
+  .horizontalScroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    overflow-x: visible;
+    padding: 14px var(--padding-x-inner-elements) 20px;
+  }
+
+  .horizontalScroll > * {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .emptyState {
+    margin: 0 var(--padding-x-inner-elements);
+  }
+
+  .ordersList {
+    padding: 0 var(--padding-x-inner-elements);
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    --padding-x-inner-elements: clamp(2rem, 20vw, 25rem);
+    padding: 24px 0 32px;
+    gap: 32px;
+  }
 }

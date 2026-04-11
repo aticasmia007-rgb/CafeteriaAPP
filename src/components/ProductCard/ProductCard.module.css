@@ -56,7 +56,7 @@
   top: 8px;
   left: 8px;
   background: var(--color-danger);
-  color: white;
+  color: var(--color-white);
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
@@ -79,7 +79,7 @@
 }
 
 .favBtn:hover {
-  background: white;
+  background: var(--color-white);
   transform: scale(1.1);
 }
 
