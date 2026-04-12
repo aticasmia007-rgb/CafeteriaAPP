@@ -108,3 +108,17 @@ export interface PendingOrder {
   placedAt: string;  // e.g. "Hace 3 min"
 }
 
+/** Pre-seeded pending order visible to both the client and the admin QR scanner. */
+export const mockPendingOrders: PendingOrder[] = [
+  {
+    id: "#test01",
+    items: [
+      { product: { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15 }, quantity: 1 },
+      { product: { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", category: "cafe", description: "Café con leche semidesnatada" }, quantity: 2 },
+    ],
+    total: 4.525,
+    claimSlot: "10:30 – 10:45",
+    placedAt: "Hace 2 min",
+  },
+];
+

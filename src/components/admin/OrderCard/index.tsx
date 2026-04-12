@@ -1,14 +1,54 @@
+import { useState } from "react";
 import type { AdminOrder } from "../../../data/adminMockData";
 import { useAdmin } from "../../../store/adminStore";
+import BottomSheet from "../../shared/BottomSheet";
 import styles from "./OrderCard.module.css";
 
 interface Props {
   order: AdminOrder;
 }
 
+function DeliverConfirmModal({
+  order,
+  onConfirm,
+  onCancel,
+}: {
+  order: AdminOrder;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <BottomSheet open onClose={onCancel} maxWidth="360px" label="Confirmar entrega">
+      <p className={styles.confirmLabel}>Confirmar entrega</p>
+      <div className={styles.confirmCode}>{order.code}</div>
+      <div className={styles.confirmStudent}>{order.studentName}</div>
+      <div className={styles.confirmTime}>{order.placedAt}</div>
+
+      <div className={styles.confirmItems}>
+        {order.items.map((item) => (
+          <div key={item.product.id} className={styles.confirmRow}>
+            <span className={styles.confirmProduct}>{item.product.name}</span>
+            <span className={styles.confirmQty}>×{item.quantity}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.confirmActions}>
+        <button className={styles.confirmCancelBtn} onClick={onCancel}>
+          Cancelar
+        </button>
+        <button className={styles.confirmDeliverBtn} onClick={onConfirm}>
+          Confirmar entrega
+        </button>
+      </div>
+    </BottomSheet>
+  );
+}
+
 export default function OrderCard({ order }: Props) {
   const { state, dispatch } = useAdmin();
   const isExpanded = state.expandedOrderId === order.id;
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const statusClass =
     order.status === "pending"
@@ -48,7 +88,7 @@ export default function OrderCard({ order }: Props) {
             className={`${styles.deliverBtn} ${styles.deliverBtnGreen}`}
             onClick={(e) => {
               e.stopPropagation();
-              dispatch({ type: "MARK_ORDER_DELIVERED", orderId: order.id });
+              setShowConfirm(true);
             }}
           >
             Entregado
@@ -85,6 +125,18 @@ export default function OrderCard({ order }: Props) {
           </button>
         )}
       </div>
+
+      {/* Delivery confirmation modal */}
+      {showConfirm && (
+        <DeliverConfirmModal
+          order={order}
+          onConfirm={() => {
+            dispatch({ type: "MARK_ORDER_DELIVERED", orderId: order.id });
+            setShowConfirm(false);
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 }

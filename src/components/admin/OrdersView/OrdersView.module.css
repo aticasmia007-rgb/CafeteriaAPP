@@ -18,10 +18,20 @@
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
 }
 
 .filterBtn {
+  flex-shrink: 0;
+  scroll-snap-align: start;
   padding: 8px 18px;
   font-size: 13px;
   font-weight: 600;

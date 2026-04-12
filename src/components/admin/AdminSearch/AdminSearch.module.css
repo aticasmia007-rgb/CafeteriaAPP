@@ -175,6 +175,34 @@
   font-size: 14px;
 }
 
+/* QR scan FAB */
+.scanFab {
+  position: fixed;
+  bottom: calc(var(--admin-nav-height) + 20px);
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  transition: background 0.2s, transform 0.15s;
+  z-index: 90;
+}
+
+.scanFab:hover {
+  background: var(--color-accent-dark);
+  transform: scale(1.06);
+}
+
+.scanFab svg {
+  width: 26px;
+  height: 26px;
+}
+
 /* ≥ 768px */
 @media (min-width: 768px) {
   .content {
@@ -200,5 +228,10 @@
 @media (min-width: 1024px) {
   .content {
     padding: 24px clamp(2rem, 10vw, 8rem);
+  }
+
+  .scanFab {
+    bottom: 32px;
+    right: 108px; /* clear of the FAB nav stack */
   }
 }

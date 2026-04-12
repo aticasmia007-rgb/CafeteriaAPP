@@ -1,0 +1,249 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.codeLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-gray-400);
+  margin-bottom: 2px;
+}
+
+.code {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.closeBtn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.closeBtn:hover {
+  background: var(--color-gray-200);
+}
+
+/* Student + status row */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.student {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-gray-800);
+}
+
+.statusBadge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badgePending {
+  background: var(--admin-status-pending);
+  color: var(--admin-status-pending-text);
+}
+
+.badgePrepared {
+  background: var(--admin-status-prepared);
+  color: var(--admin-status-prepared-text);
+}
+
+.badgeDelivered {
+  background: var(--admin-status-delivered);
+  color: var(--admin-status-delivered-text);
+}
+
+/* Time */
+.time {
+  font-size: 13px;
+  color: var(--color-gray-400);
+  margin-top: -8px;
+}
+
+/* Items list */
+.divider {
+  height: 1px;
+  background: var(--color-gray-100);
+}
+
+.itemsLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-gray-400);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--color-gray-700);
+}
+
+.itemImg {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.itemEmoji {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.itemName {
+  flex: 1;
+  font-weight: 500;
+}
+
+.itemQty {
+  font-weight: 700;
+  color: var(--color-gray-500);
+}
+
+.totalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.totalLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.totalAmount {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-gray-800);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.actionBtn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.actionBtn:active {
+  transform: scale(0.98);
+}
+
+.btnPrepared {
+  color: var(--color-white);
+  background: var(--color-warning);
+}
+
+.btnPrepared:hover {
+  background: var(--color-accent);
+}
+
+.btnDeliver {
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+.btnDeliver:hover {
+  background: var(--color-primary-dark);
+}
+
+.btnDone {
+  color: var(--color-gray-500);
+  background: var(--color-gray-100);
+  cursor: default;
+  pointer-events: none;
+}
+
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.notFoundIcon {
+  font-size: 40px;
+}
+
+.notFoundText {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.notFoundCode {
+  font-size: 13px;
+  color: var(--color-gray-400);
+  font-family: var(--font-display);
+}
+
+.cancelBtn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+
+.cancelBtn:hover {
+  background: var(--color-gray-200);
+}

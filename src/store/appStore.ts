@@ -1,6 +1,7 @@
 // Simple global state using React context + useReducer
 import { createContext, useContext } from "react";
 import type { Product, Notification, PendingOrder } from "../data/mockData";
+import { mockPendingOrders } from "../data/mockData";
 
 export interface CartItem {
   product: Product;
@@ -85,7 +86,7 @@ export const initialState: AppState = {
   user: null,
   authSheetOpen: false,
   pendingIntent: null,
-  pendingOrders: [],
+  pendingOrders: [...mockPendingOrders],
   pendingOrderSheetOpen: false,
   selectedPendingOrderId: null,
   selectedPickupSlot: null,
