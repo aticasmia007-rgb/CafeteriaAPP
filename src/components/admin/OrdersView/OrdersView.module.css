@@ -1,5 +1,8 @@
 .content {
   padding: 16px 20px;
+  max-width: 760px;
+  margin-inline: auto;
+  width: 100%;
 }
 
 .title {
@@ -78,7 +81,6 @@
 .ordersList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .empty {
@@ -91,7 +93,7 @@
 /* ≥ 768px */
 @media (min-width: 768px) {
   .content {
-    padding: 20px clamp(2rem, 6vw, 5rem);
+    padding: 20px 28px;
   }
 
   .title {
@@ -102,12 +104,6 @@
 /* ≥ 1024px */
 @media (min-width: 1024px) {
   .content {
-    padding: 24px clamp(2rem, 10vw, 8rem);
-  }
-
-  .ordersList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 10px;
+    padding: 24px 32px;
   }
 }

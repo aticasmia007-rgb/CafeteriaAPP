@@ -1,4 +1,7 @@
 .card {
+  margin-bottom: 1rem
+}
+.cardCompact {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -8,9 +11,11 @@
   transition: border-color 0.2s, box-shadow 0.2s;
   cursor: pointer;
   background: var(--color-surface);
+  position: relative;
+  z-index: 1;
 }
 
-.card:hover {
+.cardCompact:hover {
   box-shadow: var(--shadow-sm);
 }
 
@@ -153,13 +158,16 @@
   padding: 0 14px;
   background: var(--color-surface);
   border-radius: 0 0 var(--radius-md) var(--radius-md);
-  margin-top: -4px;
+  /* overlap = --radius-md (14px) so the square top corners slide out from behind the cardCompact */
+  margin-top: calc(-1 * var(--radius-md));
+  padding-bottom: calc(1 * var(--radius-md));;
 }
 
 .detailOpen {
   max-height: 400px;
   opacity: 1;
-  padding: 12px 14px 14px;
+  /* 14px overlap + 12px content gap */
+  padding: calc(var(--radius-md) + 12px) 14px 14px;
 }
 
 .detailItems {
@@ -213,7 +221,7 @@
 
 /* ≥ 768px */
 @media (min-width: 768px) {
-  .card {
+  .cardCompact {
     padding: 14px 18px;
     gap: 14px;
   }
@@ -235,7 +243,7 @@
 
 /* ≥ 1024px */
 @media (min-width: 1024px) {
-  .card {
+  .cardCompact {
     padding: 16px 20px;
   }
 
@@ -244,6 +252,6 @@
   }
 
   .detailOpen {
-    padding: 14px 20px 16px;
+    padding: calc(var(--radius-md) + 14px) 20px 16px;
   }
 }

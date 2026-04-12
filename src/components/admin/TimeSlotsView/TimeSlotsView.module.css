@@ -400,6 +400,9 @@
   .chartSection {
     flex: 1;
     position: sticky;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     top: calc(var(--admin-header-height) + 24px);
   }
 

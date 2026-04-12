@@ -18,9 +18,9 @@ export default function OrderCard({ order }: Props) {
         : styles.cardDelivered;
 
   return (
-    <div>
+    <div className={styles.card}>
       <div
-        className={`${styles.card} ${statusClass}`}
+        className={`${styles.cardCompact} ${statusClass}`}
         onClick={() => dispatch({ type: "TOGGLE_ORDER_EXPAND", orderId: order.id })}
       >
         {/* Expand arrow */}

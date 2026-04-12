@@ -24,11 +24,12 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 14px 0 20px;
+  padding: 14px 4px 20px;
   scroll-snap-type: x mandatory;
-  scroll-padding-inline: 20px;
+  scroll-padding-inline: 4px;
   -webkit-overflow-scrolling: touch;
   margin-bottom: 24px;
+  margin-inline: -4px;
 }
 
 .recentScroll::-webkit-scrollbar {

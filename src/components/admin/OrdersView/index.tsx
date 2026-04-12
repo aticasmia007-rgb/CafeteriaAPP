@@ -8,7 +8,9 @@ export default function OrdersView() {
   const filteredOrders =
     state.orderFilter === "needs-prep"
       ? state.orders.filter((o) => o.needsPrep)
-      : state.orders;
+      : state.orderFilter === "pending"
+        ? state.orders.filter((o) => o.status !== "delivered")
+        : state.orders;
 
   // Group by time slot, preserving slot order
   const grouped = state.timeSlots
@@ -28,6 +30,12 @@ export default function OrdersView() {
           onClick={() => dispatch({ type: "SET_ORDER_FILTER", filter: "all" })}
         >
           Todos
+        </button>
+        <button
+          className={`${styles.filterBtn} ${state.orderFilter === "pending" ? styles.filterBtnActive : ""}`}
+          onClick={() => dispatch({ type: "SET_ORDER_FILTER", filter: "pending" })}
+        >
+          Pendientes
         </button>
         <button
           className={`${styles.filterBtn} ${state.orderFilter === "needs-prep" ? styles.filterBtnActive : ""}`}

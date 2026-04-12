@@ -82,10 +82,12 @@ export default function TimeSlotsView() {
                   8
                 );
                 return (
-                  <div
+                  <button
                     key={slot.id}
+                    type="button"
                     className={styles.barCol}
                     onClick={() => dispatch({ type: "SELECT_SLOT", slotId: slot.id })}
+                    aria-label={`Ver tramo ${slot.startTime}`}
                   >
                     <span className={styles.barValue}>
                       {slot.blocked ? "🚫" : slot.currentOrders}
@@ -97,7 +99,7 @@ export default function TimeSlotsView() {
                     <span className={styles.barLabel}>
                       {slot.startTime}
                     </span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
