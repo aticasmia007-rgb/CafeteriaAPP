@@ -1,0 +1,249 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  background: var(--color-surface);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Status colors */
+.cardPending {
+  border-color: var(--admin-status-pending-border);
+  background: var(--admin-status-pending);
+}
+
+.cardPrepared {
+  border-color: var(--admin-status-prepared-border);
+  background: var(--admin-status-prepared);
+}
+
+.cardDelivered {
+  border-color: var(--admin-status-delivered-border);
+  background: var(--admin-status-delivered);
+}
+
+/* Expand arrow */
+.expandBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--color-gray-500);
+  transition: transform 0.25s;
+}
+
+/* 28px visual + 16px = 44px touch target */
+.expandBtn::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
+.expandBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.expandBtnOpen {
+  transform: rotate(180deg);
+}
+
+/* Main info */
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.code {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--color-gray-800);
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
+.studentRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.studentName {
+  font-size: 13px;
+  color: var(--color-gray-600);
+  font-weight: 500;
+}
+
+.prepIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-warning);
+  color: var(--color-white);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--color-gray-400);
+}
+
+/* Deliver button */
+.deliverBtn {
+  position: relative;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  color: var(--color-white);
+  transition: background 0.2s, transform 0.15s;
+}
+
+/* expand hit area to ≥44px */
+.deliverBtn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.deliverBtn:active {
+  transform: scale(0.96);
+}
+
+.deliverBtnGreen {
+  background: var(--color-primary);
+}
+
+.deliverBtnGreen:hover {
+  background: var(--color-primary-dark);
+}
+
+.deliverBtnDone {
+  background: var(--color-gray-300);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Accordion detail */
+.detail {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.25s;
+  padding: 0 14px;
+  background: var(--color-surface);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  margin-top: -4px;
+}
+
+.detailOpen {
+  max-height: 400px;
+  opacity: 1;
+  padding: 12px 14px 14px;
+}
+
+.detailItems {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--color-gray-700);
+}
+
+.detailProduct {
+  font-weight: 500;
+}
+
+.detailQty {
+  font-weight: 600;
+  color: var(--color-gray-500);
+}
+
+.preparedBtn {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--color-warning);
+  border-radius: var(--radius-md);
+  transition: background 0.2s, transform 0.15s;
+}
+
+.preparedBtn:hover {
+  background: var(--color-accent);
+}
+
+.preparedBtn:active {
+  transform: scale(0.97);
+}
+
+.preparedBtnDone {
+  background: var(--color-gray-300);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ≥ 768px */
+@media (min-width: 768px) {
+  .card {
+    padding: 14px 18px;
+    gap: 14px;
+  }
+
+  .code {
+    font-size: 20px;
+  }
+
+  .deliverBtn {
+    padding: 10px 22px;
+    font-size: 14px;
+  }
+
+  .expandBtn::after,
+  .deliverBtn::after {
+    display: none;
+  }
+}
+
+/* ≥ 1024px */
+@media (min-width: 1024px) {
+  .card {
+    padding: 16px 20px;
+  }
+
+  .detail {
+    padding-inline: 20px;
+  }
+
+  .detailOpen {
+    padding: 14px 20px 16px;
+  }
+}

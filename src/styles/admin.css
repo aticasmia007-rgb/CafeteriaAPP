@@ -1,0 +1,25 @@
+/* === Admin Panel — Additional Tokens === */
+
+:root {
+  /* Pastel order status colors */
+  --admin-status-pending: #F8D7DA;
+  --admin-status-pending-text: #842029;
+  --admin-status-pending-border: #F1AEB5;
+
+  --admin-status-prepared: #FFF3CD;
+  --admin-status-prepared-text: #664D03;
+  --admin-status-prepared-border: #FFE69C;
+
+  --admin-status-delivered: #D1E7DD;
+  --admin-status-delivered-text: #0A3622;
+  --admin-status-delivered-border: #A3CFBB;
+
+  /* Slot chart bar colors */
+  --admin-bar-low: #A3CFBB;
+  --admin-bar-medium: #FFE69C;
+  --admin-bar-high: #F1AEB5;
+  --admin-bar-blocked: #6C757D;
+
+  --admin-header-height: 64px;
+  --admin-nav-height: 72px;
+}
