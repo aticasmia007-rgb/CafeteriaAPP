@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAdmin } from "../../../store/adminStore";
 import { isImageUrl, categories, type Product } from "../../../data/mockData";
 import styles from "./ProductEditor.module.css";
+import { useRef } from "react"; //Para fotos
 
 const pencilIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -24,7 +25,8 @@ export default function ProductEditor({ product }: Props) {
   const [description, setDescription] = useState(product?.description ?? "");
   const [category, setCategory] = useState(product?.category ?? "bocadillos");
   const [image, setImage] = useState(product?.image ?? "🍽️");
-
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   function handleSave() {
     const p: Product = {
       id: product?.id ?? 0,
@@ -41,6 +43,19 @@ export default function ProductEditor({ product }: Props) {
       dispatch({ type: "UPDATE_PRODUCT", product: p });
     }
   }
+
+  const handleCameraClick = () => {
+    // 2. DISPARAR EL CLICK DEL INPUT OCULTO
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Por ahora guardamos el nombre, pero aquí podrías subirlo a un servidor
+      setImage(file.name); 
+    }
+  };
 
   return (
     <div className={styles.editor}>
@@ -156,17 +171,38 @@ export default function ProductEditor({ product }: Props) {
             </select>
           </div>
 
+
+             
           <div className={styles.field}>
             <label className={styles.fieldLabel}>
               {pencilIcon} Imagen (emoji o ruta)
+              <button  //boton para activar camara
+                type="button" 
+                onClick={handleCameraClick}
+                className={styles.cameraBtn} 
+                style={{ marginLeft: '10px', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                📸 Usar Cámara
+              </button>
             </label>
-            <input
-              className={styles.fieldInput}
-              type="text"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder="🍽️ o /imagen.jpg"
-            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  className={styles.fieldInput}
+                  type="text"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="cámara o /imagen.jpg"
+                />
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
+                />
+            </div>
           </div>
 
           <div className={styles.actions}>

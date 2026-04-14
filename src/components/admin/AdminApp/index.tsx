@@ -28,7 +28,7 @@ const initialState: AdminState = {
   notifications: adminNotifications,
   user: adminUser,
   searchQuery: "",
-  orderFilter: "all",
+  orderFilter: "pending",
   expandedOrderId: null,
   editingProductId: null,
   selectedSlotId: null,

@@ -93,6 +93,8 @@
 /* Chart section */
 .chartSection {
   min-width: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 .chartLabel {
@@ -122,6 +124,7 @@
   min-width: max-content;
   height: 200px;
   padding: 0 4px;
+  margin: 0 auto;
 }
 
 .barCol {
@@ -389,8 +392,13 @@
 @media (min-width: 1024px) {
   .content {
     padding: 24px clamp(2rem, 10vw, 8rem);
+    overflow: hidden;
+    
   }
 
+  .chart {
+    height: calc(70vh - 120px);
+  }
   .twoCol {
     flex-direction: row;
     align-items: flex-start;
@@ -403,11 +411,15 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    top: calc(var(--admin-header-height) + 24px);
+    /* top: calc(var(--admin-header-height) + 24px); */
+
   }
 
   .slotsSection {
+    height:calc(100vh - var(--admin-header-height) - 40px);
     flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
   }
 
   .slotsGrid {
