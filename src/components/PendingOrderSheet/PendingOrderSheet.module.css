@@ -71,6 +71,7 @@
   color: var(--color-gray-900);
   letter-spacing: 0.04em;
   line-height: 1;
+  text-transform: uppercase;
 }
 
 .closeBtn {
