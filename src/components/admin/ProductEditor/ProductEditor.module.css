@@ -1,0 +1,247 @@
+.editor {
+  padding: 16px 20px;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+
+.backBtn:hover {
+  opacity: 0.7;
+}
+
+.backBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Image section */
+.imageSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.mainImage {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  background: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mainImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mainImageEmoji {
+  font-size: 80px;
+}
+
+.carousel {
+  display: flex;
+  gap: 8px;
+}
+
+.carouselThumb {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+
+.carouselThumb:hover {
+  border-color: var(--color-primary-light);
+}
+
+.carouselThumbActive {
+  border-color: var(--color-primary);
+}
+
+.carouselThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carouselEmoji {
+  font-size: 22px;
+}
+
+.carouselAdd {
+  color: var(--color-gray-400);
+  font-size: 20px;
+}
+
+/* Form fields */
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.fieldLabel svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-gray-400);
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-gray-800);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.fieldInput:focus {
+  border-color: var(--color-primary);
+}
+
+.fieldRow {
+  display: flex;
+  gap: 12px;
+}
+
+.fieldRow .field {
+  flex: 1;
+}
+
+/* Category select */
+.fieldSelect {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-gray-800);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.fieldSelect:focus {
+  border-color: var(--color-primary);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.saveBtn {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+
+.saveBtn:hover {
+  background: var(--color-primary-dark);
+}
+
+.cancelBtn {
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+
+.cancelBtn:hover {
+  background: var(--color-gray-200);
+}
+
+/* ≥ 768px */
+@media (min-width: 768px) {
+  .editor {
+    padding: 20px clamp(2rem, 6vw, 5rem);
+  }
+
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .imageSection {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    top: calc(var(--admin-header-height) + 20px);
+  }
+
+  .fields {
+    flex: 1;
+  }
+}
+
+/* ≥ 1024px */
+@media (min-width: 1024px) {
+  .editor {
+    padding: 24px clamp(2rem, 10vw, 8rem);
+  }
+
+  .imageSection {
+    width: 320px;
+  }
+}

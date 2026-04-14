@@ -1,0 +1,29 @@
+.adminApp {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: transparent;
+  overflow: hidden;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 8px;
+  padding-bottom: calc(var(--admin-nav-height) + 16px);
+}
+
+/* ≥ 768px — tablet */
+@media (min-width: 768px) {
+  .main {
+    padding-bottom: calc(var(--admin-nav-height) + 24px);
+  }
+}
+
+/* ≥ 1024px — desktop */
+@media (min-width: 1024px) {
+  .main {
+    padding-bottom: 24px;
+  }
+}

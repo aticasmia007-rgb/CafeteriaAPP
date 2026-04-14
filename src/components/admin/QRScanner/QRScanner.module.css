@@ -1,0 +1,178 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-gray-800);
+  text-align: center;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  text-align: center;
+  margin-top: -8px;
+}
+
+/* Camera viewport */
+.viewport {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-black);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hidden canvas used for frame capture */
+.canvas {
+  display: none;
+}
+
+/* Corner-cut scanning frame overlay */
+.frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.frame::before,
+.frame::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: var(--color-accent);
+  border-style: solid;
+}
+
+.frame::before {
+  top: 16px;
+  left: 16px;
+  border-width: 3px 0 0 3px;
+  border-radius: 4px 0 0 0;
+}
+
+.frame::after {
+  bottom: 16px;
+  right: 16px;
+  border-width: 0 3px 3px 0;
+  border-radius: 0 0 4px 0;
+}
+
+/* Two extra corners via a child element */
+.frameInner::before,
+.frameInner::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: var(--color-accent);
+  border-style: solid;
+}
+
+.frameInner::before {
+  top: 16px;
+  right: 16px;
+  border-width: 3px 3px 0 0;
+  border-radius: 0 4px 0 0;
+}
+
+.frameInner::after {
+  bottom: 16px;
+  left: 16px;
+  border-width: 0 0 3px 3px;
+  border-radius: 0 0 0 4px;
+}
+
+/* Scanning laser line animation */
+.laser {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--color-accent);
+  opacity: 0.8;
+  border-radius: 1px;
+  animation: scan 2s ease-in-out infinite;
+  box-shadow: 0 0 6px var(--color-accent);
+}
+
+@keyframes scan {
+  0%   { top: 20%; }
+  50%  { top: 75%; }
+  100% { top: 20%; }
+}
+
+/* Error / permission denied */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-gray-500);
+  font-size: 14px;
+}
+
+.errorIcon {
+  font-size: 40px;
+}
+
+/* Success flash */
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+}
+
+.successIcon {
+  font-size: 48px;
+}
+
+.successText {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.successCode {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-gray-800);
+  text-transform: uppercase;
+}
+
+/* Close button */
+.closeBtn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+
+.closeBtn:hover {
+  background: var(--color-gray-200);
+}

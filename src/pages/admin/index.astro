@@ -1,0 +1,16 @@
+---
+export const prerender = false;
+
+// Auth guard — redirect to login if no valid session
+const sessionCookie = Astro.cookies.get("admin_session");
+if (sessionCookie?.value !== "authenticated") {
+  return Astro.redirect("/admin/login");
+}
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import AdminApp from '../../components/admin/AdminApp';
+---
+
+<AdminLayout>
+  <AdminApp client:load />
+</AdminLayout>
