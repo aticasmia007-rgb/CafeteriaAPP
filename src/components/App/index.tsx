@@ -27,8 +27,8 @@ export default function App() {
   useEffect(() => {
     if (!state.user || !state.pendingIntent) return;
     if (state.pendingIntent === "checkout") {
-      // User just logged in during checkout — stay on cart so they can pick a payment method
       dispatch({ type: "SET_TAB", tab: "cart" });
+      dispatch({ type: "OPEN_PAYMENT_SHEET" });
     } else if (state.pendingIntent === "profile") {
       dispatch({ type: "SET_TAB", tab: "profile" });
     }

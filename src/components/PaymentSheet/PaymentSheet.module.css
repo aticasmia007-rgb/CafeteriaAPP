@@ -1,3 +1,51 @@
+/* ── Success screen ── */
+.successBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px 12px;
+  gap: 12px;
+  animation: successIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes successIn {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+
+.successIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.successTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-gray-900);
+}
+
+.successSub {
+  font-size: 15px;
+  color: var(--color-gray-500);
+  line-height: 1.5;
+}
+
+.successAmount {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin-top: 4px;
+}
+
+/* ── Header ── */
 .header {
   display: flex;
   align-items: center;
