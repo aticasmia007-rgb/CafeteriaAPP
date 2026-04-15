@@ -63,7 +63,7 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, requiresPreparation: true, recommended: true },
+  { id: 1, name: "Bocadillo de Jamón", allergens:["gluten", "sesamo"], price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, requiresPreparation: true, recommended: true },
   { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", categories: ["bocadillos", "healthy"], description: "Lechuga, tomate, huevo y atún", requiresPreparation: true, recommended: true },
   { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada", requiresPreparation: true, recommended: true },
   { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", categories: ["bebidas", "healthy"], description: "Zumo natural", discount: 10, recommended: true },
