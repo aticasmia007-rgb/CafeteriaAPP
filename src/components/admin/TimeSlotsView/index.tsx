@@ -46,33 +46,35 @@ export default function TimeSlotsView() {
 
       <div className={styles.dashboardGrid}>
 
-        {/* Global lead-time */}
-        <div className={styles.leadCard}>
-          <div className={styles.leadLabel}>
-            <span className={styles.leadTitle}>Tiempo de antelación</span>
-            <span className={styles.leadDesc}>Mínimo para realizar un pedido</span>
-          </div>
-          <div className={styles.leadControls}>
-            <button
-              className={styles.leadBtn}
-              onClick={() => dispatch({ type: "SET_LEAD_TIME", minutes: state.leadTimeMinutes - 15 })}
-            >
-            
-            </button>
-            <div className={styles.leadValueWrap}>
-              <div className={styles.leadValue}>{state.leadTimeMinutes}</div>
-              <div className={styles.leadUnit}>min</div>
-            </div>
-            <button
-              className={styles.leadBtn}
-              onClick={() => dispatch({ type: "SET_LEAD_TIME", minutes: state.leadTimeMinutes + 15 })}
-            >
-              +
-            </button>
-          </div>
-        </div>
+        {/* Left sticky panel: stepper + chart */}
+        <div className={styles.stickyPanel}>
 
-        {/*<div className={styles.twoCol}>*/}
+          {/* Global lead-time stepper */}
+          <div className={styles.leadCard}>
+            <div className={styles.leadLabel}>
+              <span className={styles.leadTitle}>Tiempo de antelación</span>
+              <span className={styles.leadDesc}>Mínimo para realizar un pedido</span>
+            </div>
+            <div className={styles.leadControls}>
+              <button
+                className={styles.leadBtn}
+                onClick={() => dispatch({ type: "SET_LEAD_TIME", minutes: state.leadTimeMinutes - 15 })}
+              >
+                −
+              </button>
+              <div className={styles.leadValueWrap}>
+                <div className={styles.leadValue}>{state.leadTimeMinutes}</div>
+                <div className={styles.leadUnit}>min</div>
+              </div>
+              <button
+                className={styles.leadBtn}
+                onClick={() => dispatch({ type: "SET_LEAD_TIME", minutes: state.leadTimeMinutes + 15 })}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
           {/* Bar chart */}
           <div className={styles.chartSection}>
             <div className={styles.chartLabel}>Afluencia por tramo</div>
@@ -127,51 +129,53 @@ export default function TimeSlotsView() {
             </div>
           </div>
 
-          {/* Slot cards */}
-          <div className={styles.slotsSection}>
-            <div className={styles.slotsLabel}>Tramos horarios</div>
-            <div className={styles.slotsGrid}>
-              {state.timeSlots.map((slot) => {
-                const ratio = slot.blocked ? 1 : slot.currentOrders / slot.maxOrders;
-                return (
-                  <button
-                    key={slot.id}
-                    className={styles.slotCard}
-                    onClick={() => dispatch({ type: "SELECT_SLOT", slotId: slot.id })}
-                  >
-                    <div className={styles.slotCardTop}>
-                      <span className={styles.slotName}>{slot.name}</span>
-                      <span className={`${styles.slotStatus} ${getStatusClass(slot)}`}>
-                        {getStatusLabel(slot)}
-                      </span>
-                    </div>
-                    <span className={styles.slotTime}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                      </svg>
-                      {slot.startTime} – {slot.endTime}
+        </div>{/* /stickyPanel */}
+
+        {/* Right: slot cards (scrolls with the page) */}
+        <div className={styles.slotsSection}>
+          <div className={styles.slotsLabel}>Tramos horarios</div>
+          <div className={styles.slotsGrid}>
+            {state.timeSlots.map((slot) => {
+              const ratio = slot.blocked ? 1 : slot.currentOrders / slot.maxOrders;
+              return (
+                <button
+                  key={slot.id}
+                  className={styles.slotCard}
+                  onClick={() => dispatch({ type: "SELECT_SLOT", slotId: slot.id })}
+                >
+                  <div className={styles.slotCardTop}>
+                    <span className={styles.slotName}>{slot.name}</span>
+                    <span className={`${styles.slotStatus} ${getStatusClass(slot)}`}>
+                      {getStatusLabel(slot)}
                     </span>
-                    <div className={styles.slotProgress}>
-                      <div className={styles.progressTrack}>
-                        <div
-                          className={`${styles.progressFill} ${getProgressClass(slot)}`}
-                          style={{ width: `${Math.min(ratio * 100, 100)}%` }}
-                        />
-                      </div>
-                      <span className={styles.slotCapacity}>
-                        {slot.blocked ? "—" : slot.currentOrders} / {slot.maxOrders}
-                      </span>
+                  </div>
+                  <span className={styles.slotTime}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    {slot.startTime} – {slot.endTime}
+                  </span>
+                  <div className={styles.slotProgress}>
+                    <div className={styles.progressTrack}>
+                      <div
+                        className={`${styles.progressFill} ${getProgressClass(slot)}`}
+                        style={{ width: `${Math.min(ratio * 100, 100)}%` }}
+                      />
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                    <span className={styles.slotCapacity}>
+                      {slot.blocked ? "—" : slot.currentOrders} / {slot.maxOrders}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Slot modal */}
-        <SlotModal />
+      </div>
+
+      <SlotModal />
     </div>
   );
 }

@@ -9,30 +9,20 @@
   color: var(--color-gray-800);
   margin-bottom: 20px;
 }
-/*GRID GLOBAL*/
+
+/* Dashboard grid — mobile: single column */
 .dashboardGrid {
   display: grid;
-  gap: 24px;
-
-  /* Mobile-first: 1 columna, 3 filas */
   grid-template-columns: 1fr;
-  grid-template-areas:
-    "lead"
-    "chart"
-    "slots";
+  gap: 24px;
 }
 
-/* Asignación de áreas */
-.leadCard {
-  grid-area: lead;
-}
-
-.chartSection {
-  grid-area: chart;
-}
-
-.slotsSection {
-  grid-area: slots;
+/* ── Sticky panel (stepper + chart) ── */
+.stickyPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
 }
 
 /* Lead-time card */
@@ -44,7 +34,6 @@
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: var(--shadow-md);
-  margin-bottom: 28px;
 }
 
 .leadLabel {
@@ -89,6 +78,10 @@
   background: var(--color-gray-200);
 }
 
+.leadValueWrap {
+  text-align: center;
+}
+
 .leadValue {
   min-width: 60px;
   text-align: center;
@@ -104,25 +97,11 @@
   color: var(--color-gray-400);
 }
 
-.leadValueWrap {
-  text-align: center;
-}
-
-/* Two-column wrapper (stacks on mobile, side-by-side on desktop) */
-.twoCol {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
 /* Chart section */
 .chartSection {
   min-width: 0;
-  display: flex;            /* ← FALTABA */
+  display: flex;
   flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
 }
 
 .chartLabel {
@@ -137,8 +116,7 @@
 .chartScroll {
   width: 100%;
   display: flex;
-  justify-content: center; /* ← centra la gráfica */
-  max-width: 100%;    
+  justify-content: center;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 8px 0 12px;
@@ -153,10 +131,8 @@
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  max-width: 100%; 
   height: 200px;
   padding: 0 4px;
-  margin: 0 auto;
 }
 
 .barCol {
@@ -185,22 +161,10 @@
   transition: height 0.4s ease-out;
 }
 
-.barLow {
-  background: var(--admin-bar-low);
-}
-
-.barMedium {
-  background: var(--admin-bar-medium);
-}
-
-.barHigh {
-  background: var(--admin-bar-high);
-}
-
-.barBlocked {
-  background: var(--admin-bar-blocked);
-  opacity: 0.5;
-}
+.barLow     { background: var(--admin-bar-low); }
+.barMedium  { background: var(--admin-bar-medium); }
+.barHigh    { background: var(--admin-bar-high); }
+.barBlocked { background: var(--admin-bar-blocked); opacity: 0.5; }
 
 .barLabel {
   font-size: 12px;
@@ -232,24 +196,12 @@
   flex-shrink: 0;
 }
 
-.legendDotLow {
-  background: var(--admin-bar-low);
-}
+.legendDotLow     { background: var(--admin-bar-low); }
+.legendDotMedium  { background: var(--admin-bar-medium); }
+.legendDotHigh    { background: var(--admin-bar-high); }
+.legendDotBlocked { background: var(--admin-bar-blocked); opacity: 0.5; }
 
-.legendDotMedium {
-  background: var(--admin-bar-medium);
-}
-
-.legendDotHigh {
-  background: var(--admin-bar-high);
-}
-
-.legendDotBlocked {
-  background: var(--admin-bar-blocked);
-  opacity: 0.5;
-}
-
-/* ── Slot cards section ── */
+/* Slot cards section */
 .slotsSection {
   min-width: 0;
 }
@@ -313,25 +265,10 @@
   white-space: nowrap;
 }
 
-.statusLow {
-  background: var(--admin-status-delivered);
-  color: var(--admin-status-delivered-text);
-}
-
-.statusMedium {
-  background: var(--admin-status-prepared);
-  color: var(--admin-status-prepared-text);
-}
-
-.statusHigh {
-  background: var(--admin-status-pending);
-  color: var(--admin-status-pending-text);
-}
-
-.statusBlocked {
-  background: var(--color-gray-200);
-  color: var(--color-gray-600);
-}
+.statusLow     { background: var(--admin-status-delivered);  color: var(--admin-status-delivered-text); }
+.statusMedium  { background: var(--admin-status-prepared);   color: var(--admin-status-prepared-text); }
+.statusHigh    { background: var(--admin-status-pending);    color: var(--admin-status-pending-text); }
+.statusBlocked { background: var(--color-gray-200);          color: var(--color-gray-600); }
 
 .slotTime {
   display: flex;
@@ -346,7 +283,6 @@
   flex-shrink: 0;
 }
 
-/* Progress bar */
 .slotProgress {
   display: flex;
   align-items: center;
@@ -367,22 +303,10 @@
   transition: width 0.3s ease-out;
 }
 
-.progressLow {
-  background: var(--admin-bar-low);
-}
-
-.progressMedium {
-  background: var(--admin-bar-medium);
-}
-
-.progressHigh {
-  background: var(--admin-bar-high);
-}
-
-.progressBlocked {
-  background: var(--admin-bar-blocked);
-  opacity: 0.5;
-}
+.progressLow     { background: var(--admin-bar-low); }
+.progressMedium  { background: var(--admin-bar-medium); }
+.progressHigh    { background: var(--admin-bar-high); }
+.progressBlocked { background: var(--admin-bar-blocked); opacity: 0.5; }
 
 .slotCapacity {
   font-size: 12px;
@@ -393,38 +317,17 @@
 
 /* ≥ 768px — tablet */
 @media (min-width: 768px) {
-  html, body {
-  height: 100%;
-  overflow: hidden; /* ← bloquea scroll global real */
-}
-
   .content {
-    padding: 0 clamp(2rem, 6vw, 5rem);
-    height: calc(100vh - var(--admin-header-height));
-    overflow: hidden; /* ← evita scroll global */
-    display: flex;
-    flex-direction: column;
+    padding: 16px clamp(2rem, 6vw, 5rem);
   }
-
-  .dashboardGrid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "lead  slots"
-      "chart slots";
-    gap: 24px;
-    min-height: 0;
-  }
-
 
   .title {
     font-size: 26px;
   }
 
-  .leadCard {
-    max-width: 440px;
+  .dashboardGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
   }
 
   .bar {
@@ -437,51 +340,39 @@
 
   .slotsGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 }
 
-/* ≥ 1024px — desktop */
+/* ≥ 1024px — desktop: sticky left panel, slots scroll with page */
 @media (min-width: 1024px) {
-  html, body {
-  height: 100%;
-  overflow: hidden; /* ← bloquea scroll global real */
-}
   .content {
-    padding: 0 clamp(2rem, 10vw, 8rem);
-    overflow: hidden;
-    
+    padding: 24px clamp(2rem, 10vw, 8rem);
+  }
+
+  .dashboardGrid {
+    grid-template-columns: 380px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .stickyPanel {
+    position: sticky;
+    top: calc(var(--admin-header-height) + 24px);
   }
 
   .chart {
-    height: calc(70vh - 120px);
-  }
-  
-  .chartSection {
-    flex: 1;
-    /*position: sticky;*/
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content:flex-start;
-    /* top: calc(var(--admin-header-height) + 24px); */
-
+    height: calc(50dvh - 80px);
+    gap: 14px;
   }
 
-  .slotsSection {
-    grid-area: slots;
-    overflow-y: auto;
-    padding-right: 6px;
-    height: 100%;
+  .bar {
+    width: 48px;
   }
 
   .slotsGrid {
     grid-template-columns: 1fr;
     gap: 10px;
-  }
-
-  .bar {
-    width: 64px;
   }
 }
