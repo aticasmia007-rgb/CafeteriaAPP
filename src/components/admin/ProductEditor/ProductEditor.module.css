@@ -224,6 +224,52 @@
   white-space: nowrap;
 }
 
+/* Preparation toggle */
+.prepToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-gray-200);
+  background: var(--color-white);
+  color: var(--color-gray-600);
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  text-align: left;
+}
+
+.prepToggle:hover {
+  border-color: var(--color-primary-light);
+  background: var(--color-gray-100);
+}
+
+.prepToggleActive {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  color: var(--color-primary-dark);
+}
+
+.prepBadge {
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--color-gray-200);
+  color: var(--color-gray-500);
+  transition: background 0.15s, color 0.15s;
+}
+
+.prepToggleActive .prepBadge {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
 /* Actions */
 .actions {
   display: flex;

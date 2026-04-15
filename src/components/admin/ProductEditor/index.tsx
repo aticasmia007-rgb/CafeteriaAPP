@@ -23,9 +23,10 @@ export default function ProductEditor({ product }: Props) {
   const [price, setPrice] = useState(product?.price?.toString() ?? "");
   const [discount, setDiscount] = useState(product?.discount?.toString() ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
-  const [category, setCategory] = useState(product?.category ?? "bocadillos");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(product?.categories ?? []);
   const [image, setImage] = useState(product?.image ?? "🍽️");
   const [allergens, setAllergens] = useState<string[]>(product?.allergens ?? []);
+  const [requiresPreparation, setRequiresPreparation] = useState(product?.requiresPreparation ?? false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function toggleAllergen(id: string) {
@@ -41,8 +42,9 @@ export default function ProductEditor({ product }: Props) {
       price: parseFloat(price) || 0,
       discount: discount ? parseInt(discount, 10) : undefined,
       description,
-      category,
+      categories: selectedCategories,
       image,
+      requiresPreparation: requiresPreparation || undefined,
       allergens: allergens.length > 0 ? allergens : undefined,
     };
     if (isNew) {
@@ -162,25 +164,50 @@ export default function ProductEditor({ product }: Props) {
 
           <div className={styles.field}>
             <label className={styles.fieldLabel}>
-              {pencilIcon} Categoría
+              {pencilIcon} Categorías
             </label>
-            <select
-              className={styles.fieldSelect}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
+            <div className={styles.allergenGrid}>
               {categories
                 .filter((c) => c.id !== "all")
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.icon} {c.name}
-                  </option>
-                ))}
-            </select>
+                .map((c) => {
+                  const active = selectedCategories.includes(c.id);
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
+                      onClick={() =>
+                        setSelectedCategories((prev) =>
+                          prev.includes(c.id)
+                            ? prev.filter((id) => id !== c.id)
+                            : [...prev, c.id]
+                        )
+                      }
+                    >
+                      <span className={styles.allergenIcon}>{c.icon}</span>
+                      <span className={styles.allergenLabel}>{c.name}</span>
+                    </button>
+                  );
+                })}
+            </div>
           </div>
 
 
              
+          <button
+            type="button"
+            className={`${styles.prepToggle} ${requiresPreparation ? styles.prepToggleActive : ""}`}
+            onClick={() => setRequiresPreparation((v) => !v)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 19h12v2H6z"/>
+              <path d="M7 19v-3h10v3"/>
+              <path d="M7 16a5 5 0 1 1 10 0"/>
+            </svg>
+            <span>Requiere preparación</span>
+            <span className={styles.prepBadge}>{requiresPreparation ? "Sí" : "No"}</span>
+          </button>
+
           <div className={styles.field}>
             <label className={styles.fieldLabel}>
               {pencilIcon} Alérgenos
