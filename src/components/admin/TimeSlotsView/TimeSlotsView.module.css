@@ -9,6 +9,31 @@
   color: var(--color-gray-800);
   margin-bottom: 20px;
 }
+/*GRID GLOBAL*/
+.dashboardGrid {
+  display: grid;
+  gap: 24px;
+
+  /* Mobile-first: 1 columna, 3 filas */
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "lead"
+    "chart"
+    "slots";
+}
+
+/* Asignación de áreas */
+.leadCard {
+  grid-area: lead;
+}
+
+.chartSection {
+  grid-area: chart;
+}
+
+.slotsSection {
+  grid-area: slots;
+}
 
 /* Lead-time card */
 .leadCard {
@@ -93,6 +118,9 @@
 /* Chart section */
 .chartSection {
   min-width: 0;
+  display: flex;            /* ← FALTABA */
+  flex-direction: column;
+
   justify-content: center;
   align-items: center;
 }
@@ -107,9 +135,13 @@
 }
 
 .chartScroll {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* ← centra la gráfica */
+  max-width: 100%;    
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 8px 0 12px;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -121,7 +153,7 @@
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  min-width: max-content;
+  max-width: 100%; 
   height: 200px;
   padding: 0 4px;
   margin: 0 auto;
@@ -361,9 +393,31 @@
 
 /* ≥ 768px — tablet */
 @media (min-width: 768px) {
+  html, body {
+  height: 100%;
+  overflow: hidden; /* ← bloquea scroll global real */
+}
+
   .content {
-    padding: 20px clamp(2rem, 6vw, 5rem);
+    padding: 0 clamp(2rem, 6vw, 5rem);
+    height: calc(100vh - var(--admin-header-height));
+    overflow: hidden; /* ← evita scroll global */
+    display: flex;
+    flex-direction: column;
   }
+
+  .dashboardGrid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "lead  slots"
+      "chart slots";
+    gap: 24px;
+    min-height: 0;
+  }
+
 
   .title {
     font-size: 26px;
@@ -390,8 +444,12 @@
 
 /* ≥ 1024px — desktop */
 @media (min-width: 1024px) {
+  html, body {
+  height: 100%;
+  overflow: hidden; /* ← bloquea scroll global real */
+}
   .content {
-    padding: 24px clamp(2rem, 10vw, 8rem);
+    padding: 0 clamp(2rem, 10vw, 8rem);
     overflow: hidden;
     
   }
@@ -399,27 +457,23 @@
   .chart {
     height: calc(70vh - 120px);
   }
-  .twoCol {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 32px;
-  }
-
+  
   .chartSection {
     flex: 1;
-    position: sticky;
+    /*position: sticky;*/
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content:flex-start;
     /* top: calc(var(--admin-header-height) + 24px); */
 
   }
 
   .slotsSection {
-    height:calc(100vh - var(--admin-header-height) - 40px);
-    flex: 1;
+    grid-area: slots;
     overflow-y: auto;
     padding-right: 6px;
+    height: 100%;
   }
 
   .slotsGrid {
