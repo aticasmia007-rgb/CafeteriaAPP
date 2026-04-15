@@ -106,8 +106,5 @@
     padding: 0 clamp(2rem, 10vw, 8rem);
   }
 
-  .actions {
-    margin-right: calc((100vw - 760px) / 2 - 15px);
-  }
 
 }
