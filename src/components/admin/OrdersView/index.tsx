@@ -1,6 +1,7 @@
 import { useAdmin } from "../../../store/adminStore";
 import { type TimeSlot } from "../../../data/adminMockData";
 import OrderCard from "../OrderCard";
+import QRScanFab from "../QRScanFab";
 import styles from "./OrdersView.module.css";
 
 function getCurrentSlotId(timeSlots: TimeSlot[]): string | null {
@@ -40,6 +41,7 @@ export default function OrdersView() {
   }));
 
   return (
+    <>
     <div className={styles.content}>
       <h1 className={styles.title}>Pedidos Realizados</h1>
 
@@ -96,5 +98,8 @@ export default function OrdersView() {
         </div>
       ))}
     </div>
+
+    <QRScanFab />
+    </>
   );
 }
