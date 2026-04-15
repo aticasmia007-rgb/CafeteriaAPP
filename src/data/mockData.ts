@@ -32,6 +32,7 @@ export interface OrderGroup {
 
 export const categories = [
   { id: "all", name: "Todos", icon: "🍽️" },
+  { id: "healthy", name: "Saludable", icon: "🥦"}, 
   { id: "bocadillos", name: "Bocadillos", icon: "🥖" },
   { id: "bebidas", name: "Bebidas", icon: "🥤" },
   { id: "postres", name: "Postres", icon: "🍰" },
