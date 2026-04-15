@@ -16,14 +16,14 @@ export default function ProductsView() {
   const filteredProducts =
     catFilter === "all"
       ? state.products
-      : state.products.filter((p) => p.category === catFilter);
+      : state.products.filter((p) => p.categories.includes(catFilter));
 
   // Group by category for display
   const grouped = categories
     .filter((c) => c.id !== "all")
     .map((cat) => ({
       cat,
-      products: filteredProducts.filter((p) => p.category === cat.id),
+      products: filteredProducts.filter((p) => p.categories.includes(cat.id)),
     }))
     .filter((g) => g.products.length > 0);
 

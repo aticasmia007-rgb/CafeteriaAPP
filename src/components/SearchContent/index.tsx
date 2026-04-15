@@ -12,7 +12,7 @@ export default function SearchContent() {
       p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
       p.description.toLowerCase().includes(state.searchQuery.toLowerCase());
     const matchesCategory =
-      state.activeCategory === "all" || p.category === state.activeCategory;
+      state.activeCategory === "all" || p.categories.includes(state.activeCategory);
     return matchesQuery && matchesCategory;
   });
 

@@ -36,7 +36,7 @@ export default function AdminSearch() {
     ? state.products.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q)
+          p.categories.some((c) => c.toLowerCase().includes(q))
       )
     : [];
 
