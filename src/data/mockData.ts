@@ -12,6 +12,7 @@ export interface Product {
   categories: string[];
   description: string;
   discount?: number;
+  requiresPreparation?: boolean;
   isFavorite?: boolean;
   recommended?: boolean;
   allergens?: string[];
@@ -62,9 +63,9 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, recommended: true },
-  { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", categories: ["bocadillos", "healthy"], description: "Lechuga, tomate, huevo y atún", recommended: true },
-  { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada", recommended: true },
+  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, requiresPreparation: true, recommended: true },
+  { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", categories: ["bocadillos", "healthy"], description: "Lechuga, tomate, huevo y atún", requiresPreparation: true, recommended: true },
+  { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada", requiresPreparation: true, recommended: true },
   { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", categories: ["bebidas", "healthy"], description: "Zumo natural", discount: 10, recommended: true },
   { id: 5, name: "Fuze Tea", price: 0.80, image: "/fuze-tea.jpg", categories: ["bebidas"], description: "Lata 250ml" },
   { id: 6, name: "Tarta de Manzana", price: 1.80, image: "/tarta.jpg", categories: ["postres"], description: "Porción casera", discount: 20, recommended: true },
@@ -72,10 +73,10 @@ export const products: Product[] = [
   { id: 8, name: "Fruta del Día", price: 0.70, image: "/fruit.jpg", categories: ["fruta", "healthy"], description: "Manzana, plátano o naranja", recommended: true },
   { id: 9, name: "Patatas Fritas", price: 1.00, image: "🍟", categories: ["snacks"], description: "Bolsa individual", recommended: true },
   { id: 10, name: "Batido Chocolate", price: 1.60, image: "/chocolate.jpg", categories: ["bebidas"], description: "Batido de chocolate frío", recommended: true },
-  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", categories: ["bocadillos"], description: "Pincho de tortilla con pan", recommended: true },
+  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", categories: ["bocadillos"], description: "Pincho de tortilla con pan", requiresPreparation: true, recommended: true },
   { id: 12, name: "Galletas", price: 0.90, image: "/galleta.jpg", categories: ["snacks"], description: "Paquete de galletas María", recommended: true },
   { id: 13, name: "Yogur Natural", price: 0.95, image: "🥄", categories: ["postres", "healthy"], description: "Yogur natural sin azúcar", recommended: true },
-  { id: 14, name: "Cortado", price: 1.00, image: "/cortado.jpg", categories: ["cafe"], description: "Café cortado con leche", discount: 5, recommended: true },
+  { id: 14, name: "Cortado", price: 1.00, image: "/cortado.jpg", categories: ["cafe"], description: "Café cortado con leche", discount: 5, requiresPreparation: true, recommended: true },
   { id: 15, name: "Bocadillo Mixto", price: 2.30, image: "🧀", categories: ["bocadillos"], description: "Jamón york y queso a la plancha", recommended: true },
   { id: 16, name: "Napolitana de Chocolate", price: 1.30, image: "🥐", categories: ["snacks"], description: "Hojaldre relleno de crema de cacao" },
   { id: 17, name: "Agua Mineral", price: 0.50, image: "💧", categories: ["bebidas", "healthy"], description: "Botella 500ml" },
@@ -86,7 +87,7 @@ export const products: Product[] = [
   { id: 22, name: "Refresco Cola", price: 1.10, image: "🥤", categories: ["bebidas"], description: "Lata 330ml" },
   { id: 23, name: "Barrita de Cereales", price: 0.80, image: "🌾", categories: ["snacks", "healthy"], description: "Barrita de avena con miel y frutos secos", recommended: true },
   { id: 24, name: "Flan de Huevo", price: 1.20, image: "🍮", categories: ["postres"], description: "Flan casero con caramelo", discount: 15 },
-  { id: 25, name: "Cappuccino", price: 1.50, image: "☕", categories: ["cafe"], description: "Café espresso con leche vaporizada y espuma", recommended: true },
+  { id: 25, name: "Cappuccino", price: 1.50, image: "☕", categories: ["cafe"], description: "Café espresso con leche vaporizada y espuma", requiresPreparation: true, recommended: true },
 ];
 
 export const notifications: Notification[] = [
