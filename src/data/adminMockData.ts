@@ -91,7 +91,6 @@ function order(
   studentIdx: number,
   productIds: number[],
   status: OrderStatus,
-  needsPrep: boolean,
   slotId: string,
   placedAt: string,
 ): AdminOrder {
@@ -103,7 +102,7 @@ function order(
     items,
     total: calcTotal(items),
     status,
-    needsPrep,
+    needsPrep: items.some((i) => i.product.requiresPreparation === true),
     timeSlotId: slotId,
     placedAt,
   };
@@ -111,27 +110,27 @@ function order(
 
 export const adminOrders: AdminOrder[] = [
   // Slot t1 — Primer recreo
-  order(0, [1, 3], "pending", true, "t1", "09:48"),
-  order(1, [7, 5], "pending", false, "t1", "09:50"),
-  order(2, [11, 4], "prepared", true, "t1", "09:42"),
-  order(3, [8, 9], "delivered", false, "t1", "09:35"),
+  order(0, [1, 3], "pending", "t1", "09:48"),
+  order(1, [7, 5], "pending", "t1", "09:50"),
+  order(2, [11, 4], "prepared", "t1", "09:42"),
+  order(3, [8, 9], "delivered", "t1", "09:35"),
   // Slot t2 — Segundo recreo
-  order(4, [1, 10, 3], "pending", true, "t2", "10:05"),
-  order(5, [6], "pending", false, "t2", "10:08"),
-  order(6, [2, 14], "prepared", true, "t2", "09:58"),
-  order(7, [15, 12], "pending", true, "t2", "10:10"),
-  order(8, [17, 9], "delivered", false, "t2", "09:55"),
-  order(9, [7, 3], "prepared", false, "t2", "10:02"),
+  order(4, [1, 10, 3], "pending", "t2", "10:05"),
+  order(5, [6], "pending", "t2", "10:08"),
+  order(6, [2, 14], "prepared", "t2", "09:58"),
+  order(7, [15, 12], "pending", "t2", "10:10"),
+  order(8, [17, 9], "delivered", "t2", "09:55"),
+  order(9, [7, 3], "prepared", "t2", "10:02"),
   // Slot t3 — Tercer recreo
-  order(10, [18, 4], "pending", true, "t3", "10:25"),
-  order(11, [13, 19], "pending", false, "t3", "10:28"),
+  order(10, [18, 4], "pending", "t3", "10:25"),
+  order(11, [13, 19], "pending", "t3", "10:28"),
   // Slot t4 — Mediodía
-  order(12, [1, 2, 10], "pending", true, "t4", "12:40"),
-  order(13, [21, 3], "pending", true, "t4", "12:45"),
-  order(14, [11, 25, 6], "pending", false, "t4", "12:50"),
-  order(15, [15, 22, 9], "pending", true, "t4", "12:52"),
+  order(12, [1, 2, 10], "pending", "t4", "12:40"),
+  order(13, [21, 3], "pending", "t4", "12:45"),
+  order(14, [11, 25, 6], "pending", "t4", "12:50"),
+  order(15, [15, 22, 9], "pending", "t4", "12:52"),
   // Slot t5 — Tarde
-  order(0, [3, 7], "pending", false, "t5", "14:50"),
+  order(0, [3, 7], "pending", "t5", "14:50"),
 ];
 
 /* ── Admin Notifications ── */

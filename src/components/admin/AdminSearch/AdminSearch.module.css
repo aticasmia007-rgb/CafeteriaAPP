@@ -232,6 +232,6 @@
 
   .scanFab {
     bottom: 32px;
-    right: 108px; /* clear of the FAB nav stack */
+    right: 100px; /* clear of the FAB nav stack */
   }
 }
