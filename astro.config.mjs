@@ -6,5 +6,12 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
   adapter: node({ mode: 'standalone' }),
-  integrations: [react()]
+  integrations: [react()],
+  security: {
+    checkOrigin: false,
+  
+  },
+  server: {
+    allowedHosts: true,
+  },
 });
