@@ -30,6 +30,7 @@ export interface AppState {
   pendingOrderSheetOpen: boolean;
   selectedPendingOrderId: string | null;
   selectedPickupSlot: string | null;
+  paymentSheetOpen: boolean;
 }
 
 export type AppAction =
@@ -53,7 +54,9 @@ export type AppAction =
   | { type: "OPEN_PENDING_ORDER_SHEET"; orderId: string }
   | { type: "CLOSE_PENDING_ORDER_SHEET" }
   | { type: "PLACE_ORDER"; id: string; claimSlot: string; placedAt: string }
-  | { type: "SET_PICKUP_SLOT"; slot: string };
+  | { type: "SET_PICKUP_SLOT"; slot: string }
+  | { type: "OPEN_PAYMENT_SHEET" }
+  | { type: "CLOSE_PAYMENT_SHEET" };
 
 /** Generate a fake order id like "#adb323" (3 letters + 3 digits). */
 export function createOrderId(): string {
@@ -90,6 +93,7 @@ export const initialState: AppState = {
   pendingOrderSheetOpen: false,
   selectedPendingOrderId: null,
   selectedPickupSlot: null,
+  paymentSheetOpen: false,
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -194,6 +198,10 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, pendingOrderSheetOpen: false };
     case "SET_PICKUP_SLOT":
       return { ...state, selectedPickupSlot: action.slot };
+    case "OPEN_PAYMENT_SHEET":
+      return { ...state, paymentSheetOpen: true };
+    case "CLOSE_PAYMENT_SHEET":
+      return { ...state, paymentSheetOpen: false };
     case "PLACE_ORDER": {
       if (state.cart.length === 0) return state;
       const items = state.cart.map((item) => ({

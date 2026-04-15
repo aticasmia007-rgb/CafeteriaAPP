@@ -2,8 +2,6 @@ import { useEffect, useReducer } from "react";
 import {
   AppContext,
   appReducer,
-  createClaimSlot,
-  createOrderId,
   initialState,
 } from "../../store/appStore";
 import { notifications as mockNotifications } from "../../data/mockData";
@@ -14,6 +12,7 @@ import CartContent from "../CartContent";
 import BottomNav from "../BottomNav";
 import AuthSheet from "../AuthSheet";
 import PendingOrderSheet from "../PendingOrderSheet";
+import PaymentSheet from "../PaymentSheet";
 import ProfileView from "../ProfileView";
 import HistoryView from "../HistoryView";
 import styles from "./App.module.css";
@@ -28,23 +27,8 @@ export default function App() {
   useEffect(() => {
     if (!state.user || !state.pendingIntent) return;
     if (state.pendingIntent === "checkout") {
-      dispatch({
-        type: "PLACE_ORDER",
-        id: createOrderId(),
-        claimSlot: state.selectedPickupSlot ?? createClaimSlot(),
-        placedAt: "Ahora",
-      });
-      dispatch({
-        type: "PUSH_NOTIFICATION",
-        notification: {
-          id: Date.now(),
-          title: "Pedido realizado",
-          message: `¡Gracias, ${state.user.name}! Tu pedido está en camino.`,
-          time: "Ahora",
-          read: false,
-        },
-      });
-      dispatch({ type: "SET_TAB", tab: "home" });
+      // User just logged in during checkout — stay on cart so they can pick a payment method
+      dispatch({ type: "SET_TAB", tab: "cart" });
     } else if (state.pendingIntent === "profile") {
       dispatch({ type: "SET_TAB", tab: "profile" });
     }
@@ -65,6 +49,7 @@ export default function App() {
         <BottomNav />
         <AuthSheet />
         <PendingOrderSheet />
+        <PaymentSheet />
       </div>
     </AppContext.Provider>
   );

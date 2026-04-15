@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createClaimSlot, createOrderId, useApp } from "../../store/appStore";
+import { useApp } from "../../store/appStore";
 import { isImageUrl, products } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import SlotPicker from "../SlotPicker";
@@ -145,7 +145,6 @@ export default function CartContent() {
         })}
       </div>
 
-
       <div className={styles.slotPickerArea}>
         <SlotPicker />
       </div>
@@ -157,7 +156,7 @@ export default function CartContent() {
         <div className={styles.summaryRow}>
           <div className={styles.slotInlineLabels}>
             <span className={styles.slotInlineLabel}>Hora de recogida:</span>
-          <span>Productos ({itemCount})</span>
+            <span>Productos ({itemCount})</span>
           </div>
           <div className={styles.slotInline}>
             <SlotPicker compact />
@@ -173,23 +172,7 @@ export default function CartContent() {
             if (!state.user) {
               dispatch({ type: "OPEN_AUTH_SHEET", intent: "checkout" });
             } else {
-              dispatch({
-                type: "PLACE_ORDER",
-                id: createOrderId(),
-                claimSlot: state.selectedPickupSlot ?? createClaimSlot(),
-                placedAt: "Ahora",
-              });
-              dispatch({
-                type: "PUSH_NOTIFICATION",
-                notification: {
-                  id: Date.now(),
-                  title: "Pedido realizado",
-                  message: `¡Gracias, ${state.user.name}! Tu pedido está en camino.`,
-                  time: "Ahora",
-                  read: false,
-                },
-              });
-              dispatch({ type: "SET_TAB", tab: "home" });
+              dispatch({ type: "OPEN_PAYMENT_SHEET" });
             }
           }}
         >
@@ -197,11 +180,9 @@ export default function CartContent() {
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
             <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
-          {/* Realizar Pedido — {total.toFixed(2)}€ */}
           Realizar Pedido
         </button>
       </div>
-
     </div>
   );
 }
