@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAdmin } from "../../../store/adminStore";
-import { isImageUrl, categories, type Product } from "../../../data/mockData";
+import { isImageUrl, categories, ALLERGENS, type Product } from "../../../data/mockData";
 import styles from "./ProductEditor.module.css";
 import { useRef } from "react"; //Para fotos
 
@@ -25,7 +25,14 @@ export default function ProductEditor({ product }: Props) {
   const [description, setDescription] = useState(product?.description ?? "");
   const [category, setCategory] = useState(product?.category ?? "bocadillos");
   const [image, setImage] = useState(product?.image ?? "🍽️");
+  const [allergens, setAllergens] = useState<string[]>(product?.allergens ?? []);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function toggleAllergen(id: string) {
+    setAllergens((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    );
+  }
   
   function handleSave() {
     const p: Product = {
@@ -36,6 +43,7 @@ export default function ProductEditor({ product }: Props) {
       description,
       category,
       image,
+      allergens: allergens.length > 0 ? allergens : undefined,
     };
     if (isNew) {
       dispatch({ type: "ADD_PRODUCT", product: p });
@@ -173,6 +181,29 @@ export default function ProductEditor({ product }: Props) {
 
 
              
+          <div className={styles.field}>
+            <label className={styles.fieldLabel}>
+              {pencilIcon} Alérgenos
+            </label>
+            <div className={styles.allergenGrid}>
+              {ALLERGENS.map((a) => {
+                const active = allergens.includes(a.id);
+                return (
+                  <button
+                    key={a.id}
+                    type="button"
+                    className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
+                    onClick={() => toggleAllergen(a.id)}
+                    title={a.detail || a.label}
+                  >
+                    <span className={styles.allergenIcon}>{a.icon}</span>
+                    <span className={styles.allergenLabel}>{a.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className={styles.field}>
             <label className={styles.fieldLabel}>
               {pencilIcon} Imagen (emoji o ruta)

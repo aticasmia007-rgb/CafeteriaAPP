@@ -17,6 +17,11 @@ Campos relevantes:
 - `authSheetOpen` / `pendingIntent` — controlan el sheet de login
 - `user` — null si no autenticado
 
+## Available components utilitary compounents
+- Components that are utilitys and used to prevent repetitive code.
+- in `src/components/shared/**`
+
+
 ### Flujo de pago (`PLACE_ORDER`)
 Para registrar un pedido al pagar, **NO** uses `CLEAR_CART` separado — usa `PLACE_ORDER` que construye el pedido desde el carrito y lo vacía en un solo dispatch:
 ```tsx

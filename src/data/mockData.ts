@@ -14,7 +14,27 @@ export interface Product {
   discount?: number;
   isFavorite?: boolean;
   recommended?: boolean;
+  allergens?: string[];
 }
+
+export const ALLERGENS = [
+  { id: "gluten",   label: "Gluten",          detail: "trigo, centeno, cebada, avena", icon: "🌾" },
+  { id: "crustaceos", label: "Crustáceos",    detail: "",                               icon: "🦐" },
+  { id: "huevos",   label: "Huevos",          detail: "",                               icon: "🥚" },
+  { id: "pescado",  label: "Pescado",          detail: "",                               icon: "🐟" },
+  { id: "cacahuetes", label: "Cacahuetes",    detail: "",                               icon: "🥜" },
+  { id: "soja",     label: "Soja",            detail: "",                               icon: "🫘" },
+  { id: "leche",    label: "Leche",           detail: "",                               icon: "🥛" },
+  { id: "frutos_cascara", label: "Frutos de cáscara", detail: "almendras, avellanas, nueces, anacardos, pacanas, nueces de Brasil, pistachos, macadamia", icon: "🌰" },
+  { id: "apio",     label: "Apio",            detail: "",                               icon: "🥬" },
+  { id: "mostaza",  label: "Mostaza",         detail: "",                               icon: "🌿" },
+  { id: "sesamo",   label: "Sésamo",          detail: "",                               icon: "⚪" },
+  { id: "sulfitos", label: "Sulfitos",        detail: "dióxido de azufre >10 mg/kg o mg/L", icon: "🧪" },
+  { id: "altramuz", label: "Altramuz",        detail: "",                               icon: "🌼" },
+  { id: "moluscos", label: "Moluscos",        detail: "",                               icon: "🐚" },
+] as const;
+
+export type AllergenId = typeof ALLERGENS[number]["id"];
 
 export interface Notification {
   id: number;
