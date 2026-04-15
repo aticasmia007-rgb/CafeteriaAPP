@@ -11,5 +11,6 @@ services:
       - "traefik.http.services.cafeteria.loadbalancer.server.port=4321"
 
 networks:
-  traefik:
-    external: true
+    traefik_proxy_external:
+        external: true
+        name: "traefik_proxy_external"
