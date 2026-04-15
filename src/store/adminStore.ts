@@ -20,7 +20,7 @@ export interface AdminState {
   notifications: AdminNotification[];
   user: AdminUser;
   searchQuery: string;
-  orderFilter: "all" | "needs-prep" | "pending";
+  orderFilter: "all" | "needs-prep" | "pending" | "current-slot";
   expandedOrderId: string | null;
   editingProductId: number | null;
   selectedSlotId: string | null;
@@ -33,7 +33,7 @@ export interface AdminState {
 export type AdminAction =
   | { type: "SET_VIEW"; view: AdminView }
   | { type: "SET_SEARCH_QUERY"; query: string }
-  | { type: "SET_ORDER_FILTER"; filter: "all" | "needs-prep" | "pending" }
+  | { type: "SET_ORDER_FILTER"; filter: "all" | "needs-prep" | "pending" | "current-slot" }
   | { type: "TOGGLE_ORDER_EXPAND"; orderId: string }
   | { type: "SET_ORDER_STATUS"; orderId: string; status: OrderStatus }
   | { type: "MARK_ORDER_PREPARED"; orderId: string }

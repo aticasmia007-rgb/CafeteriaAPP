@@ -32,7 +32,7 @@ export const timeSlots: TimeSlot[] = [
   { id: "t3", name: "Tercer recreo", startTime: "10:40", endTime: "11:00", maxOrders: 20, currentOrders: 12, blocked: false },
   { id: "t4", name: "Mediodía", startTime: "13:00", endTime: "13:30", maxOrders: 35, currentOrders: 35, blocked: false },
   { id: "t5", name: "Tarde", startTime: "15:00", endTime: "15:20", maxOrders: 15, currentOrders: 4, blocked: false },
-  { id: "t6", name: "Cierre", startTime: "16:00", endTime: "16:30", maxOrders: 10, currentOrders: 0, blocked: true },
+  { id: "t6", name: "Cierre", startTime: "16:00", endTime: "23:30", maxOrders: 10, currentOrders: 0, blocked: true },
 ];
 
 /* ── Admin Orders ── */
