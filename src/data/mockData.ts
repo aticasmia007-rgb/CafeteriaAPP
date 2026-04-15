@@ -14,6 +14,7 @@ export interface Product {
   discount?: number;
   isFavorite?: boolean;
   recommended?: boolean;
+  allergens?: string[]; 
 }
 
 export interface Notification {
@@ -42,7 +43,7 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15, recommended: true },
+  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15, recommended: true, allergens:["gluten", "leche"] },
   { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", category: "bocadillos", description: "Lechuga, tomate, huevo y atún", recommended: true },
   { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", category: "cafe", description: "Café con leche semidesnatada", recommended: true },
   { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", category: "bebidas", description: "Zumo natural", discount: 10, recommended: true },
@@ -123,3 +124,20 @@ export const mockPendingOrders: PendingOrder[] = [
   },
 ];
 
+
+export const ALLERGENS = [
+  { id: "gluten",   label: "Gluten",          detail: "trigo, centeno, cebada, avena", icon: "🌾" },
+  { id: "crustaceos", label: "Crustáceos",    detail: "",                               icon: "🦐" },
+  { id: "huevos",   label: "Huevos",          detail: "",                               icon: "🥚" },
+  { id: "pescado",  label: "Pescado",          detail: "",                               icon: "🐟" },
+  { id: "cacahuetes", label: "Cacahuetes",    detail: "",                               icon: "🥜" },
+  { id: "soja",     label: "Soja",            detail: "",                               icon: "🫘" },
+  { id: "leche",    label: "Leche",           detail: "",                               icon: "🥛" },
+  { id: "frutos_cascara", label: "Frutos de cáscara", detail: "almendras, avellanas, nueces, anacardos, pacanas, nueces de Brasil, pistachos, macadamia", icon: "🌰" },
+  { id: "apio",     label: "Apio",            detail: "",                               icon: "🥬" },
+  { id: "mostaza",  label: "Mostaza",         detail: "",                               icon: "🌿" },
+  { id: "sesamo",   label: "Sésamo",          detail: "",                               icon: "⚪" },
+  { id: "sulfitos", label: "Sulfitos",        detail: "dióxido de azufre >10 mg/kg o mg/L", icon: "🧪" },
+  { id: "altramuz", label: "Altramuz",        detail: "",                               icon: "🌼" },
+  { id: "moluscos", label: "Moluscos",        detail: "",                               icon: "🐚" },
+] as const;

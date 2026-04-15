@@ -1,0 +1,153 @@
+.container {
+  position: relative;
+  text-align: center;
+}
+
+/* Botón X */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/*.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  line-height: 1.2;
+}*/
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.closeBtn:hover {
+  background: var(--color-gray-200);
+}
+
+/* Imagen */
+.imageArea {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  aspect-ratio: 16 / 9;
+
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.discountBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--color-danger);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Texto */
+.name {
+  font-size: 22px;
+  margin: 8px 0 4px;
+}
+
+.desc {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* Precio */
+.priceRow {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.priceOld {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.priceNew {
+  color: var(--color-success);
+  font-weight: bold;
+}
+
+/* Contador */
+.qtyGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.qtyBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.qtyBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.qtyValue {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Alergenos */
+.subTitle {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.allergenChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.chip {
+  background: #f2f2f2;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+.noAllergens {
+  color: #777;
+}

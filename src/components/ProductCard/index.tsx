@@ -17,7 +17,14 @@ export default function ProductCard({ product, compact = false }: Props) {
     : null;
 
   return (
-    <div className={`${styles.card} ${compact ? styles.compact : ""}`}>
+    // <div className={`${styles.card} ${compact ? styles.compact : ""}`}>
+  <div
+      className={`${styles.card} ${compact ? styles.compact : ""}`}
+      onClick={() => {
+        
+        dispatch({ type: "OPEN_ALLERGEN_SHEET", producto: product })
+      }}
+    >
       <div className={styles.imageArea}>
         {isImageUrl(product.image) ? (
           <img
@@ -34,7 +41,9 @@ export default function ProductCard({ product, compact = false }: Props) {
         )}
         <button
           className={`${styles.favBtn} ${isFav ? styles.favActive : ""}`}
-          onClick={() => dispatch({ type: "TOGGLE_FAVORITE", productId: product.id })}
+          onClick={(e) => {
+            e.stopPropagation()
+            dispatch({ type: "TOGGLE_FAVORITE", productId: product.id })} }
           aria-label={isFav ? "Quitar de favoritos" : "Añadir a favoritos"}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill={isFav ? "var(--color-danger)" : "none"} stroke={isFav ? "var(--color-danger)" : "currentColor"} strokeWidth="2">
@@ -51,13 +60,14 @@ export default function ProductCard({ product, compact = false }: Props) {
         >
           <button
             className={styles.qtyBtn}
-            onClick={() =>
+            onClick={(e) => {
+              e.stopPropagation()
               dispatch({
                 type: "UPDATE_CART_QTY",
                 productId: product.id,
                 quantity: (cartItem?.quantity ?? 0) - 1,
               })
-            }
+            } }
             aria-label="Quitar uno del carrito"
             tabIndex={inCart ? 0 : -1}
           >
@@ -68,7 +78,11 @@ export default function ProductCard({ product, compact = false }: Props) {
           <span className={styles.qtyValue}>{cartItem?.quantity ?? 0}</span>
           <button
             className={styles.qtyBtn}
-            onClick={() => dispatch({ type: "ADD_TO_CART", product })}
+            onClick={(e) => {
+              e.stopPropagation()
+              dispatch({ type: "ADD_TO_CART", product })
+            
+          }}
             aria-label="Añadir uno al carrito"
             tabIndex={inCart ? 0 : -1}
           >
@@ -91,7 +105,12 @@ export default function ProductCard({ product, compact = false }: Props) {
           </div>
           <button
             className={`${styles.addBtn} ${inCart ? styles.addBtnHidden : ""}`}
-            onClick={() => dispatch({ type: "ADD_TO_CART", product })}
+            onClick={(e) => {
+              e.stopPropagation()
+              dispatch({ type: "ADD_TO_CART", product })
+          
+            }}
+            
             aria-label="Añadir al carrito"
             tabIndex={inCart ? -1 : 0}
           >

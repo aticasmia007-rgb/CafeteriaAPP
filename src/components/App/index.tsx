@@ -14,6 +14,7 @@ import CartContent from "../CartContent";
 import BottomNav from "../BottomNav";
 import AuthSheet from "../AuthSheet";
 import PendingOrderSheet from "../PendingOrderSheet";
+import ProductDetailsSheet from "../ProductDetailsSheet";
 import ProfileView from "../ProfileView";
 import HistoryView from "../HistoryView";
 import styles from "./App.module.css";
@@ -65,6 +66,7 @@ export default function App() {
         <BottomNav />
         <AuthSheet />
         <PendingOrderSheet />
+        <ProductDetailsSheet />
       </div>
     </AppContext.Provider>
   );

@@ -30,6 +30,8 @@ export interface AppState {
   pendingOrderSheetOpen: boolean;
   selectedPendingOrderId: string | null;
   selectedPickupSlot: string | null;
+  allergenSheetOpen: boolean;
+  productoSeleccionado: Product | null;
 }
 
 export type AppAction =
@@ -53,7 +55,9 @@ export type AppAction =
   | { type: "OPEN_PENDING_ORDER_SHEET"; orderId: string }
   | { type: "CLOSE_PENDING_ORDER_SHEET" }
   | { type: "PLACE_ORDER"; id: string; claimSlot: string; placedAt: string }
-  | { type: "SET_PICKUP_SLOT"; slot: string };
+  | { type: "SET_PICKUP_SLOT"; slot: string }
+  | { type: "OPEN_ALLERGEN_SHEET"; producto: Product }
+  | { type: "CLOSE_ALLERGEN_SHEET" };
 
 /** Generate a fake order id like "#adb323" (3 letters + 3 digits). */
 export function createOrderId(): string {
@@ -90,6 +94,8 @@ export const initialState: AppState = {
   pendingOrderSheetOpen: false,
   selectedPendingOrderId: null,
   selectedPickupSlot: null,
+  allergenSheetOpen: false,
+  productoSeleccionado: null,
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -220,6 +226,19 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         selectedPickupSlot: null,
       };
     }
+    case "OPEN_ALLERGEN_SHEET":
+      return {
+        ...state,
+        allergenSheetOpen: true,
+        productoSeleccionado: action.producto,
+      };
+
+    case "CLOSE_ALLERGEN_SHEET":
+      return {
+        ...state,
+        allergenSheetOpen: false,
+        productoSeleccionado: null,
+      };
     default:
       return state;
   }
