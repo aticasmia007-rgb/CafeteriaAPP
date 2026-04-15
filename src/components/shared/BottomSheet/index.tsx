@@ -3,7 +3,7 @@ import styles from "./BottomSheet.module.css";
 
 interface Props {
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
   /** Max width of the card at ≥640px. Default: "480px" */
   maxWidth?: string;
@@ -21,7 +21,7 @@ interface Props {
  *
  * Manages its own mounted/animOpen state so consumers only pass `open`.
  */
-export default function BottomSheet({ open, onClose, children, maxWidth = "480px", label }: Props) {
+export default function BottomSheet({ open, onClose = () => {}, children, maxWidth = "480px", label }: Props) {
   const [mounted, setMounted] = useState(false);
   const [animOpen, setAnimOpen] = useState(false);
 
