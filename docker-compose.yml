@@ -1,16 +1,17 @@
+networks:
+    traefik_proxy_external:
+        external: true
+        name: "traefik_proxy_external"
 services:
   cafeteria:
     build: .
     restart: unless-stopped
     networks:
-      - traefik
+      - traefik_proxy_external
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cafeteria.rule=Host(`cafeteria.jcool-laboratory-00.click`)"
       - "traefik.http.routers.cafeteria.entrypoints=web"
       - "traefik.http.services.cafeteria.loadbalancer.server.port=4321"
 
-networks:
-    traefik_proxy_external:
-        external: true
-        name: "traefik_proxy_external"
+
