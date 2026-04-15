@@ -10,7 +10,7 @@ services:
       - traefik_proxy_external
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.cafeteria.rule=Host(`cafeteria.jcool-laboratory-00.click`)"
+      - "traefik.http.routers.cafeteria.rule=Host(`cafeteria.home`) || Host(`cafeteria.jcool-laboratory-00.click`)"
       - "traefik.http.routers.cafeteria.entrypoints=web"
       - "traefik.http.services.cafeteria.loadbalancer.server.port=4321"
 
