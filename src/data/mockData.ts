@@ -14,7 +14,7 @@ export interface Product {
   discount?: number;
   isFavorite?: boolean;
   recommended?: boolean;
-  allergens?: string[];
+  allergens?: string[]; 
 }
 
 export const ALLERGENS = [
@@ -62,7 +62,7 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15, recommended: true },
+  { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", category: "bocadillos", description: "Jamón serrano con tomate", discount: 15, recommended: true, allergens:["gluten", "leche"] },
   { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", category: "bocadillos", description: "Lechuga, tomate, huevo y atún", recommended: true },
   { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", category: "cafe", description: "Café con leche semidesnatada", recommended: true },
   { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", category: "bebidas", description: "Zumo natural", discount: 10, recommended: true },
@@ -142,4 +142,5 @@ export const mockPendingOrders: PendingOrder[] = [
     placedAt: "Hace 2 min",
   },
 ];
+
 

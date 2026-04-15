@@ -30,6 +30,8 @@ export interface AppState {
   pendingOrderSheetOpen: boolean;
   selectedPendingOrderId: string | null;
   selectedPickupSlot: string | null;
+  allergenSheetOpen: boolean;
+  productoSeleccionado: Product | null;
   paymentSheetOpen: boolean;
 }
 
@@ -55,6 +57,8 @@ export type AppAction =
   | { type: "CLOSE_PENDING_ORDER_SHEET" }
   | { type: "PLACE_ORDER"; id: string; claimSlot: string; placedAt: string }
   | { type: "SET_PICKUP_SLOT"; slot: string }
+  | { type: "OPEN_ALLERGEN_SHEET"; producto: Product }
+  | { type: "CLOSE_ALLERGEN_SHEET" }
   | { type: "OPEN_PAYMENT_SHEET" }
   | { type: "CLOSE_PAYMENT_SHEET" };
 
@@ -93,6 +97,8 @@ export const initialState: AppState = {
   pendingOrderSheetOpen: false,
   selectedPendingOrderId: null,
   selectedPickupSlot: null,
+  allergenSheetOpen: false,
+  productoSeleccionado: null,
   paymentSheetOpen: false,
 };
 
@@ -228,6 +234,19 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         selectedPickupSlot: null,
       };
     }
+    case "OPEN_ALLERGEN_SHEET":
+      return {
+        ...state,
+        allergenSheetOpen: true,
+        productoSeleccionado: action.producto,
+      };
+
+    case "CLOSE_ALLERGEN_SHEET":
+      return {
+        ...state,
+        allergenSheetOpen: false,
+        productoSeleccionado: null,
+      };
     default:
       return state;
   }
