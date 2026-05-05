@@ -400,8 +400,6 @@
 
   .content {
     padding: 0 clamp(2rem, 6vw, 5rem);
-    height: calc(100vh - var(--admin-header-height));
-    overflow: hidden; /* ← evita scroll global */
     display: flex;
     flex-direction: column;
   }
@@ -454,13 +452,11 @@
     
   }
 
-  .chart {
-    height: calc(70vh - 120px);
-  }
+
   
   .chartSection {
     flex: 1;
-    /*position: sticky;*/
+    position: sticky;
     display: flex;
     align-items: center;
     flex-direction: column;
