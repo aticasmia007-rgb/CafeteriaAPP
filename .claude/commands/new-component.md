@@ -184,7 +184,21 @@ if (!mounted) return null;
 - Sin gradientes púrpura, sin Inter/Roboto, sin patrones genéricos de IA
 
 ## Componentes existentes como referencia
-`App/`, `TopBar/`, `BottomNav/`, `CategoryFilters/`, `HomeContent/`, `SearchContent/`, `CartContent/`, `ProductCard/`, `AuthSheet/`, `ProfileView/`, `HistoryView/`, `RecentOrders/`, `PendingOrders/`, `PendingOrderSheet/`
+
+**Cliente:** `App/`, `TopBar/`, `BottomNav/`, `CategoryFilters/`, `HomeContent/`, `SearchContent/`, `CartContent/`, `ProductCard/`, `AuthSheet/`, `ProfileView/`, `HistoryView/`, `RecentOrders/`, `PendingOrders/`, `PendingOrderSheet/`
+
+**Admin** (`src/components/admin/`): `AdminApp/`, `AdminHeader/`, `AdminNav/`, `OrdersView/`, `OrderCard/`, `ProductsView/`, `ProductEditor/`, `TimeSlotsView/`, `SlotModal/`, `AdminSearch/`, `QRScanner/`, `QRScanFab/`, `ScannedOrderSheet/`
+
+**Compartidos** (`src/components/shared/`): componentes utilitarios reutilizables entre cliente y admin.
 
 ### Imágenes de producto (`isImageUrl`)
 Cualquier componente que muestre `Product.image` debe importar `isImageUrl` de `src/data/mockData` y ramificar entre `<img>` y `<span>` emoji. Esto incluye sheets de detalle de pedidos (`PendingOrderSheet`) y cualquier listado de items.
+
+### `Product.categories` — array, no string
+El campo es `categories: string[]` (puede pertenecer a varias categorías). Para filtrar usa `.includes(id)`. Para mostrar chips usa `.map()`. El campo anterior `category: string` ya no existe.
+
+### `Product.requiresPreparation` — toggle en editor
+`requiresPreparation?: boolean` indica si el producto necesita preparación en cocina. En `ProductEditor` se controla con un toggle button (`.prepToggle`/`.prepToggleActive`). Se guarda como `true` o `undefined` (nunca `false` explícito). En el admin, `AdminOrder.needsPrep` se deriva automáticamente — no lo calcules tú.
+
+### `QRScanFab` — componente reutilizable
+Si la vista admin necesita escáner QR, usa `<QRScanFab />` de `src/components/admin/QRScanFab/`. Encapsula el FAB, el modal de cámara (`QRScanner`) y el sheet de resultado (`ScannedOrderSheet`). No reimplementes esta lógica inline.

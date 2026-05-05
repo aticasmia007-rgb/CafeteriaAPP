@@ -66,6 +66,30 @@
   margin-bottom: 10px;
 }
 
+.liveDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+  animation: livePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.7); }
+}
+
+.slotEmpty {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px dashed var(--color-gray-200);
+  color: var(--color-gray-400);
+  font-size: 13px;
+  text-align: center;
+}
+
 .slotName {
   font-size: 15px;
   font-weight: 700;

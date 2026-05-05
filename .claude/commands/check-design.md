@@ -80,4 +80,10 @@ Checks adicionales específicos del proyecto:
 
 17. **TopBar y CategoryFilters — alineación de padding**: `TopBar.module.css` debe declarar `--padding-x-inner-elements` en `.header` a 768px/1024px. `CategoryFilters.module.css` hereda la variable y usa `padding-inline: var(--padding-x-inner-elements)` — sin redeclarar los valores clamp. Si el padding del topbar y los filtros no coincide con el resto del contenido, es un bug de alineación.
 
+18. **`Product.categories` — array multi-categoría**: el campo es `categories: string[]`, no `category: string`. Cualquier filtro debe usar `.includes(id)` o `.some(...)`, nunca `=== id`. Si ves `p.category` en el código es un bug de migración.
+
+19. **`Product.requiresPreparation` — derivado, no manual**: en `adminMockData.ts`, `AdminOrder.needsPrep` se calcula dentro de la función `order()` con `items.some(i => i.product.requiresPreparation === true)`. Nunca debe pasarse como argumento manual a `order()`. Si aparece como parámetro o valor hardcodeado, es un error.
+
+20. **`QRScanFab` — no duplicar**: si una vista admin necesita escáner QR, debe usar `<QRScanFab />` de `src/components/admin/QRScanFab/`. Reportar como error cualquier implementación inline que duplique el FAB button + `QRScanner` + `ScannedOrderSheet`.
+
 Devuelve el componente corregido con los cambios explicados línea a línea.

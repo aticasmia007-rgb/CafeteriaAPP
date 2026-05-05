@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useAdmin } from "../../../store/adminStore";
 import { isImageUrl } from "../../../data/mockData";
-import QRScanner from "../QRScanner";
-import ScannedOrderSheet from "../ScannedOrderSheet";
+import QRScanFab from "../QRScanFab";
 import styles from "./AdminSearch.module.css";
 
 const statusLabels: Record<string, string> = {
@@ -13,16 +11,8 @@ const statusLabels: Record<string, string> = {
 
 export default function AdminSearch() {
   const { state, dispatch } = useAdmin();
-  const [scannerOpen, setScannerOpen] = useState(false);
-  const [scannedValue, setScannedValue] = useState("");
-  const [orderSheetOpen, setOrderSheetOpen] = useState(false);
 
   const q = state.searchQuery.toLowerCase().trim();
-
-  function handleDetected(value: string) {
-    setScannedValue(value);
-    setOrderSheetOpen(true);
-  }
 
   const matchedOrders = q
     ? state.orders.filter(
@@ -133,32 +123,7 @@ export default function AdminSearch() {
         )}
       </div>
 
-      {/* QR scan FAB */}
-      <button
-        className={styles.scanFab}
-        onClick={() => setScannerOpen(true)}
-        aria-label="Escanear QR"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="3" width="5" height="5" rx="1" />
-          <rect x="16" y="3" width="5" height="5" rx="1" />
-          <rect x="3" y="16" width="5" height="5" rx="1" />
-          <path d="M21 16h-3a2 2 0 00-2 2v3" />
-          <line x1="21" y1="21" x2="21" y2="21" />
-        </svg>
-      </button>
-
-      <QRScanner
-        open={scannerOpen}
-        onClose={() => setScannerOpen(false)}
-        onDetected={handleDetected}
-      />
-
-      <ScannedOrderSheet
-        open={orderSheetOpen}
-        onClose={() => setOrderSheetOpen(false)}
-        scannedValue={scannedValue}
-      />
+      <QRScanFab />
     </>
   );
 }
