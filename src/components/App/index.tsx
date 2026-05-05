@@ -16,6 +16,7 @@ import ProductDetailsSheet from "../ProductDetailsSheet";
 import PaymentSheet from "../PaymentSheet";
 import ProfileView from "../ProfileView";
 import HistoryView from "../HistoryView";
+import LoginButton from "../LoginButton";
 import styles from "./App.module.css";
 
 export default function App() {

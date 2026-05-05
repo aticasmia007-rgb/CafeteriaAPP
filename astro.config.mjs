@@ -14,4 +14,8 @@ export default defineConfig({
   server: {
     allowedHosts: true,
   },
+
+  devToolbar: {
+    enabled: false
+  }
 });
