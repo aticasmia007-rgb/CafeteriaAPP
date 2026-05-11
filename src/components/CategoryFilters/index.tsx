@@ -1,5 +1,4 @@
 import { useApp } from "../../store/appStore";
-import { categories } from "../../data/mockData";
 import styles from "./CategoryFilters.module.css";
 
 export default function CategoryFilters() {
@@ -15,7 +14,7 @@ export default function CategoryFilters() {
 
   return (
     <nav className={styles.filters}>
-      {categories.map((cat) => (
+      {state.categories.map((cat) => (
         <button
           key={cat.id}
           className={`${styles.filterBtn} ${state.activeCategory === cat.id ? styles.filterActive : ""}`}

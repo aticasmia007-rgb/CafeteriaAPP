@@ -16,16 +16,18 @@ export interface AdminState {
   activeView: AdminView;
   orders: AdminOrder[];
   products: Product[];
+  categories: { id: string; name: string; icon: string }[];
+  allergens: { id: string; name: string; icon: string }[];
   timeSlots: TimeSlot[];
   notifications: AdminNotification[];
   user: AdminUser;
   searchQuery: string;
   orderFilter: "all" | "needs-prep" | "pending" | "current-slot";
   expandedOrderId: string | null;
-  editingProductId: number | null;
+  editingProductId: string | null;
   selectedSlotId: string | null;
-  leadTimeMinutes: number; // global advance-order time
-  recentlyEditedIds: number[];
+  leadTimeMinutes: number;
+  recentlyEditedIds: string[];
 }
 
 /* ── Actions ── */
@@ -38,17 +40,18 @@ export type AdminAction =
   | { type: "SET_ORDER_STATUS"; orderId: string; status: OrderStatus }
   | { type: "MARK_ORDER_PREPARED"; orderId: string }
   | { type: "MARK_ORDER_DELIVERED"; orderId: string }
-  | { type: "SET_EDITING_PRODUCT"; productId: number | null }
+  | { type: "SET_EDITING_PRODUCT"; productId: string | null }
   | { type: "UPDATE_PRODUCT"; product: Product }
   | { type: "ADD_PRODUCT"; product: Product }
-  | { type: "TOGGLE_PRODUCT_AVAILABLE"; productId: number }
+  | { type: "TOGGLE_PRODUCT_AVAILABLE"; productId: string }
   | { type: "SELECT_SLOT"; slotId: string | null }
   | { type: "UPDATE_SLOT"; slot: TimeSlot }
   | { type: "TOGGLE_SLOT_BLOCKED"; slotId: string }
   | { type: "SET_LEAD_TIME"; minutes: number }
   | { type: "MARK_NOTIFICATION_READ"; notificationId: number }
   | { type: "MARK_ALL_NOTIFICATIONS_READ" }
-  | { type: "PUSH_NOTIFICATION"; notification: AdminNotification };
+  | { type: "PUSH_NOTIFICATION"; notification: AdminNotification }
+  | { type: "LOAD_ADMIN_DATA"; orders: AdminOrder[]; products: Product[]; categories: { id: string; name: string; icon: string }[]; allergens: { id: string; name: string; icon: string }[]; timeSlots: TimeSlot[] };
 
 /* ── Reducer ── */
 
@@ -110,25 +113,21 @@ export function adminReducer(state: AdminState, action: AdminAction): AdminState
         editingProductId: null,
       };
 
-    case "ADD_PRODUCT": {
-      const newId = Math.max(...state.products.map((p) => p.id), 0) + 1;
-      const product = { ...action.product, id: newId };
+    case "ADD_PRODUCT":
       return {
         ...state,
-        products: [...state.products, product],
-        recentlyEditedIds: [newId, ...state.recentlyEditedIds].slice(0, 10),
+        products: [...state.products, action.product],
+        recentlyEditedIds: [action.product.id, ...state.recentlyEditedIds].slice(0, 10),
         editingProductId: null,
       };
-    }
 
-    case "TOGGLE_PRODUCT_AVAILABLE": {
-      // Toggle by adding/removing discount=-1 as a "disabled" marker won't work.
-      // Instead, we use a simple filter: products with id in a "disabled" set.
-      // For the mock, we'll just toggle the product out/in by setting price to 0 / restoring.
-      // Actually, let's add an `available` field convention: discount of -1 means unavailable.
-      // Better: keep it simple — we store unavailable IDs in state.
-      return state; // handled by a dedicated unavailable set below
-    }
+    case "TOGGLE_PRODUCT_AVAILABLE":
+      return {
+        ...state,
+        products: state.products.map((p) =>
+          p.id === action.productId ? { ...p, available: !(p.available ?? true) } : p
+        ),
+      };
 
     case "SELECT_SLOT":
       return { ...state, selectedSlotId: action.slotId };
@@ -174,6 +173,16 @@ export function adminReducer(state: AdminState, action: AdminAction): AdminState
       return {
         ...state,
         notifications: [action.notification, ...state.notifications],
+      };
+
+    case "LOAD_ADMIN_DATA":
+      return {
+        ...state,
+        orders: action.orders,
+        products: action.products,
+        categories: action.categories,
+        allergens: action.allergens,
+        timeSlots: action.timeSlots,
       };
 
     default:

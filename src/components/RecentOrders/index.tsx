@@ -1,5 +1,5 @@
 import { useApp } from "../../store/appStore";
-import { isImageUrl, recentOrders } from "../../data/mockData";
+import { isImageUrl } from "../../data/mockData";
 import styles from "./RecentOrders.module.css";
 
 export default function RecentOrders() {
@@ -13,7 +13,7 @@ export default function RecentOrders() {
         </h2>
       </div>
       <div className={styles.ordersList}>
-        {recentOrders.map((order) => (
+        {state.recentOrders.map((order) => (
           <div key={order.id} className={styles.orderCard}>
             <div className={styles.orderHeader}>
               <span className={styles.orderDate}>{order.date}</span>

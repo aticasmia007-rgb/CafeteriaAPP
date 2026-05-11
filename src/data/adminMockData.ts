@@ -71,7 +71,7 @@ function makeCode(): string {
   return `#${letters}${digits}`;
 }
 
-function pickItems(ids: number[]): AdminOrderItem[] {
+function pickItems(ids: string[]): AdminOrderItem[] {
   return ids.map((id) => ({
     product: products.find((p) => p.id === id)!,
     quantity: 1 + Math.floor(Math.random() * 3),
@@ -89,7 +89,7 @@ function calcTotal(items: AdminOrderItem[]): number {
 
 function order(
   studentIdx: number,
-  productIds: number[],
+  productIds: string[],
   status: OrderStatus,
   slotId: string,
   placedAt: string,
@@ -110,27 +110,27 @@ function order(
 
 export const adminOrders: AdminOrder[] = [
   // Slot t1 — Primer recreo
-  order(0, [1, 3], "pending", "t1", "09:48"),
-  order(1, [7, 5], "pending", "t1", "09:50"),
-  order(2, [11, 4], "prepared", "t1", "09:42"),
-  order(3, [8, 9], "delivered", "t1", "09:35"),
+  order(0, ["mock-prod-001", "mock-prod-003"], "pending", "t1", "09:48"),
+  order(1, ["mock-prod-007", "mock-prod-005"], "pending", "t1", "09:50"),
+  order(2, ["mock-prod-011", "mock-prod-004"], "prepared", "t1", "09:42"),
+  order(3, ["mock-prod-008", "mock-prod-009"], "delivered", "t1", "09:35"),
   // Slot t2 — Segundo recreo
-  order(4, [1, 10, 3], "pending", "t2", "10:05"),
-  order(5, [6], "pending", "t2", "10:08"),
-  order(6, [2, 14], "prepared", "t2", "09:58"),
-  order(7, [15, 12], "pending", "t2", "10:10"),
-  order(8, [17, 9], "delivered", "t2", "09:55"),
-  order(9, [7, 3], "prepared", "t2", "10:02"),
+  order(4, ["mock-prod-001", "mock-prod-010", "mock-prod-003"], "pending", "t2", "10:05"),
+  order(5, ["mock-prod-006"], "pending", "t2", "10:08"),
+  order(6, ["mock-prod-002", "mock-prod-014"], "prepared", "t2", "09:58"),
+  order(7, ["mock-prod-015", "mock-prod-012"], "pending", "t2", "10:10"),
+  order(8, ["mock-prod-017", "mock-prod-009"], "delivered", "t2", "09:55"),
+  order(9, ["mock-prod-007", "mock-prod-003"], "prepared", "t2", "10:02"),
   // Slot t3 — Tercer recreo
-  order(10, [18, 4], "pending", "t3", "10:25"),
-  order(11, [13, 19], "pending", "t3", "10:28"),
+  order(10, ["mock-prod-018", "mock-prod-004"], "pending", "t3", "10:25"),
+  order(11, ["mock-prod-013", "mock-prod-019"], "pending", "t3", "10:28"),
   // Slot t4 — Mediodía
-  order(12, [1, 2, 10], "pending", "t4", "12:40"),
-  order(13, [21, 3], "pending", "t4", "12:45"),
-  order(14, [11, 25, 6], "pending", "t4", "12:50"),
-  order(15, [15, 22, 9], "pending", "t4", "12:52"),
+  order(12, ["mock-prod-001", "mock-prod-002", "mock-prod-010"], "pending", "t4", "12:40"),
+  order(13, ["mock-prod-021", "mock-prod-003"], "pending", "t4", "12:45"),
+  order(14, ["mock-prod-011", "mock-prod-025", "mock-prod-006"], "pending", "t4", "12:50"),
+  order(15, ["mock-prod-015", "mock-prod-022", "mock-prod-009"], "pending", "t4", "12:52"),
   // Slot t5 — Tarde
-  order(0, [3, 7], "pending", "t5", "14:50"),
+  order(0, ["mock-prod-003", "mock-prod-007"], "pending", "t5", "14:50"),
 ];
 
 /* ── Admin Notifications ── */
@@ -152,4 +152,10 @@ export const adminNotifications: AdminNotification[] = [
 
 /* ── Recently edited products (IDs) ── */
 
-export const recentlyEditedProductIds = [1, 6, 11, 3, 7];
+export const recentlyEditedProductIds: string[] = [
+  "mock-prod-001",
+  "mock-prod-006",
+  "mock-prod-011",
+  "mock-prod-003",
+  "mock-prod-007",
+];

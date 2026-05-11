@@ -3,6 +3,7 @@ import { useAdmin } from "../../../store/adminStore";
 import type { TimeSlot } from "../../../data/adminMockData";
 import BottomSheet from "../../shared/BottomSheet";
 import styles from "./SlotModal.module.css";
+import { updateSlot } from "../../../services/api";
 
 export default function SlotModal() {
   const { state, dispatch } = useAdmin();
@@ -41,6 +42,10 @@ export default function SlotModal() {
       currentOrders: slot!.currentOrders,
     };
     dispatch({ type: "UPDATE_SLOT", slot: updated });
+    updateSlot(slot!.id, {
+      capacity: updated.maxOrders,
+      active: !updated.blocked,
+    }).catch(() => {});
   }
 
   function handleNotify() {

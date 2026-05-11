@@ -1,18 +1,37 @@
+import { useEffect, useState } from "react";
 import { useApp } from "../../store/appStore";
-import { isImageUrl, recentOrders } from "../../data/mockData";
+import { isImageUrl } from "../../data/mockData";
+import type { OrderGroup } from "../../data/mockData";
+import { getMyOrders, mapApiOrderToGroup } from "../../services/api";
 import styles from "./HistoryView.module.css";
-
-function orderTotal(items: { price: number; discount?: number }[]) {
-  return items.reduce((sum, item) => {
-    const price = item.discount
-      ? item.price * (1 - item.discount / 100)
-      : item.price;
-    return sum + price;
-  }, 0);
-}
 
 export default function HistoryView() {
   const { state, dispatch } = useApp();
+  const [orders, setOrders] = useState<(OrderGroup & { total: number; code: string })[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!state.user) return;
+    setLoading(true);
+    getMyOrders()
+      .then((apiOrders) => {
+        const history = apiOrders
+          .filter((o) => ["collected", "cancelled", "paid", "preparing", "ready"].includes(o.state))
+          .map((o) => mapApiOrderToGroup(o, state.products));
+        setOrders(history);
+      })
+      .catch(() => {
+        // Fall back to state.recentOrders (populated on login) if fetch fails
+        setOrders(
+          state.recentOrders.map((o) => ({
+            ...o,
+            total: o.total ?? o.items.reduce((s, i) => s + (i.price ?? 0), 0),
+            code: o.code ?? (o.id.slice(-6).toUpperCase()),
+          }))
+        );
+      })
+      .finally(() => setLoading(false));
+  }, [state.user]);
 
   if (!state.user) {
     return (
@@ -31,18 +50,18 @@ export default function HistoryView() {
     );
   }
 
-  const handleReorder = (order: typeof recentOrders[number]) => {
+  const handleReorder = (order: OrderGroup) => {
     order.items.forEach((p) => dispatch({ type: "ADD_TO_CART", product: p }));
     dispatch({ type: "SET_TAB", tab: "cart" });
   };
 
-  const handleInvoice = (orderId: number) => {
+  const handleInvoice = (orderId: string) => {
     dispatch({
       type: "PUSH_NOTIFICATION",
       notification: {
         id: Date.now(),
         title: "Factura generada",
-        message: `La factura del pedido #${orderId} se ha enviado a tu email.`,
+        message: `La factura del pedido #${orderId.slice(-6).toUpperCase()} se ha enviado a tu email.`,
         time: "Ahora",
         read: false,
       },
@@ -64,18 +83,24 @@ export default function HistoryView() {
 
       <header className={styles.header}>
         <h2 className={styles.title}>Historial de pedidos</h2>
-        <p className={styles.subtitle}>{recentOrders.length} pedidos realizados</p>
+        <p className={styles.subtitle}>
+          {loading ? "Cargando…" : `${orders.length} pedidos realizados`}
+        </p>
       </header>
 
       <div className={styles.list}>
-        {recentOrders.map((order) => {
-          const total = orderTotal(order.items);
+        {orders.map((order) => {
+          const total = order.total ?? order.items.reduce((s, i) => {
+            const price = i.discount ? i.price * (1 - i.discount / 100) : i.price;
+            return s + price;
+          }, 0);
+          const displayCode = order.code ?? order.id.slice(-6).toUpperCase();
           const itemCount = order.items.length;
           return (
             <article key={order.id} className={styles.orderCard}>
               <div className={styles.orderHeader}>
                 <div>
-                  <span className={styles.orderId}>Pedido #{String(order.id).padStart(4, "0")}</span>
+                  <span className={styles.orderId}>Pedido #{displayCode}</span>
                   <span className={styles.orderDate}>{order.date}</span>
                 </div>
                 <div className={styles.orderAmount}>
@@ -85,12 +110,12 @@ export default function HistoryView() {
               </div>
 
               <ul className={styles.items}>
-                {order.items.map((item) => {
+                {order.items.map((item, idx) => {
                   const price = item.discount
                     ? item.price * (1 - item.discount / 100)
                     : item.price;
                   return (
-                    <li key={item.id} className={styles.item}>
+                    <li key={`${item.id}-${idx}`} className={styles.item}>
                       {isImageUrl(item.image) ? (
                         <img
                           src={item.image}

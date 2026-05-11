@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../store/appStore";
-import { isImageUrl, products } from "../../data/mockData";
+import { isImageUrl } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import SlotPicker from "../SlotPicker";
 import styles from "./CartContent.module.css";
@@ -42,7 +42,7 @@ export default function CartContent() {
 
   const itemCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  const recommended = products.filter((p) => p.recommended);
+  const recommended = state.products.filter((p) => p.recommended);
 
   if (state.cart.length === 0) {
     return (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { AdminOrder } from "../../../data/adminMockData";
 import { useAdmin } from "../../../store/adminStore";
+import { updateOrderState } from "../../../services/api";
 import BottomSheet from "../../shared/BottomSheet";
 import styles from "./OrderCard.module.css";
 
@@ -114,7 +115,10 @@ export default function OrderCard({ order }: Props) {
         {order.status === "pending" && (
           <button
             className={styles.preparedBtn}
-            onClick={() => dispatch({ type: "MARK_ORDER_PREPARED", orderId: order.id })}
+            onClick={() => {
+              dispatch({ type: "MARK_ORDER_PREPARED", orderId: order.id });
+              updateOrderState(order.id, "preparing").catch(() => {});
+            }}
           >
             Preparado
           </button>
@@ -132,6 +136,7 @@ export default function OrderCard({ order }: Props) {
           order={order}
           onConfirm={() => {
             dispatch({ type: "MARK_ORDER_DELIVERED", orderId: order.id });
+            updateOrderState(order.id, "collected").catch(() => {});
             setShowConfirm(false);
           }}
           onCancel={() => setShowConfirm(false)}

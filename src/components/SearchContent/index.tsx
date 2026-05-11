@@ -1,12 +1,11 @@
 import { useApp } from "../../store/appStore";
-import { products } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import styles from "./SearchContent.module.css";
 
 export default function SearchContent() {
   const { state, dispatch } = useApp();
 
-  const filtered = products.filter((p) => {
+  const filtered = state.products.filter((p) => {
     const matchesQuery =
       state.searchQuery === "" ||
       p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||

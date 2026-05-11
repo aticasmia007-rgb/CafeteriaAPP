@@ -3,7 +3,7 @@ import { useApp } from "../../store/appStore";
 import BottomSheet from "../shared/BottomSheet";
 import styles from "./AuthSheet.module.css";
 import LoginButton from "../LoginButton";
-
+import { authGoogle, authLogin, authRegister, setTokens, ApiError } from "../../services/api";
 
 type Mode = "login" | "register";
 
@@ -13,42 +13,44 @@ export default function AuthSheet() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const[googleClient, setGoogleClient] = useState<any>(null);
+  const [googleClient, setGoogleClient] = useState<any>(null);
 
   const open = state.authSheetOpen;
   const close = () => dispatch({ type: "CLOSE_AUTH_SHEET" });
 
-
   // inicialize Google Identity Services (GSI)
   useEffect(() => {
     /* global google */
-    // si SDK está cargado en el index.html y open
     if ((window as any).google && open && !googleClient) {
       const client = (window as any).google.accounts.oauth2.initCodeClient({
-        client_id: "650533798034-2aqmekrh6jr1jbv81dq50j663kg3vv15.apps.googleusercontent.com", //  ID DE GOOGLE
+        client_id: "650533798034-2aqmekrh6jr1jbv81dq50j663kg3vv15.apps.googleusercontent.com",
         scope: "openid email profile",
         callback: async (response: any) => {
-          console.log("Google Access Token:", response);
           if (response.code) {
-            console.log("Google Access Token:", response);
-            
-            /** 
-             * LLamada a backend:
-             * const res = await fetch('/api/auth/google', { ... });
-             * const userData = await res.json();
-             */
-
-            // Simulación de login exitoso tras recibir el token
-            dispatch({
-              type: "LOGIN",
-              user: {
-                email: "aticasmia007@gmail.es", 
-                name: "Comprobado Google Auth",
-                provider: "google",
-              },
-            });
-            close();
+            setLoading(true);
+            setError(null);
+            try {
+              const res = await authGoogle(response.code);
+              setTokens(res.access_token, res.refresh_token);
+              console.log("Google login successful:", res);
+              dispatch({
+                type: "LOGIN",
+                user: {
+                  email: res.user.email,
+                  name: res.user.name,
+                  provider: "google",
+                },
+              });
+            } catch (err) {
+              console.log(err);
+              
+              setError(err instanceof ApiError ? err.message : "Error al iniciar sesión con Google");
+            } finally {
+              setLoading(false);
+            }
           }
         },
       });
@@ -56,17 +58,14 @@ export default function AuthSheet() {
     }
   }, [open, googleClient, dispatch]);
 
-  
   const handleGoogleLogin = () => {
     if (googleClient) {
-      //googleClient.requestAccessToken();
       googleClient.requestCode();
     } else {
       console.error("Google SDK no cargado");
       alert("El servicio de Google se está cargando, inténtalo de nuevo.");
     }
   };
-
 
   // Lock body scroll while open
   useEffect(() => {
@@ -83,6 +82,8 @@ export default function AuthSheet() {
       setPassword("");
       setName("");
       setMode("login");
+      setError(null);
+      setLoading(false);
     }
   }, [open]);
 
@@ -94,28 +95,32 @@ export default function AuthSheet() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const submitEmail = () => {
+  const submitEmail = async () => {
     if (!email || !password) return;
     if (mode === "register" && !name) return;
-    dispatch({
-      type: "LOGIN",
-      user: {
-        email,
-        name: mode === "register" ? name : email.split("@")[0],
-        provider: "email",
-      },
-    });
-  };
-
-  const handleGoogle = () => {
-    dispatch({
-      type: "LOGIN",
-      user: {
-        email: "estudiante@iespio.es",
-        name: "Estudiante Pío Baroja",
-        provider: "google",
-      },
-    });
+    setLoading(true);
+    setError(null);
+    try {
+      if (mode === "login") {
+        const res = await authLogin(email, password);
+        setTokens(res.access_token, res.refresh_token);
+        dispatch({
+          type: "LOGIN",
+          user: { email: res.user.email, name: res.user.name, provider: "email" },
+        });
+      } else {
+        const res = await authRegister(email, password, name);
+        setTokens(res.access_token, res.refresh_token);
+        dispatch({
+          type: "LOGIN",
+          user: { email: res.user.email, name: res.user.name, provider: "email" },
+        });
+      }
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const intentLabel =
@@ -165,6 +170,12 @@ export default function AuthSheet() {
         <span>o con email</span>
       </div>
 
+      {error && (
+        <p className={styles.errorMsg} role="alert">
+          {error}
+        </p>
+      )}
+
       <form
         className={styles.form}
         onSubmit={(e) => { e.preventDefault(); submitEmail(); }}
@@ -179,6 +190,7 @@ export default function AuthSheet() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Tu nombre"
               required
+              disabled={loading}
             />
           </label>
         )}
@@ -191,6 +203,7 @@ export default function AuthSheet() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
             required
+            disabled={loading}
           />
         </label>
         <label className={styles.field}>
@@ -203,11 +216,12 @@ export default function AuthSheet() {
             placeholder="••••••••"
             required
             minLength={4}
+            disabled={loading}
           />
         </label>
 
-        <button type="submit" className={styles.submitBtn}>
-          {mode === "login" ? "Entrar" : "Crear cuenta"}
+        <button type="submit" className={styles.submitBtn} disabled={loading}>
+          {loading ? "Cargando…" : mode === "login" ? "Entrar" : "Crear cuenta"}
         </button>
       </form>
 

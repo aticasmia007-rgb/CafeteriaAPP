@@ -241,3 +241,11 @@
 .confirmBtn:active {
   transform: scale(0.98);
 }
+.errorMsg {
+  font-size: 14px;
+  color: #c0392b;
+  background: #fdf0ef;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin: 0 0 8px;
+}

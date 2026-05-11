@@ -2,20 +2,22 @@
 
 /** True when a Product.image value is a URL (file in /public or external) rather than an emoji. */
 export const isImageUrl = (image: string): boolean =>
-  image.startsWith("/") || image.startsWith("http");
+  Boolean(image) && (image.startsWith("/") || image.startsWith("http"));
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   categories: string[];
   description: string;
+  stock?: number;
+  available?: boolean;
   discount?: number;
   requiresPreparation?: boolean;
   isFavorite?: boolean;
   recommended?: boolean;
-  allergens?: string[]; 
+  allergens?: string[];
 }
 
 export const ALLERGENS = [
@@ -46,14 +48,16 @@ export interface Notification {
 }
 
 export interface OrderGroup {
-  id: number;
+  id: string;
+  code?: string;
   date: string;
   items: Product[];
+  total?: number;
 }
 
 export const categories = [
   { id: "all", name: "Todos", icon: "🍽️" },
-  { id: "healthy", name: "Saludable", icon: "🥦"}, 
+  { id: "healthy", name: "Saludable", icon: "🥦" },
   { id: "bocadillos", name: "Bocadillos", icon: "🥖" },
   { id: "bebidas", name: "Bebidas", icon: "🥤" },
   { id: "postres", name: "Postres", icon: "🍰" },
@@ -63,31 +67,31 @@ export const categories = [
 ];
 
 export const products: Product[] = [
-  { id: 1, name: "Bocadillo de Jamón", allergens:["gluten", "sesamo"], price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, requiresPreparation: true, recommended: true },
-  { id: 2, name: "Bocadillo Vegetal", price: 2.80, image: "🥬", categories: ["bocadillos", "healthy"], description: "Lechuga, tomate, huevo y atún", allergens: ["gluten", "huevos", "pescado", "sesamo"], requiresPreparation: true, recommended: true },
-  { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada", allergens: ["leche"], requiresPreparation: true, recommended: true },
-  { id: 4, name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", categories: ["bebidas", "healthy"], description: "Zumo natural", discount: 10, recommended: true },
-  { id: 5, name: "Fuze Tea", price: 0.80, image: "/fuze-tea.jpg", categories: ["bebidas"], description: "Lata 250ml" },
-  { id: 6, name: "Tarta de Manzana", price: 1.80, image: "/tarta.jpg", categories: ["postres"], description: "Porción casera", allergens: ["gluten", "huevos", "leche"], discount: 20, recommended: true },
-  { id: 7, name: "Croissant", price: 1.10, image: "/croissant.jpg", categories: ["snacks"], description: "Croissant de mantequilla", allergens: ["gluten", "leche", "huevos"], recommended: true },
-  { id: 8, name: "Fruta del Día", price: 0.70, image: "/fruit.jpg", categories: ["fruta", "healthy"], description: "Manzana, plátano o naranja", recommended: true },
-  { id: 9, name: "Patatas Fritas", price: 1.00, image: "🍟", categories: ["snacks"], description: "Bolsa individual", recommended: true },
-  { id: 10, name: "Batido Chocolate", price: 1.60, image: "/chocolate.jpg", categories: ["bebidas"], description: "Batido de chocolate frío", allergens: ["leche", "soja"], recommended: true },
-  { id: 11, name: "Tortilla", price: 2.20, image: "/tortilla.jpg", categories: ["bocadillos"], description: "Pincho de tortilla con pan", allergens: ["gluten", "huevos"], requiresPreparation: true, recommended: true },
-  { id: 12, name: "Galletas", price: 0.90, image: "/galleta.jpg", categories: ["snacks"], description: "Paquete de galletas María", allergens: ["gluten", "leche"], recommended: true },
-  { id: 13, name: "Yogur Natural", price: 0.95, image: "🥄", categories: ["postres", "healthy"], description: "Yogur natural sin azúcar", allergens: ["leche"], recommended: true },
-  { id: 14, name: "Cortado", price: 1.00, image: "/cortado.jpg", categories: ["cafe"], description: "Café cortado con leche", allergens: ["leche"], discount: 5, requiresPreparation: true, recommended: true },
-  { id: 15, name: "Bocadillo Mixto", price: 2.30, image: "🧀", categories: ["bocadillos"], description: "Jamón york y queso a la plancha", allergens: ["gluten", "leche", "sesamo"], recommended: true },
-  { id: 16, name: "Napolitana de Chocolate", price: 1.30, image: "🥐", categories: ["snacks"], description: "Hojaldre relleno de crema de cacao", allergens: ["gluten", "leche", "huevos", "soja"] },
-  { id: 17, name: "Agua Mineral", price: 0.50, image: "💧", categories: ["bebidas", "healthy"], description: "Botella 500ml" },
-  { id: 18, name: "Bocadillo de Atún", price: 2.60, image: "🥪", categories: ["bocadillos"], description: "Atún con tomate natural y aceite de oliva", allergens: ["gluten", "pescado", "sesamo"], recommended: true },
-  { id: 19, name: "Té Verde", price: 1.00, image: "🍵", categories: ["cafe", "healthy"], description: "Infusión de té verde en bolsita" },
-  { id: 20, name: "Muffin de Arándanos", price: 1.40, image: "🧁", categories: ["postres"], description: "Bizcocho esponjoso con arándanos frescos", allergens: ["gluten", "huevos", "leche"], discount: 10 },
-  { id: 21, name: "Bocadillo de Lomo", price: 2.90, image: "🥩", categories: ["bocadillos"], description: "Lomo de cerdo a la plancha con pimientos", allergens: ["gluten", "sesamo"] },
-  { id: 22, name: "Refresco Cola", price: 1.10, image: "🥤", categories: ["bebidas"], description: "Lata 330ml" },
-  { id: 23, name: "Barrita de Cereales", price: 0.80, image: "🌾", categories: ["snacks", "healthy"], description: "Barrita de avena con miel y frutos secos", allergens: ["gluten", "frutos_cascara", "leche"], recommended: true },
-  { id: 24, name: "Flan de Huevo", price: 1.20, image: "🍮", categories: ["postres"], description: "Flan casero con caramelo", allergens: ["huevos", "leche"], discount: 15 },
-  { id: 25, name: "Cappuccino", price: 1.50, image: "☕", categories: ["cafe"], description: "Café espresso con leche vaporizada y espuma", allergens: ["leche"], requiresPreparation: true, recommended: true },
+  { id: "mock-prod-001", name: "Bocadillo de Jamón", allergens: ["gluten", "sesamo"], price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15, requiresPreparation: true, recommended: true },
+  { id: "mock-prod-002", name: "Bocadillo Vegetal", price: 2.80, image: "🥬", categories: ["bocadillos", "healthy"], description: "Lechuga, tomate, huevo y atún", allergens: ["gluten", "huevos", "pescado", "sesamo"], requiresPreparation: true, recommended: true },
+  { id: "mock-prod-003", name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada", allergens: ["leche"], requiresPreparation: true, recommended: true },
+  { id: "mock-prod-004", name: "Zumo de Naranja", price: 1.50, image: "/jugo-naranja.jpg", categories: ["bebidas", "healthy"], description: "Zumo natural", discount: 10, recommended: true },
+  { id: "mock-prod-005", name: "Fuze Tea", price: 0.80, image: "/fuze-tea.jpg", categories: ["bebidas"], description: "Lata 250ml" },
+  { id: "mock-prod-006", name: "Tarta de Manzana", price: 1.80, image: "/tarta.jpg", categories: ["postres"], description: "Porción casera", allergens: ["gluten", "huevos", "leche"], discount: 20, recommended: true },
+  { id: "mock-prod-007", name: "Croissant", price: 1.10, image: "/croissant.jpg", categories: ["snacks"], description: "Croissant de mantequilla", allergens: ["gluten", "leche", "huevos"], recommended: true },
+  { id: "mock-prod-008", name: "Fruta del Día", price: 0.70, image: "/fruit.jpg", categories: ["fruta", "healthy"], description: "Manzana, plátano o naranja", recommended: true },
+  { id: "mock-prod-009", name: "Patatas Fritas", price: 1.00, image: "🍟", categories: ["snacks"], description: "Bolsa individual", recommended: true },
+  { id: "mock-prod-010", name: "Batido Chocolate", price: 1.60, image: "/chocolate.jpg", categories: ["bebidas"], description: "Batido de chocolate frío", allergens: ["leche", "soja"], recommended: true },
+  { id: "mock-prod-011", name: "Tortilla", price: 2.20, image: "/tortilla.jpg", categories: ["bocadillos"], description: "Pincho de tortilla con pan", allergens: ["gluten", "huevos"], requiresPreparation: true, recommended: true },
+  { id: "mock-prod-012", name: "Galletas", price: 0.90, image: "/galleta.jpg", categories: ["snacks"], description: "Paquete de galletas María", allergens: ["gluten", "leche"], recommended: true },
+  { id: "mock-prod-013", name: "Yogur Natural", price: 0.95, image: "🥄", categories: ["postres", "healthy"], description: "Yogur natural sin azúcar", allergens: ["leche"], recommended: true },
+  { id: "mock-prod-014", name: "Cortado", price: 1.00, image: "/cortado.jpg", categories: ["cafe"], description: "Café cortado con leche", allergens: ["leche"], discount: 5, requiresPreparation: true, recommended: true },
+  { id: "mock-prod-015", name: "Bocadillo Mixto", price: 2.30, image: "🧀", categories: ["bocadillos"], description: "Jamón york y queso a la plancha", allergens: ["gluten", "leche", "sesamo"], recommended: true },
+  { id: "mock-prod-016", name: "Napolitana de Chocolate", price: 1.30, image: "🥐", categories: ["snacks"], description: "Hojaldre relleno de crema de cacao", allergens: ["gluten", "leche", "huevos", "soja"] },
+  { id: "mock-prod-017", name: "Agua Mineral", price: 0.50, image: "💧", categories: ["bebidas", "healthy"], description: "Botella 500ml" },
+  { id: "mock-prod-018", name: "Bocadillo de Atún", price: 2.60, image: "🥪", categories: ["bocadillos"], description: "Atún con tomate natural y aceite de oliva", allergens: ["gluten", "pescado", "sesamo"], recommended: true },
+  { id: "mock-prod-019", name: "Té Verde", price: 1.00, image: "🍵", categories: ["cafe", "healthy"], description: "Infusión de té verde en bolsita" },
+  { id: "mock-prod-020", name: "Muffin de Arándanos", price: 1.40, image: "🧁", categories: ["postres"], description: "Bizcocho esponjoso con arándanos frescos", allergens: ["gluten", "huevos", "leche"], discount: 10 },
+  { id: "mock-prod-021", name: "Bocadillo de Lomo", price: 2.90, image: "🥩", categories: ["bocadillos"], description: "Lomo de cerdo a la plancha con pimientos", allergens: ["gluten", "sesamo"] },
+  { id: "mock-prod-022", name: "Refresco Cola", price: 1.10, image: "🥤", categories: ["bebidas"], description: "Lata 330ml" },
+  { id: "mock-prod-023", name: "Barrita de Cereales", price: 0.80, image: "🌾", categories: ["snacks", "healthy"], description: "Barrita de avena con miel y frutos secos", allergens: ["gluten", "frutos_cascara", "leche"], recommended: true },
+  { id: "mock-prod-024", name: "Flan de Huevo", price: 1.20, image: "🍮", categories: ["postres"], description: "Flan casero con caramelo", allergens: ["huevos", "leche"], discount: 15 },
+  { id: "mock-prod-025", name: "Cappuccino", price: 1.50, image: "☕", categories: ["cafe"], description: "Café espresso con leche vaporizada y espuma", allergens: ["leche"], requiresPreparation: true, recommended: true },
 ];
 
 export const notifications: Notification[] = [
@@ -99,23 +103,29 @@ export const notifications: Notification[] = [
 
 export const recentOrders: OrderGroup[] = [
   {
-    id: 1,
+    id: "mock-order-001",
     date: "Hoy, 10:30",
     items: [products[0], products[2], products[7]],
   },
   {
-    id: 2,
+    id: "mock-order-002",
     date: "Ayer, 11:00",
     items: [products[5], products[3]],
   },
   {
-    id: 3,
+    id: "mock-order-003",
     date: "28 Mar, 10:15",
     items: [products[1], products[9], products[11]],
   },
 ];
 
-export const favoriteProductIds = [1, 3, 6, 8, 10];
+export const favoriteProductIds: string[] = [
+  "mock-prod-001",
+  "mock-prod-003",
+  "mock-prod-006",
+  "mock-prod-008",
+  "mock-prod-010",
+];
 
 export interface PendingOrderItem {
   product: Product;
@@ -135,13 +145,11 @@ export const mockPendingOrders: PendingOrder[] = [
   {
     id: "#test01",
     items: [
-      { product: { id: 1, name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15 }, quantity: 1 },
-      { product: { id: 3, name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada" }, quantity: 2 },
+      { product: { id: "mock-prod-001", name: "Bocadillo de Jamón", price: 2.50, image: "/bocatav2.png", categories: ["bocadillos"], description: "Jamón serrano con tomate", discount: 15 }, quantity: 1 },
+      { product: { id: "mock-prod-003", name: "Café con Leche", price: 1.20, image: "/cafe-leche.jpg", categories: ["cafe"], description: "Café con leche semidesnatada" }, quantity: 2 },
     ],
     total: 4.525,
     claimSlot: "10:30 – 10:45",
     placedAt: "Hace 2 min",
   },
 ];
-
-

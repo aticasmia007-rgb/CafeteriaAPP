@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAdmin } from "../../../store/adminStore";
-import { isImageUrl, categories, ALLERGENS, type Product } from "../../../data/mockData";
+import { isImageUrl, type Product } from "../../../data/mockData";
+import { createProduct, updateProduct as updateProductApi, mapApiProduct } from "../../../services/api";
 import styles from "./ProductEditor.module.css";
-import { useRef } from "react"; //Para fotos
 
 const pencilIcon = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -16,17 +16,18 @@ interface Props {
 }
 
 export default function ProductEditor({ product }: Props) {
-  const { dispatch } = useAdmin();
+  const { state, dispatch } = useAdmin();
   const isNew = !product;
 
   const [name, setName] = useState(product?.name ?? "");
   const [price, setPrice] = useState(product?.price?.toString() ?? "");
-  const [discount, setDiscount] = useState(product?.discount?.toString() ?? "");
+  const [stock, setStock] = useState(product?.stock?.toString() ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
   const [selectedCategories, setSelectedCategories] = useState<string[]>(product?.categories ?? []);
   const [image, setImage] = useState(product?.image ?? "🍽️");
   const [allergens, setAllergens] = useState<string[]>(product?.allergens ?? []);
   const [requiresPreparation, setRequiresPreparation] = useState(product?.requiresPreparation ?? false);
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function toggleAllergen(id: string) {
@@ -34,23 +35,54 @@ export default function ProductEditor({ product }: Props) {
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
     );
   }
-  
-  function handleSave() {
-    const p: Product = {
-      id: product?.id ?? 0,
+
+  function resolveAllergenIds(): string[] {
+    return allergens; // UUID strings from state.allergens
+  }
+
+  async function handleSave() {
+    const localProduct: Product = {
+      id: product?.id ?? "",
       name,
       price: parseFloat(price) || 0,
-      discount: discount ? parseInt(discount, 10) : undefined,
+      stock: parseInt(stock, 10) || 0,
       description,
       categories: selectedCategories,
       image,
       requiresPreparation: requiresPreparation || undefined,
       allergens: allergens.length > 0 ? allergens : undefined,
     };
-    if (isNew) {
-      dispatch({ type: "ADD_PRODUCT", product: p });
-    } else {
-      dispatch({ type: "UPDATE_PRODUCT", product: p });
+
+    setSaving(true);
+    try {
+      const apiPayload = {
+        name,
+        description,
+        price: parseFloat(price) || 0,
+        image: image.startsWith("/") || image.startsWith("http") ? image : undefined,
+        available: true,
+        stock: parseInt(stock, 10) || 0,
+        prepare_required: requiresPreparation,
+        category: selectedCategories,
+        allergens: resolveAllergenIds(),
+      };
+
+      if (isNew) {
+        const { id } = await createProduct(apiPayload);
+        dispatch({ type: "ADD_PRODUCT", product: { ...localProduct, id } });
+      } else {
+        await updateProductApi(product!.id, apiPayload);
+        dispatch({ type: "UPDATE_PRODUCT", product: { ...localProduct, id: product!.id } });
+      }
+    } catch {
+      // API unavailable (e.g. no admin JWT yet) — update UI optimistically
+      if (isNew) {
+        dispatch({ type: "ADD_PRODUCT", product: { ...localProduct, id: `new-${Date.now()}` } });
+      } else {
+        dispatch({ type: "UPDATE_PRODUCT", product: localProduct });
+      }
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -135,15 +167,14 @@ export default function ProductEditor({ product }: Props) {
             </div>
             <div className={styles.field}>
               <label className={styles.fieldLabel}>
-                {pencilIcon} Descuento (%)
+                {pencilIcon} Stock
               </label>
               <input
                 className={styles.fieldInput}
                 type="number"
                 min="0"
-                max="100"
-                value={discount}
-                onChange={(e) => setDiscount(e.target.value)}
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
                 placeholder="0"
               />
             </div>
@@ -167,28 +198,29 @@ export default function ProductEditor({ product }: Props) {
               {pencilIcon} Categorías
             </label>
             <div className={styles.allergenGrid}>
-              {categories
-                .filter((c) => c.id !== "all")
-                .map((c) => {
-                  const active = selectedCategories.includes(c.id);
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
-                      onClick={() =>
-                        setSelectedCategories((prev) =>
-                          prev.includes(c.id)
-                            ? prev.filter((id) => id !== c.id)
-                            : [...prev, c.id]
-                        )
-                      }
-                    >
-                      <span className={styles.allergenIcon}>{c.icon}</span>
-                      <span className={styles.allergenLabel}>{c.name}</span>
-                    </button>
-                  );
-                })}
+              {state.categories.map((c) => {
+                const active = selectedCategories.includes(c.id);
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
+                    onClick={() =>
+                      setSelectedCategories((prev) =>
+                        prev.includes(c.id)
+                          ? prev.filter((id) => id !== c.id)
+                          : [...prev, c.id]
+                      )
+                    }
+                  >
+                    <span className={styles.allergenIcon}>{c.icon}</span>
+                    <span className={styles.allergenLabel}>{c.name}</span>
+                  </button>
+                );
+              })}
+              {state.categories.length === 0 && (
+                <span style={{ fontSize: "13px", opacity: 0.5 }}>Cargando categorías…</span>
+              )}
             </div>
           </div>
 
@@ -213,7 +245,7 @@ export default function ProductEditor({ product }: Props) {
               {pencilIcon} Alérgenos
             </label>
             <div className={styles.allergenGrid}>
-              {ALLERGENS.map((a) => {
+              {state.allergens.map((a) => {
                 const active = allergens.includes(a.id);
                 return (
                   <button
@@ -221,13 +253,15 @@ export default function ProductEditor({ product }: Props) {
                     type="button"
                     className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
                     onClick={() => toggleAllergen(a.id)}
-                    title={a.detail || a.label}
                   >
                     <span className={styles.allergenIcon}>{a.icon}</span>
-                    <span className={styles.allergenLabel}>{a.label}</span>
+                    <span className={styles.allergenLabel}>{a.name}</span>
                   </button>
                 );
               })}
+              {state.allergens.length === 0 && (
+                <span style={{ fontSize: "13px", opacity: 0.5 }}>Cargando alérgenos…</span>
+              )}
             </div>
           </div>
 
@@ -270,8 +304,8 @@ export default function ProductEditor({ product }: Props) {
             >
               Cancelar
             </button>
-            <button className={styles.saveBtn} onClick={handleSave}>
-              {isNew ? "Crear producto" : "Guardar cambios"}
+            <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
+              {saving ? "Guardando…" : isNew ? "Crear producto" : "Guardar cambios"}
             </button>
           </div>
         </div>

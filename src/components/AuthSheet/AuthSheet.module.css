@@ -158,3 +158,13 @@
   text-decoration: underline;
 }
 
+
+
+.errorMsg {
+  font-size: 14px;
+  color: #c0392b;
+  background: #fdf0ef;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 4px;
+}

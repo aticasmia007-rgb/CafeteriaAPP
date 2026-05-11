@@ -1,0 +1,67 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout>
+  <div id="payment-return" style="display:flex;align-items:center;justify-content:center;min-height:100dvh;background:var(--color-bg,#f5f0e8);font-family:'DM Sans',sans-serif;padding:24px;">
+    <div style="text-align:center;max-width:360px;width:100%;">
+      <div id="spinner" style="font-size:48px;margin-bottom:16px;">⏳</div>
+      <h1 id="title" style="font-size:22px;font-weight:700;color:#2f5d3a;margin:0 0 8px;">Verificando pago…</h1>
+      <p id="subtitle" style="font-size:15px;color:#6b7280;margin:0;">Por favor, espera un momento.</p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("order_id");
+
+  const titleEl = document.getElementById("title")!;
+  const subtitleEl = document.getElementById("subtitle")!;
+  const spinnerEl = document.getElementById("spinner")!;
+
+  if (!orderId) {
+    spinnerEl.textContent = "❌";
+    titleEl.textContent = "Parámetros incorrectos";
+    subtitleEl.textContent = "No se pudo verificar el pago.";
+    setTimeout(() => { window.location.href = "/"; }, 3000);
+  } else {
+    let attempts = 0;
+    const MAX = 12;
+
+    async function poll() {
+      attempts++;
+      try {
+        const res = await fetch(`http://localhost:8000/api/payments/${orderId}/`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("cafeteria_access_token") ?? ""}` },
+        });
+        const json = await res.json();
+        if (json.status === "00" && json.data?.payment_state === "paid") {
+          const { pickup_code, slot_label } = json.data as any;
+          spinnerEl.textContent = "✅";
+          titleEl.textContent = "¡Pago completado!";
+          subtitleEl.textContent = "Redirigiendo a tu pedido…";
+          const qs = new URLSearchParams({ order_paid: orderId! });
+          if (pickup_code) qs.set("pickup_code", pickup_code);
+          if (slot_label) qs.set("slot", encodeURIComponent(slot_label));
+          setTimeout(() => { window.location.href = `/?${qs}`; }, 1500);
+          return;
+        }
+      } catch {
+        // network error — keep polling
+      }
+
+      if (attempts >= MAX) {
+        spinnerEl.textContent = "⚠️";
+        titleEl.textContent = "Pago en proceso";
+        subtitleEl.textContent = "La confirmación está tardando. Puedes revisar tus pedidos en la app.";
+        setTimeout(() => { window.location.href = "/"; }, 4000);
+        return;
+      }
+
+      setTimeout(poll, 2000);
+    }
+
+    poll();
+  }
+</script>

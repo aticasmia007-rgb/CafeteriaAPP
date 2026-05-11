@@ -1,7 +1,7 @@
 // Simple global state using React context + useReducer
 import { createContext, useContext } from "react";
-import type { Product, Notification, PendingOrder } from "../data/mockData";
-import { mockPendingOrders } from "../data/mockData";
+import type { Product, Notification, PendingOrder, OrderGroup } from "../data/mockData";
+import { products as mockProducts, categories as mockCategories, notifications as mockNotifications, favoriteProductIds } from "../data/mockData";
 
 export interface CartItem {
   product: Product;
@@ -20,7 +20,7 @@ export interface AppState {
   activeTab: "home" | "search" | "cart" | "profile" | "history";
   activeCategory: string;
   cart: CartItem[];
-  favorites: number[];
+  favorites: string[];
   notifications: Notification[];
   searchQuery: string;
   user: User | null;
@@ -30,9 +30,16 @@ export interface AppState {
   pendingOrderSheetOpen: boolean;
   selectedPendingOrderId: string | null;
   selectedPickupSlot: string | null;
+  selectedPickupSlotId: string | null;
   allergenSheetOpen: boolean;
   productoSeleccionado: Product | null;
   paymentSheetOpen: boolean;
+  // Catalog — loaded from API, seeded with mock data as fallback
+  products: Product[];
+  categories: { id: string; name: string; icon: string }[];
+  loadingCatalog: boolean;
+  // History
+  recentOrders: OrderGroup[];
 }
 
 export type AppAction =
@@ -40,10 +47,10 @@ export type AppAction =
   | { type: "SET_CATEGORY"; category: string }
   | { type: "SELECT_FILTER"; category: string }
   | { type: "ADD_TO_CART"; product: Product }
-  | { type: "REMOVE_FROM_CART"; productId: number }
-  | { type: "UPDATE_CART_QTY"; productId: number; quantity: number }
+  | { type: "REMOVE_FROM_CART"; productId: string }
+  | { type: "UPDATE_CART_QTY"; productId: string; quantity: number }
   | { type: "CLEAR_CART" }
-  | { type: "TOGGLE_FAVORITE"; productId: number }
+  | { type: "TOGGLE_FAVORITE"; productId: string }
   | { type: "MARK_NOTIFICATION_READ"; notificationId: number }
   | { type: "MARK_ALL_NOTIFICATIONS_READ" }
   | { type: "SET_SEARCH_QUERY"; query: string }
@@ -56,11 +63,15 @@ export type AppAction =
   | { type: "OPEN_PENDING_ORDER_SHEET"; orderId: string }
   | { type: "CLOSE_PENDING_ORDER_SHEET" }
   | { type: "PLACE_ORDER"; id: string; claimSlot: string; placedAt: string }
-  | { type: "SET_PICKUP_SLOT"; slot: string }
+  | { type: "PLACE_ORDER_FROM_API"; order: PendingOrder }
+  | { type: "SET_PICKUP_SLOT"; slot: string; slotId?: string }
   | { type: "OPEN_ALLERGEN_SHEET"; producto: Product }
   | { type: "CLOSE_ALLERGEN_SHEET" }
   | { type: "OPEN_PAYMENT_SHEET" }
-  | { type: "CLOSE_PAYMENT_SHEET" };
+  | { type: "CLOSE_PAYMENT_SHEET" }
+  | { type: "LOAD_CATALOG"; products: Product[]; categories: { id: string; name: string; icon: string }[] }
+  | { type: "SET_PENDING_ORDERS"; orders: PendingOrder[] }
+  | { type: "SET_RECENT_ORDERS"; orders: OrderGroup[] };
 
 /** Generate a fake order id like "#adb323" (3 letters + 3 digits). */
 export function createOrderId(): string {
@@ -83,23 +94,46 @@ export function createClaimSlot(now: Date = new Date()): string {
   return `${fmt(start)} – ${fmt(end)}`;
 }
 
+function loadFavoritesFromStorage(): string[] {
+  try {
+    const raw = localStorage.getItem("cafeteria_favorites");
+    if (raw) return JSON.parse(raw) as string[];
+  } catch {
+    // ignore
+  }
+  return [...favoriteProductIds];
+}
+
+function saveFavoritesToStorage(ids: string[]): void {
+  try {
+    localStorage.setItem("cafeteria_favorites", JSON.stringify(ids));
+  } catch {
+    // ignore
+  }
+}
+
 export const initialState: AppState = {
   activeTab: "home",
-  activeCategory: '',
+  activeCategory: "",
   cart: [],
-  favorites: [1, 3, 6, 8, 10],
-  notifications: [],
+  favorites: loadFavoritesFromStorage(),
+  notifications: [...mockNotifications],
   searchQuery: "",
   user: null,
   authSheetOpen: false,
   pendingIntent: null,
-  pendingOrders: [...mockPendingOrders],
+  pendingOrders: [],
   pendingOrderSheetOpen: false,
   selectedPendingOrderId: null,
   selectedPickupSlot: null,
+  selectedPickupSlotId: null,
   allergenSheetOpen: false,
   productoSeleccionado: null,
   paymentSheetOpen: false,
+  products: mockProducts,
+  categories: mockCategories,
+  loadingCatalog: false,
+  recentOrders: [],
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -109,8 +143,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         activeTab: action.tab,
         searchQuery: "",
-        // Reset category filter when leaving search
-        activeCategory: action.tab !== "search" ? '' : state.activeCategory === '' ? 'all' : state.activeCategory,
+        activeCategory: action.tab !== "search" ? "" : state.activeCategory === "" ? "all" : state.activeCategory,
       };
     case "SET_CATEGORY":
       return { ...state, activeCategory: action.category };
@@ -162,12 +195,11 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, cart: [] };
     case "TOGGLE_FAVORITE": {
       const isFav = state.favorites.includes(action.productId);
-      return {
-        ...state,
-        favorites: isFav
-          ? state.favorites.filter((id) => id !== action.productId)
-          : [...state.favorites, action.productId],
-      };
+      const newFavorites = isFav
+        ? state.favorites.filter((id) => id !== action.productId)
+        : [...state.favorites, action.productId];
+      saveFavoritesToStorage(newFavorites);
+      return { ...state, favorites: newFavorites };
     }
     case "MARK_NOTIFICATION_READ":
       return {
@@ -190,7 +222,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
     case "LOGIN":
       return { ...state, user: action.user, authSheetOpen: false };
     case "LOGOUT":
-      return { ...state, user: null, pendingIntent: null };
+      return { ...state, user: null, pendingIntent: null, pendingOrders: [], recentOrders: [] };
     case "CLEAR_PENDING_INTENT":
       return { ...state, pendingIntent: null };
     case "PUSH_NOTIFICATION":
@@ -203,7 +235,11 @@ export function appReducer(state: AppState, action: AppAction): AppState {
     case "CLOSE_PENDING_ORDER_SHEET":
       return { ...state, pendingOrderSheetOpen: false };
     case "SET_PICKUP_SLOT":
-      return { ...state, selectedPickupSlot: action.slot };
+      return {
+        ...state,
+        selectedPickupSlot: action.slot,
+        selectedPickupSlotId: action.slotId ?? state.selectedPickupSlotId,
+      };
     case "OPEN_PAYMENT_SHEET":
       return { ...state, paymentSheetOpen: true };
     case "CLOSE_PAYMENT_SHEET":
@@ -232,21 +268,40 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         pendingOrders: [order, ...state.pendingOrders],
         cart: [],
         selectedPickupSlot: null,
+        selectedPickupSlotId: null,
       };
     }
+    case "PLACE_ORDER_FROM_API":
+      return {
+        ...state,
+        pendingOrders: [action.order, ...state.pendingOrders],
+        cart: [],
+        selectedPickupSlot: null,
+        selectedPickupSlotId: null,
+      };
     case "OPEN_ALLERGEN_SHEET":
       return {
         ...state,
         allergenSheetOpen: true,
         productoSeleccionado: action.producto,
       };
-
     case "CLOSE_ALLERGEN_SHEET":
       return {
         ...state,
         allergenSheetOpen: false,
         productoSeleccionado: null,
       };
+    case "LOAD_CATALOG":
+      return {
+        ...state,
+        products: action.products,
+        categories: action.categories,
+        loadingCatalog: false,
+      };
+    case "SET_PENDING_ORDERS":
+      return { ...state, pendingOrders: action.orders };
+    case "SET_RECENT_ORDERS":
+      return { ...state, recentOrders: action.orders };
     default:
       return state;
   }

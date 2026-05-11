@@ -1,5 +1,4 @@
 import { useApp } from "../../store/appStore";
-import { products, recentOrders } from "../../data/mockData";
 import ProductCard from "../ProductCard";
 import RecentOrders from "../RecentOrders";
 import PendingOrders from "../PendingOrders";
@@ -8,8 +7,8 @@ import styles from "./HomeContent.module.css";
 export default function HomeContent() {
   const { state } = useApp();
 
-  const recommended = products.filter((p) => p.recommended);
-  const favorites = products.filter((p) => state.favorites.includes(p.id));
+  const recommended = state.products.slice(0, 10);
+  const favorites = state.products.filter((p) => state.favorites.includes(p.id));
 
   return (
     <div className={styles.content}>
@@ -50,7 +49,7 @@ export default function HomeContent() {
         )}
       </section>
 
-      {recentOrders.length > 0 ? (
+      {state.recentOrders.length > 0 ? (
         <RecentOrders />
       ) : (
         <section className={styles.section}>
@@ -60,7 +59,7 @@ export default function HomeContent() {
             </h2>
           </div>
           <div className={styles.horizontalScroll}>
-            {products.map((p) => (
+            {state.products.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
