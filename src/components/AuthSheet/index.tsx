@@ -25,11 +25,12 @@ export default function AuthSheet() {
     /* global google */
     // si SDK está cargado en el index.html y open
     if ((window as any).google && open && !googleClient) {
-      const client = (window as any).google.accounts.oauth2.initTokenClient({
+      const client = (window as any).google.accounts.oauth2.initCodeClient({
         client_id: "650533798034-2aqmekrh6jr1jbv81dq50j663kg3vv15.apps.googleusercontent.com", //  ID DE GOOGLE
         scope: "openid email profile",
         callback: async (response: any) => {
-          if (response.access_token) {
+          console.log("Google Access Token:", response);
+          if (response.code) {
             console.log("Google Access Token:", response);
             
             /** 
@@ -58,7 +59,8 @@ export default function AuthSheet() {
   
   const handleGoogleLogin = () => {
     if (googleClient) {
-      googleClient.requestAccessToken();
+      //googleClient.requestAccessToken();
+      googleClient.requestCode();
     } else {
       console.error("Google SDK no cargado");
       alert("El servicio de Google se está cargando, inténtalo de nuevo.");
