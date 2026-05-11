@@ -1,0 +1,28 @@
+networks:
+    traefik_proxy_external:
+        external: true
+        name: "traefik_proxy_external"
+services:
+  cafeteria:
+    build: .
+    restart: unless-stopped
+    networks:
+      - traefik_proxy_external
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cafeteria.rule=Host(`cafeteria.home`) || Host(`cafeteria.jcool-laboratory-00.click`)"
+      - "traefik.http.routers.cafeteria.entrypoints=web"
+      - "traefik.http.services.cafeteria.loadbalancer.server.port=4321"
+      - "traefik.http.routers.cafeteria.middlewares=cafeteria-security@docker"
+      # Content-Security-Policy
+      - "traefik.http.middlewares.cafeteria-security.headers.contentSecurityPolicy=default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; media-src 'self' blob:; worker-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+      # Clickjacking protection (legacy browsers)
+      - "traefik.http.middlewares.cafeteria-security.headers.customResponseHeaders.X-Frame-Options=DENY"
+      # Prevent MIME sniffing
+      - "traefik.http.middlewares.cafeteria-security.headers.contentTypeNosniff=true"
+      # Referrer policy
+      - "traefik.http.middlewares.cafeteria-security.headers.referrerPolicy=strict-origin-when-cross-origin"
+      # Permissions Policy: allow camera only for admin QR scanner, block everything else
+      - "traefik.http.middlewares.cafeteria-security.headers.customResponseHeaders.Permissions-Policy=camera=(self), microphone=(), geolocation=(), payment=()"
+
+
