@@ -401,17 +401,9 @@ export async function deleteProduct(id: string): Promise<void> {
 // ── Mapping helpers ────────────────────────────────────────────────────────
 
 import type { Product } from "../data/mockData";
-import { ALLERGENS } from "../data/mockData";
 
 /** Map a backend ApiProduct to the frontend Product shape. */
 export function mapApiProduct(p: ApiProduct): Product {
-  const allergenIds = p.allergens.map((a) => {
-    const match = ALLERGENS.find(
-      (al) => al.label.toLowerCase() === a.name.toLowerCase()
-    );
-    return match?.id ?? a.name.toLowerCase().replace(/\s+/g, "_");
-  });
-
   return {
     id: p.id,
     name: p.name,
@@ -419,11 +411,10 @@ export function mapApiProduct(p: ApiProduct): Product {
     price: parseFloat(p.price),
     image: p.image ?? "🍽️",
     categories: p.category.map((c) => c.category_id),
-    allergens: allergenIds.length > 0 ? allergenIds : undefined,
+    allergens: p.allergens.length > 0 ? p.allergens.map((a) => a.allergen_id) : undefined,
     stock: p.stock,
     available: p.available,
     requiresPreparation: p.prepare_required || undefined,
-    // discount and recommended are frontend-only — not in the backend
   };
 }
 
