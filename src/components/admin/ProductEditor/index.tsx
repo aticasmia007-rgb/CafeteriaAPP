@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useAdmin } from "../../../store/adminStore";
-import { type Product } from "../../../data/mockData";
+import { isImageUrl, type Product } from "../../../data/mockData";
 import { createProduct, updateProduct as updateProductApi, mapApiProduct } from "../../../services/api";
 import ChipIcon from "../../shared/ChipIcon";
 import styles from "./ProductEditor.module.css";
@@ -60,7 +60,7 @@ export default function ProductEditor({ product }: Props) {
         name,
         description,
         price: parseFloat(price) || 0,
-        image: image.startsWith("/") || image.startsWith("http") ? image : undefined,
+        image: isImageUrl(image) ? image : undefined,
         available: true,
         stock: parseInt(stock, 10) || 0,
         prepare_required: requiresPreparation,
