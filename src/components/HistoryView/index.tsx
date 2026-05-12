@@ -61,7 +61,7 @@ export default function HistoryView() {
       notification: {
         id: Date.now(),
         title: "Factura generada",
-        message: `La factura del pedido #${orderId.slice(-6).toUpperCase()} se ha enviado a tu email.`,
+        message: `La factura del pedido #${orderId.slice(-10).toUpperCase()} se ha enviado a tu email.`,
         time: "Ahora",
         read: false,
       },
@@ -94,13 +94,12 @@ export default function HistoryView() {
             const price = i.discount ? i.price * (1 - i.discount / 100) : i.price;
             return s + price;
           }, 0);
-          const displayCode = order.code ?? order.id.slice(-6).toUpperCase();
           const itemCount = order.items.length;
           return (
             <article key={order.id} className={styles.orderCard}>
               <div className={styles.orderHeader}>
                 <div>
-                  <span className={styles.orderId}>Pedido #{displayCode}</span>
+                  <span className={styles.orderId}>Pedido #{order.id.slice(-10).toUpperCase()}</span>
                   <span className={styles.orderDate}>{order.date}</span>
                 </div>
                 <div className={styles.orderAmount}>

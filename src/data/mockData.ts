@@ -138,6 +138,8 @@ export interface PendingOrder {
   total: number;
   claimSlot: string; // e.g. "10:30 – 10:45"
   placedAt: string;  // e.g. "Hace 3 min"
+  pickup_code?: string;  // set once payment is confirmed
+  orderStatus?: "pending" | "paid" | "preparing" | "ready";
 }
 
 /** Pre-seeded pending order visible to both the client and the admin QR scanner. */

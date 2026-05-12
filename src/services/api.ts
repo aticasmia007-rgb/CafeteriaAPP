@@ -467,6 +467,8 @@ export function mapApiOrderToPending(
     total: parseFloat(order.total),
     claimSlot: order.slot.label,
     placedAt,
+    pickup_code: order.pickup_code ?? undefined,
+    orderStatus: order.state as "pending" | "paid" | "preparing" | "ready",
   };
 }
 

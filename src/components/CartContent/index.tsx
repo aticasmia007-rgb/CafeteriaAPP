@@ -42,7 +42,9 @@ export default function CartContent() {
 
   const itemCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  const recommended = state.products.filter((p) => p.recommended);
+  const recommended = state.products.filter((p) => p.recommended).length > 0
+    ? state.products.filter((p) => p.recommended)
+    : state.products.slice(0, 10);
 
   if (state.cart.length === 0) {
     return (

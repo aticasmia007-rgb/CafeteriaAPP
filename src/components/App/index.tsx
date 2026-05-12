@@ -141,6 +141,8 @@ export default function App() {
         }, 0),
         claimSlot,
         placedAt: "Ahora",
+        pickup_code: pickupCode ?? undefined,
+        orderStatus: "paid",
       },
     });
     dispatch({

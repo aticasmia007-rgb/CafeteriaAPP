@@ -43,18 +43,29 @@ export default function PendingOrderSheet() {
             </button>
           </div>
 
-          {/* QR */}
-          <div className={styles.qrWrap}>
-            <QRCodeSVG
-              value={order.id}
-              size={160}
-              fgColor="#1A1811"
-              bgColor="transparent"
-              className={styles.qr}
-              aria-hidden="true"
-            />
-            <p className={styles.qrHint}>Muestra este código en la cafetería</p>
-          </div>
+          {/* QR — only shown once payment is confirmed and pickup_code is assigned */}
+          {order.pickup_code ? (
+            <div className={styles.qrWrap}>
+              <QRCodeSVG
+                value={order.pickup_code}
+                size={160}
+                fgColor="#1A1811"
+                bgColor="transparent"
+                className={styles.qr}
+                aria-hidden="true"
+              />
+              <p className={styles.qrHint}>Muestra este código en la cafetería</p>
+            </div>
+          ) : (
+            <div className={styles.awaitingWrap}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <p className={styles.awaitingTitle}>Esperando confirmación de pago</p>
+              <p className={styles.awaitingHint}>El código QR aparecerá aquí en cuanto se confirme el pago</p>
+            </div>
+          )}
 
           {/* Claim slot */}
           <div className={styles.slotRow}>
