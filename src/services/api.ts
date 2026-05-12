@@ -1,7 +1,7 @@
 // Central API service layer — all backend communication lives here
 
-const BASE_URL = "http://localhost:8000/api";
-const REDSYS_URL = "https://sis-t.redsys.es:25443/sis/realizarPago"; // test TPV
+const BASE_URL = `${import.meta.env.PUBLIC_API_URL}/api`;
+const REDSYS_URL = import.meta.env.PUBLIC_REDSYS_URL as string;
 
 const TOKEN_KEY = "cafeteria_access_token";
 const REFRESH_KEY = "cafeteria_refresh_token";
