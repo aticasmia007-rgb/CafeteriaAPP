@@ -1,7 +1,7 @@
 import { useApp } from "../../store/appStore";
 import BottomSheet from "../shared/BottomSheet";
 import { isImageUrl } from "../../data/mockData";
-import { ALLERGENS } from "../../data/mockData";
+import ChipIcon from "../shared/ChipIcon";
 import styles from "./ProductDetailsSheet.module.css";
 
 export default function AlergenosSheet() {
@@ -95,18 +95,21 @@ export default function AlergenosSheet() {
         <h3 className={styles.subTitle}>Alérgenos</h3>
 
         <div className={styles.allergenChips}>
-                {producto.allergens?.length ? (
-                producto.allergens.map((id) => {
-                const info = ALLERGENS.find(a => a.id === id);
-                return (
-                    <span key={id} className={styles.chip}>
-                        {info?.icon} {info?.label}
-                    </span>
-                );
-                })
-            ) : (
-                <span className={styles.noAllergens}>No contiene alérgenos</span>
-            )}
+          {producto.allergens?.length ? (
+            producto.allergens.map((id) => {
+              const info = state.allergens.find((a) => a.id === id);
+              const label = info?.name ?? id;
+              const icon = info?.icon ?? "";
+              return (
+                <span key={id} className={styles.chip}>
+                  {icon && <ChipIcon icon={icon} name={label} size={16} />}
+                  {label}
+                </span>
+              );
+            })
+          ) : (
+            <span className={styles.noAllergens}>No contiene alérgenos</span>
+          )}
         </div>
 
 

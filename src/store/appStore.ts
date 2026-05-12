@@ -37,6 +37,7 @@ export interface AppState {
   // Catalog — loaded from API, seeded with mock data as fallback
   products: Product[];
   categories: { id: string; name: string; icon: string }[];
+  allergens: { id: string; name: string; icon: string }[];
   loadingCatalog: boolean;
   // History
   recentOrders: OrderGroup[];
@@ -69,7 +70,7 @@ export type AppAction =
   | { type: "CLOSE_ALLERGEN_SHEET" }
   | { type: "OPEN_PAYMENT_SHEET" }
   | { type: "CLOSE_PAYMENT_SHEET" }
-  | { type: "LOAD_CATALOG"; products: Product[]; categories: { id: string; name: string; icon: string }[] }
+  | { type: "LOAD_CATALOG"; products: Product[]; categories: { id: string; name: string; icon: string }[]; allergens: { id: string; name: string; icon: string }[] }
   | { type: "SET_PENDING_ORDERS"; orders: PendingOrder[] }
   | { type: "SET_RECENT_ORDERS"; orders: OrderGroup[] };
 
@@ -132,6 +133,7 @@ export const initialState: AppState = {
   paymentSheetOpen: false,
   products: mockProducts,
   categories: mockCategories,
+  allergens: [],
   loadingCatalog: false,
   recentOrders: [],
 };
@@ -296,6 +298,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         products: action.products,
         categories: action.categories,
+        allergens: action.allergens,
         loadingCatalog: false,
       };
     case "SET_PENDING_ORDERS":

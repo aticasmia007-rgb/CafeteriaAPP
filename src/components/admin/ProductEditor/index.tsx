@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { useAdmin } from "../../../store/adminStore";
-import { isImageUrl, type Product } from "../../../data/mockData";
+import { type Product } from "../../../data/mockData";
 import { createProduct, updateProduct as updateProductApi, mapApiProduct } from "../../../services/api";
+import ChipIcon from "../../shared/ChipIcon";
 import styles from "./ProductEditor.module.css";
 
 const pencilIcon = (
@@ -213,7 +214,7 @@ export default function ProductEditor({ product }: Props) {
                       )
                     }
                   >
-                    <span className={styles.allergenIcon}>{c.icon}</span>
+                    <ChipIcon icon={c.icon} name={c.name} />
                     <span className={styles.allergenLabel}>{c.name}</span>
                   </button>
                 );
@@ -254,7 +255,7 @@ export default function ProductEditor({ product }: Props) {
                     className={`${styles.allergenChip} ${active ? styles.allergenChipActive : ""}`}
                     onClick={() => toggleAllergen(a.id)}
                   >
-                    <span className={styles.allergenIcon}>{a.icon}</span>
+                    <ChipIcon icon={a.icon} name={a.name} />
                     <span className={styles.allergenLabel}>{a.name}</span>
                   </button>
                 );

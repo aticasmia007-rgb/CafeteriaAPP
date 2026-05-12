@@ -2,6 +2,7 @@ import { useState, type Dispatch } from "react";
 import { useAdmin } from "../../../store/adminStore";
 import { isImageUrl } from "../../../data/mockData";
 import { updateProduct as updateProductApi } from "../../../services/api";
+import ChipIcon from "../../shared/ChipIcon";
 import ProductEditor from "../ProductEditor";
 import type { Product } from "../../../data/mockData";
 import type { AdminAction } from "../../../store/adminStore";
@@ -121,7 +122,7 @@ export default function ProductsView() {
             className={`${styles.catBtn} ${catFilter === cat.id ? styles.catBtnActive : ""}`}
             onClick={() => setCatFilter(cat.id)}
           >
-            {cat.icon} {cat.name}
+            <ChipIcon icon={cat.icon} name={cat.name} size={16} /> {cat.name}
           </button>
         ))}
       </div>
@@ -134,7 +135,7 @@ export default function ProductsView() {
           {grouped.map(({ cat, products }) => (
             <div key={cat.id} className={styles.catGroup}>
               <div className={styles.catGroupTitle}>
-                {cat.icon} {cat.name}
+                <ChipIcon icon={cat.icon} name={cat.name} size={16} /> {cat.name}
               </div>
               <div className={styles.productList}>
                 {products.map((p) => (

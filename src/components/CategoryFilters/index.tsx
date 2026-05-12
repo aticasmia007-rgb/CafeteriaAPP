@@ -1,4 +1,5 @@
 import { useApp } from "../../store/appStore";
+import ChipIcon from "../shared/ChipIcon";
 import styles from "./CategoryFilters.module.css";
 
 export default function CategoryFilters() {
@@ -20,7 +21,7 @@ export default function CategoryFilters() {
           className={`${styles.filterBtn} ${state.activeCategory === cat.id ? styles.filterActive : ""}`}
           onClick={() => dispatch({ type: "SELECT_FILTER", category: cat.id })}
         >
-          <span className={styles.filterIcon}>{cat.icon}</span>
+          <ChipIcon icon={cat.icon} name={cat.name} size={16} />
           <span className={styles.filterLabel}>{cat.name}</span>
         </button>
       ))}

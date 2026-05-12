@@ -1,0 +1,10 @@
+.img {
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.text {
+  font-size: 1em;
+  line-height: 1;
+  flex-shrink: 0;
+}

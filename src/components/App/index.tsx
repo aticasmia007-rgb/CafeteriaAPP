@@ -10,6 +10,7 @@ import {
   getProducts,
   getCategories,
   getAvailableSlots,
+  getAllergens,
   getMyOrders,
   clearTokens,
   mapApiProduct,
@@ -54,14 +55,19 @@ export default function App() {
 
   // ── Catalog + nearest slot loading on mount ───────────────────────────────
   useEffect(() => {
-    Promise.all([getProducts(), getCategories(), getAvailableSlots()])
-      .then(([apiProducts, apiCategories, apiSlots]) => {
+    Promise.all([getProducts(), getCategories(), getAllergens(), getAvailableSlots()])
+      .then(([apiProducts, apiCategories, apiAllergens, apiSlots]) => {
         const products = apiProducts.map(mapApiProduct);
         const categories = [
           { id: "all", name: "Todos", icon: "🍽️" },
           ...apiCategories.filter((c) => c.active).map(mapApiCategory),
         ];
-        dispatch({ type: "LOAD_CATALOG", products, categories });
+        const allergens = apiAllergens.map((a) => ({
+          id: a.allergen_id,
+          name: a.name,
+          icon: a.icon ?? "",
+        }));
+        dispatch({ type: "LOAD_CATALOG", products, categories, allergens });
 
         const available = apiSlots.filter(
           (s) => s.active !== false && (s.remaining ?? 1) > 0
