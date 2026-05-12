@@ -5,6 +5,7 @@ const REDSYS_URL = import.meta.env.PUBLIC_REDSYS_URL as string;
 
 const TOKEN_KEY = "cafeteria_access_token";
 const REFRESH_KEY = "cafeteria_refresh_token";
+const ROLE_COOKIE = "cafeteria_role";
 
 // ── Token helpers ──────────────────────────────────────────────────────────
 
@@ -24,6 +25,11 @@ export function setTokens(access: string, refresh: string): void {
 export function clearTokens(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(REFRESH_KEY);
+  document.cookie = `${ROLE_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+export function setRoleCookie(role: string): void {
+  document.cookie = `${ROLE_COOKIE}=${role}; path=/; max-age=604800; SameSite=Lax`;
 }
 
 // ── API error class ────────────────────────────────────────────────────────

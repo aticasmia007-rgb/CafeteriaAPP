@@ -12,6 +12,7 @@ export interface User {
   email: string;
   name: string;
   provider: "email" | "google";
+  role: "client" | "staff" | "admin";
 }
 
 export type AuthIntent = "checkout" | "profile" | "login" | null;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useApp } from "../../store/appStore";
+import { useApp, type User } from "../../store/appStore";
 import BottomSheet from "../shared/BottomSheet";
 import styles from "./AuthSheet.module.css";
 import LoginButton from "../LoginButton";
-import { authGoogle, authLogin, authRegister, setTokens, ApiError } from "../../services/api";
+import { authGoogle, authLogin, authRegister, setTokens, setRoleCookie, ApiError } from "../../services/api";
 
 type Mode = "login" | "register";
 
@@ -35,6 +35,7 @@ export default function AuthSheet() {
             try {
               const res = await authGoogle(response.code);
               setTokens(res.access_token, res.refresh_token);
+              setRoleCookie(res.user.role);
               console.log("Google login successful:", res);
               dispatch({
                 type: "LOGIN",
@@ -42,6 +43,7 @@ export default function AuthSheet() {
                   email: res.user.email,
                   name: res.user.name,
                   provider: "google",
+                  role: res.user.role as User["role"],
                 },
               });
             } catch (err) {
@@ -104,16 +106,18 @@ export default function AuthSheet() {
       if (mode === "login") {
         const res = await authLogin(email, password);
         setTokens(res.access_token, res.refresh_token);
+        setRoleCookie(res.user.role);
         dispatch({
           type: "LOGIN",
-          user: { email: res.user.email, name: res.user.name, provider: "email" },
+          user: { email: res.user.email, name: res.user.name, provider: "email", role: res.user.role as User["role"] },
         });
       } else {
         const res = await authRegister(email, password, name);
         setTokens(res.access_token, res.refresh_token);
+        setRoleCookie(res.user.role);
         dispatch({
           type: "LOGIN",
-          user: { email: res.user.email, name: res.user.name, provider: "email" },
+          user: { email: res.user.email, name: res.user.name, provider: "email", role: res.user.role as User["role"] },
         });
       }
     } catch (err) {

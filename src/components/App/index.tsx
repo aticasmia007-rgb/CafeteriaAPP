@@ -13,6 +13,7 @@ import {
   getAllergens,
   getMyOrders,
   clearTokens,
+  setRoleCookie,
   mapApiProduct,
   mapApiCategory,
   mapApiOrderToPending,
@@ -40,12 +41,14 @@ export default function App() {
     if (token) {
       getMe()
         .then((user) => {
+          setRoleCookie(user.role);
           dispatch({
             type: "LOGIN",
             user: {
               email: user.email,
               name: user.name,
               provider: user.auth_provider?.toLowerCase() === "google" ? "google" : "email",
+              role: user.role as import("../../store/appStore").User["role"],
             },
           });
         })
